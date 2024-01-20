@@ -3,6 +3,7 @@
 ### General Information
 
 **Group Number:** 7
+
 **Descriptive Project Title:** ClubWAT
 
 - This is a descriptive project title that uses the _WAT_ phrase polular among the UW population along with 'Club' to speciffy that it's an application for exploring *WAT*erloo clubs and their associated events.
