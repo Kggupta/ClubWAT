@@ -10,3 +10,6 @@
 | 01/22/2024 |        |        |        |         |    4    |         | Created user scenarios for searching clubs & recs       |
 | 01/22/2024 |        |        |        |         |    1    |         | Added to stakeholders and human human values            |
 | 01/28/2024 |        |        |        |         |    1    |         | Presentation Slides Prep + Review                       |
+| 01/20/2024 |        |  3     |        |         |         |         | Wrote the introduction for the report                   |
+| 01/20/2024 |        |  2     |        |         |         |         | Figma mockups for recommendation system                 |
+| 01/25/2024 |        |  1     |        |         |         |         | Proof read report                                       |
