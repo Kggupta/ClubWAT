@@ -1,0 +1,24 @@
+{
+  "name": "database",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "migratedev": "dotenv -e .env.dev -- npx prisma migrate dev",
+    "migrateprod": "dotenv -e .env.prod -- npx prisma migrate dev",
+    "startdev": "dotenv -e .env.dev -- node src/index.js",
+    "startprod": "dotenv -e .env.prod -- node src/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "@types/node": "^20.11.16",
+    "prisma": "^5.9.1"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.9.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}
