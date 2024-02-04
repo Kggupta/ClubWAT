@@ -2,23 +2,41 @@
   "name": "database",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
+    "build": "npx tsc",
     "migratedev": "dotenv -e .env.dev -- npx prisma migrate dev",
     "migrateprod": "dotenv -e .env.prod -- npx prisma migrate dev",
-    "startdev": "dotenv -e .env.dev -- node src/index.js",
-    "startprod": "dotenv -e .env.prod -- node src/index.js"
+    "dev": "tsc -w & nodemon -r dotenv/config dist/index.js dotenv_config_path=.env.dev",
+    "prod": "tsc -w & nodemon -r dotenv/config dist/index.js dotenv_config_path=.env.prod"
   },
   "author": "",
   "license": "ISC",
-  "type": "module",
   "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/debug": "^4.1.12",
+    "@types/express": "^4.17.21",
+    "@types/jsonwebtoken": "^9.0.5",
+    "@types/morgan": "^1.9.9",
     "@types/node": "^20.11.16",
-    "prisma": "^5.9.1"
+    "prisma": "^5.9.1",
+    "source-map-support": "^0.5.21",
+    "tslint": "^6.1.3",
+    "typescript": "^5.3.3"
   },
   "dependencies": {
     "@prisma/client": "^5.9.1",
+    "check-password-strength": "^2.0.7",
+    "cors": "^2.8.5",
+    "debug": "^4.3.4",
+    "dotenv": "^16.4.1",
+    "express": "^4.18.2",
+    "express-winston": "^4.2.0",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.0",
+    "nodemon": "^3.0.3",
     "ts-node": "^10.9.2",
-    "typescript": "^5.3.3"
+    "winston": "^3.11.0"
   }
 }

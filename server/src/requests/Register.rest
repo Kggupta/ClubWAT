@@ -1,0 +1,10 @@
+
+POST http://localhost:3000/api/v1/user/register
+content-type: application/json
+
+{
+    "email": "test@uwaterloo.ca",
+    "password": "jfkdfkj",
+		"first_name": "df",
+		"last_name": "sdfg"
+}
