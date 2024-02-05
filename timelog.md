@@ -14,4 +14,4 @@
 | 01/20/2024 |        | 2      |        |         |         |         | Figma mockups for recommendation system                 |
 | 01/25/2024 |        | 1      |        |         |         | 1       | Proof read report                                       |
 | 02/04/2024 | 3      |        |        |         |         |         | Boilerplate code, prisma setup, postgres db creation    |
-| 02/04/2024 | 3      |        |        |         |         |         | User login/registration Proof of concept                |
+| 02/04/2024 | 5      |        |        |         |         |         | User login/registration and all auth                    |
