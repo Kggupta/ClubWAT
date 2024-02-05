@@ -10,6 +10,7 @@ import {
   INVALID_REQUEST_CODE,
   NOT_FOUND_CODE,
   OK_CODE,
+  UNAUTHORIZED_CODE,
 } from "../lib/StatusCodes";
 import sendEmail from "../lib/EmailService";
 import { passwordStrength } from "check-password-strength";
@@ -22,7 +23,7 @@ type LoginResponse = { data: string };
 router.post<LoginRequest, LoginResponse>("/login", async (req, res) => {
   const email: string = req.body.email;
   const password: string = req.body.password;
-  if (!email || !password) return res.sendStatus(400);
+  if (!email || !password) return res.sendStatus(INVALID_REQUEST_CODE);
 
   try {
     const foundUser: User = await prisma.user.findUniqueOrThrow({
@@ -32,7 +33,7 @@ router.post<LoginRequest, LoginResponse>("/login", async (req, res) => {
       },
     });
 
-    res.status(200);
+    res.status(OK_CODE);
     const token = jwt.sign(
       foundUser,
       process.env.ACCESS_TOKEN_SECRET as string
@@ -40,7 +41,7 @@ router.post<LoginRequest, LoginResponse>("/login", async (req, res) => {
 
     res.json({ data: token });
   } catch (error) {
-    res.sendStatus(401);
+    res.sendStatus(UNAUTHORIZED_CODE);
   }
 });
 
