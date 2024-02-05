@@ -1,8 +1,18 @@
 import express from "express";
 import jwt from "jsonwebtoken";
 import { prisma } from "../lib/prisma";
-import { User } from "@prisma/client";
+import { User, UserEmailVerification } from "@prisma/client";
 import { authenticateToken } from "../middlewares";
+import {
+  CONFLICT_CODE,
+  CREATED_CODE,
+  INTERNAL_ERROR_CODE,
+  INVALID_REQUEST_CODE,
+  NOT_FOUND_CODE,
+  OK_CODE,
+} from "../lib/StatusCodes";
+import sendEmail from "../lib/EmailService";
+import { passwordStrength } from "check-password-strength";
 
 const router = express.Router();
 
@@ -34,47 +44,123 @@ router.post<LoginRequest, LoginResponse>("/login", async (req, res) => {
   }
 });
 
-type RegisterRequest = {
+type EmailVerificationRequest = {
+  email: string;
+};
+
+router.post<EmailVerificationRequest, void>(
+  "/registration-email-verification",
+  async (req, res) => {
+    const verificationRequest: EmailVerificationRequest =
+      req.body as EmailVerificationRequest;
+    if (
+      !verificationRequest.email ||
+      !verificationRequest.email.endsWith("@uwaterloo.ca")
+    )
+      return res.sendStatus(INVALID_REQUEST_CODE);
+
+    const doesUserAccountExist: number = await prisma.user.count({
+      where: {
+        email: verificationRequest.email,
+      },
+    });
+
+    if (doesUserAccountExist > 0) return res.sendStatus(CONFLICT_CODE);
+
+    const verificationCode = Math.floor(100000 + Math.random() * 900000);
+
+    try {
+      await sendEmail(verificationRequest.email, verificationCode);
+
+      await prisma.userEmailVerification.deleteMany({
+        where: { email: verificationRequest.email },
+      });
+      console.log(verificationCode);
+      await prisma.userEmailVerification.create({
+        data: { email: verificationRequest.email, code: verificationCode },
+      });
+
+      res.sendStatus(OK_CODE);
+    } catch (error) {
+      res.sendStatus(INTERNAL_ERROR_CODE);
+    }
+  }
+);
+
+type RegistrationRequest = {
   email: string;
   password: string;
   first_name: string;
   last_name: string;
+  code: number;
 };
-type RegisterResponse = { data: string };
+type RegistrationResponse = {
+  data: string;
+};
 
-router.post<RegisterRequest, RegisterResponse>(
+router.post<RegistrationRequest, RegistrationResponse>(
   "/register",
   async (req, res) => {
-    const registerRequest: RegisterRequest = req.body as RegisterRequest;
+    const registrationRequest: RegistrationRequest =
+      req.body as RegistrationRequest;
     if (
-      !registerRequest.email ||
-      !registerRequest.password ||
-      !registerRequest.first_name ||
-      !registerRequest.last_name ||
-      !registerRequest.email.endsWith("@uwaterloo.ca")
+      !registrationRequest.email ||
+      !registrationRequest.email.endsWith("@uwaterloo.ca") ||
+      !registrationRequest.password ||
+      !registrationRequest.first_name ||
+      !registrationRequest.last_name ||
+      !registrationRequest.code
     )
-      return res.sendStatus(400);
+      return res.sendStatus(INVALID_REQUEST_CODE);
 
-    const doesUserExist = await prisma.user.count({
-      where: { email: registerRequest.email },
+    const strength = passwordStrength(registrationRequest.password);
+
+    if (strength.contains.length !== 4 || strength.length < 8)
+      return res.sendStatus(INVALID_REQUEST_CODE);
+
+    const doesUserAccountExist: number = await prisma.user.count({
+      where: {
+        email: registrationRequest.email,
+      },
     });
-    if (doesUserExist > 0) return res.status(409);
 
-    const userToCreate = { admin_flag: false, ...registerRequest };
+    if (doesUserAccountExist > 0) return res.sendStatus(CONFLICT_CODE);
 
-    const createdUser: User = await prisma.user.create({ data: userToCreate });
+    const userVerification: UserEmailVerification | null =
+      await prisma.userEmailVerification.findFirst({
+        where: { email: registrationRequest.email },
+      });
 
-    res.status(200);
-    const token = jwt.sign(
+    if (!userVerification) return res.sendStatus(NOT_FOUND_CODE);
+
+    if (userVerification.code !== registrationRequest.code)
+      return res.sendStatus(INVALID_REQUEST_CODE);
+
+    await prisma.userEmailVerification.delete({
+      where: { email: registrationRequest.email },
+    });
+
+    const createdUser: User = await prisma.user.create({
+      data: {
+        admin_flag: false,
+        email: registrationRequest.email,
+        first_name: registrationRequest.first_name,
+        last_name: registrationRequest.last_name,
+        password: registrationRequest.password,
+      },
+    });
+
+    const token: string = jwt.sign(
       createdUser,
       process.env.ACCESS_TOKEN_SECRET as string
     );
 
+    res.status(CREATED_CODE);
     res.json({ data: token });
   }
 );
 
-router.get("/val", authenticateToken, (req, res) => {
+router.get("/decode-token-test-endpoint", authenticateToken, (req, res) => {
   res.json(req.body.user);
 });
 export default router;

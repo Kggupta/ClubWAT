@@ -1,10 +1,20 @@
 
+POST http://localhost:3000/api/v1/user/registration-email-verification
+content-type: application/json
+
+{
+    "email": "k44gupta@uwaterloo.ca"
+}
+
+###
+
 POST http://localhost:3000/api/v1/user/register
 content-type: application/json
 
 {
-    "email": "test@uwaterloo.ca",
-    "password": "jfkdfkj",
-		"first_name": "df",
-		"last_name": "sdfg"
+    "email": "k44gupta@uwaterloo.ca",
+		"password": "Password1$",
+		"first_name": "Keshav",
+		"last_name": "Gupta",
+		"code": 173775
 }
