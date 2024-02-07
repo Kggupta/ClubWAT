@@ -2,6 +2,7 @@ import express from "express";
 
 import MessageResponse from "../interfaces/MessageResponse";
 import userRoutes from "./UserRoutes";
+import clubRoutes from './ClubRoutes';
 
 const router = express.Router();
 
@@ -12,5 +13,6 @@ router.get<{}, MessageResponse>("/", (req, res) => {
 });
 
 router.use("/user", userRoutes);
+router.use("/club", clubRoutes);
 
 export default router;

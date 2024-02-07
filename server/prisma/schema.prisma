@@ -11,16 +11,39 @@ datasource db {
 }
 
 model User {
-  id Int @id @default(autoincrement())
-  email String @unique
-  password String
+  id         Int     @id @default(autoincrement())
+  email      String  @unique
+  password   String
   first_name String
-  last_name String
+  last_name  String
   admin_flag Boolean
 }
 
 model UserEmailVerification {
-  id Int @id @default(autoincrement())
+  id    Int    @id @default(autoincrement())
   email String @unique
-  code Int
+  code  Int
+}
+
+model Club {
+  id              Int    @id @default(autoincrement())
+  title           String
+  description     String
+  membership_fee  Float
+  categories      ClubCategory[]
+}
+
+model Category {
+  id    Int     @id @default(autoincrement())
+  type  String
+  name  String
+  clubs ClubCategory[]
+}
+
+model ClubCategory {
+  id          Int       @id @default(autoincrement())
+  club_id     Int
+  category_id Int
+  club        Club      @relation(fields: [club_id], references: [id])
+  category    Category  @relation(fields: [category_id], references: [id])
 }
