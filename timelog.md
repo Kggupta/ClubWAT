@@ -20,3 +20,4 @@
 | 01/23/2024 |        |        |        |         |         | 2       | Added on to stakeholders in project proposal            |
 | 01/26/2024 |        |        |        |         |         | 1       | Proof read proposal report and made minor edits         |
 | 02/06/2024 | 0.2    |        |        |         |         |         | Autogenerate db model                                   |
+| 02/06/2024 |        |        |        |         |         | 5       | Setup dev environments locally & built Club APIs        |
