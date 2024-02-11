@@ -6,6 +6,7 @@ import {
   INVALID_REQUEST_CODE,
   OK_CODE
 } from "../lib/StatusCodes";
+import { authenticateToken } from "../middlewares";
 
 const router = express.Router();
 
@@ -34,7 +35,7 @@ type ClubAdminResponse = {
     data: ClubAdmin[]
 }
 
-router.get<void, ClubResponse>("/", async (req, res) => {
+router.get<any, ClubResponse>("/", authenticateToken, async (req, res) => {
     try {
         let clubs: ClubWithCategories[] = await prisma.club.findMany();
 
@@ -62,7 +63,7 @@ router.get<void, ClubResponse>("/", async (req, res) => {
     }
 });
 
-router.get<ChosenClub, ClubAdminResponse>("/:id", async (req, res) => {
+router.get<ChosenClub, ClubAdminResponse>("/:id", authenticateToken, async (req, res) => {
     try {
         const clubId = Number(req.params.id);
         if (!clubId) {
@@ -109,7 +110,7 @@ router.post<ClubWithCategoryIds, void>("/", async (req, res) => {
     }
 });
 
-router.delete<ChosenClub, void>("/:id", async (req, res) => {
+router.delete<ChosenClub, void>("/:id", authenticateToken, async (req, res) => {
     try {
         const clubId = Number(req.params.id);
         if (!clubId) return res.sendStatus(INVALID_REQUEST_CODE);
