@@ -1,0 +1,18 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table User {
+  id Int [pk, increment]
+  email String [unique, not null]
+  password String [not null]
+  first_name String [not null]
+  last_name String [not null]
+  admin_flag Boolean [not null]
+}
+
+Table UserEmailVerification {
+  id Int [pk, increment]
+  email String [unique, not null]
+  code Int [not null]
+}
