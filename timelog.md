@@ -22,3 +22,4 @@
 | 02/06/2024 | 0.2    |        |        |         |         |         | Autogenerate db model                                   |
 | 02/06/2024 |        |        |        |         |         | 5       | Setup dev environments locally & built Club APIs        |
 | 02/10/2024 |        |        |        |         |         | 2       | Added ClubAdmin and Club APIs                           |
+| 02/11/2024 |        |        |        |         |         | 4       | Connected Auth to APIs; added some more APIs            |
