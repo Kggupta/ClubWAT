@@ -6,6 +6,7 @@ import {
   INVALID_REQUEST_CODE,
   OK_CODE
 } from "../lib/StatusCodes";
+import { authenticateToken } from "../middlewares";
 
 const router = express.Router();
 
@@ -22,7 +23,7 @@ type ChosenClubAdmin = {
     userId: string
 }
 
-router.get<ChosenAdmin, ClubAdminResponse>("/:id", async (req, res) => {
+router.get<ChosenAdmin, ClubAdminResponse>("/:id", authenticateToken, async (req, res) => {
     try {
         const userId = Number(req.params.id);
         if (!userId) {
@@ -44,13 +45,13 @@ router.get<ChosenAdmin, ClubAdminResponse>("/:id", async (req, res) => {
     }
 });
 
-router.post<ClubAdmin, void>("/", async (req, res) => {
+router.post<ClubAdmin, void>("/", authenticateToken, async (req, res) => {
     try {
         if (!req.body.user_id || !req.body.club_id || !req.body.position) {
             return res.sendStatus(INVALID_REQUEST_CODE);
         }
 
-        const club = await prisma.clubAdmin.create({
+        await prisma.clubAdmin.create({
             data: {
                 user_id: req.body.user_id,
                 club_id: req.body.club_id,
@@ -64,7 +65,7 @@ router.post<ClubAdmin, void>("/", async (req, res) => {
     }
 });
 
-router.delete<ChosenClubAdmin, void>("/:clubId/:userId", async (req, res) => {
+router.delete<ChosenClubAdmin, void>("/:clubId/:userId", authenticateToken, async (req, res) => {
     try {
         const clubId = Number(req.params.clubId);
         const userId = Number(req.params.userId);

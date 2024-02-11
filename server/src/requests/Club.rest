@@ -1,0 +1,42 @@
+GET http://localhost:3000/api/v1/club
+Authorization: Bearer [token]
+content-type: application/json
+
+###
+
+GET http://localhost:3000/api/v1/club/:id
+Authorization: Bearer [token]
+content-type: application/json
+
+###
+
+POST http://localhost:3000/api/v1/club
+Authorization: Bearer [token]
+content-type: application/json
+
+{
+    "title": "UW Dhamaka",
+    "description": "This is a cool club that you should join.",
+    "membership_fee": 10,
+    "categories": [1, 4]
+    "position": "VP of Events"
+}
+
+###
+
+PUT http://localhost:3000/api/v1/club/:id
+Authorization: Bearer [token]
+content-type: application/json
+
+{
+    "title": "UW Dhamaka",
+    "description": "This is a very cool club that you should join.",
+    "membership_fee": 10,
+    "categories": [1, 4]
+}
+
+###
+
+DELETE http://localhost:3000/api/v1/club/:id
+Authorization: Bearer [token]
+content-type: application/json
