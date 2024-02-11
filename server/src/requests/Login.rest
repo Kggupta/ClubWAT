@@ -2,7 +2,7 @@ POST http://localhost:3000/api/v1/user/login
 content-type: application/json
 
 {
-    "email": "a33patil@uwaterloo.ca",
+    "email": "k44gupta@uwaterloo.ca",
     "password": "Password1$"
 }
 
