@@ -4,6 +4,18 @@ content-type: application/json
 
 ###
 
+GET http://localhost:3000/api/v1/club/approved
+Authorization: Bearer [token]
+content-type: application/json
+
+###
+
+GET http://localhost:3000/api/v1/club/not-approved
+Authorization: Bearer [token]
+content-type: application/json
+
+###
+
 GET http://localhost:3000/api/v1/club/:id
 Authorization: Bearer [token]
 content-type: application/json
@@ -15,11 +27,11 @@ Authorization: Bearer [token]
 content-type: application/json
 
 {
-    "title": "UW Dhamaka",
+    "title": "UW HipHop",
     "description": "This is a cool club that you should join.",
-    "membership_fee": 10,
-    "categories": [1, 4]
-    "position": "VP of Events"
+    "membership_fee": 12,
+    "categories": [1],
+    "position": "VP of Marketing"
 }
 
 ###
@@ -32,7 +44,8 @@ content-type: application/json
     "title": "UW Dhamaka",
     "description": "This is a very cool club that you should join.",
     "membership_fee": 10,
-    "categories": [1, 4]
+    "categories": [1],
+    "is_approved": true 
 }
 
 ###
