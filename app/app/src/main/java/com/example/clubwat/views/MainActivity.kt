@@ -5,6 +5,7 @@ import SignUpViewModel
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -17,17 +18,22 @@ import com.example.clubwat.ui.theme.ClubWATTheme
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.clubwat.model.UserRepository
 import com.example.clubwat.viewmodels.CodeVerificationViewModel
+import com.example.clubwat.viewmodels.factories.CodeVerificationViewModelFactory
+import com.example.clubwat.viewmodels.factories.LoginViewModelFactory
+import com.example.clubwat.viewmodels.factories.SignUpViewModelFactory
 
 class MainActivity : ComponentActivity() {
+    private val userRepository by lazy { UserRepository() }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             ClubWATTheme {
                 val navController = rememberNavController()
-                val signUpViewModel = viewModel<SignUpViewModel>()
-                val loginViewModel = viewModel<LoginViewModel>()
-                val codeVerificationViewModel = viewModel<CodeVerificationViewModel>()
+                val signUpViewModel: SignUpViewModel by viewModels { SignUpViewModelFactory(userRepository) }
+                val loginViewModel: LoginViewModel by viewModels { LoginViewModelFactory(userRepository) }
+                val codeVerificationViewModel: CodeVerificationViewModel by viewModels { CodeVerificationViewModelFactory(userRepository) }
 
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                     NavHost(navController = navController, startDestination = "signup") {

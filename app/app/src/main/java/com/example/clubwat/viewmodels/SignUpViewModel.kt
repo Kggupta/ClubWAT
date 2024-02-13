@@ -1,13 +1,14 @@
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.clubwat.model.UserRepository
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.Dispatchers
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
 
-class SignUpViewModel : ViewModel() {
+class SignUpViewModel(private val userRepository: UserRepository) : ViewModel() {
     var firstName = mutableStateOf("")
     var lastName = mutableStateOf("")
     var email = mutableStateOf("")
@@ -16,10 +17,13 @@ class SignUpViewModel : ViewModel() {
     var passwordError = mutableStateOf<String?>(null)
     var allValuesError = mutableStateOf<String?>(null)
 
-    // Function to handle sign up logic
     fun signUp() {
         viewModelScope.launch {
         }
+    }
+
+    fun createUser() {
+        userRepository.createUser(firstName, lastName, email, password)
     }
 
     fun validatePasswordAndSignUp(password: String) {

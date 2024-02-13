@@ -1,3 +1,10 @@
 package com.example.clubwat.model
 
-class User(var name: String, var email: String, var password: String)
+import androidx.compose.runtime.MutableState
+
+data class User(
+    val firstName: MutableState<String>,
+    val lastName: MutableState<String>,
+    val email: MutableState<String>,
+    val password: MutableState<String>
+)

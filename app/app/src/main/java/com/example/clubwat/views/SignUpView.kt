@@ -112,6 +112,7 @@ fun SignUpView(
                 if (viewModel.allValuesError.value == null &&
                     viewModel.passwordError.value == null) {
                     viewModel.sendVerificationEmail()
+                    viewModel.createUser()
                     navController.navigate("verification")
                 }
             },
