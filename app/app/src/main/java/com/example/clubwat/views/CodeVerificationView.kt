@@ -100,7 +100,10 @@ fun CodeVerificationView(
         }
         Button(
             onClick = {
-//                viewModel.validateVerificationCode()
+                val verificationCodeString = verificationCode.joinToString(separator = "")
+                // Update the viewModel's code value
+                viewModel.code.value = verificationCodeString
+                viewModel.register()
             },
             modifier = Modifier
                 .fillMaxWidth()
