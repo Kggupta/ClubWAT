@@ -1,5 +1,4 @@
 package com.example.clubwat.views
-import LoginViewModel
 import SignUpViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -30,7 +29,7 @@ import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.ui.text.font.FontWeight
 
 @Composable
-fun LoginView(viewModel: LoginViewModel = viewModel()) {
+fun SignUpView(viewModel: SignUpViewModel = viewModel()) {
     var viewPassword by remember { mutableStateOf(false) }
 
     Column(
@@ -40,7 +39,7 @@ fun LoginView(viewModel: LoginViewModel = viewModel()) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Login",
+            text = "Sign Up",
             fontWeight = FontWeight.Bold,
             style = MaterialTheme.typography.headlineMedium,
             modifier = Modifier.align(Alignment.CenterHorizontally)
@@ -53,6 +52,18 @@ fun LoginView(viewModel: LoginViewModel = viewModel()) {
                 .fillMaxWidth(fraction = 0.7f)
                 .aspectRatio(2f) // Adjust the ratio according to your image's aspect ratio
         )
+        OutlinedTextField(
+            value = viewModel.firstName.value,
+            onValueChange = { viewModel.firstName.value = it },
+            label = { Text("First Name") }
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        OutlinedTextField(
+            value = viewModel.lastName.value,
+            onValueChange = { viewModel.lastName.value = it },
+            label = { Text("Last Name") }
+        )
+        Spacer(modifier = Modifier.height(8.dp))
         OutlinedTextField(
             value = viewModel.email.value,
             onValueChange = { viewModel.email.value = it },
@@ -74,14 +85,14 @@ fun LoginView(viewModel: LoginViewModel = viewModel()) {
         )
         Spacer(modifier = Modifier.height(16.dp))
         Button(
-            onClick = { viewModel.login() },
+            onClick = { viewModel.signUp() },
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFDA9206)
             ),
             modifier = Modifier
                 .width(300.dp)
                 .height(40.dp)
         ) {
-            Text("Login")
+            Text("Sign Up")
         }
     }
 }
