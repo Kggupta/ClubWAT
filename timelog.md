@@ -21,3 +21,4 @@
 | 01/26/2024 |        |        |        |         |         | 1       | Proof read proposal report and made minor edits         |
 | 02/06/2024 | 0.2    |        |        |         |         |         | Autogenerate db model                                   |
 | 02/06/2024 |        |        |        |         |         | 5       | Setup dev environments locally & built Club APIs        |
+| 02/12/2024 |        |        | 4      |         |         |         | Modified Signup & Login page. Created Verification Page.|
