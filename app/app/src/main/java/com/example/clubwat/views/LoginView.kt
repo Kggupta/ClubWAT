@@ -27,9 +27,13 @@ import com.example.clubwat.R
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.ui.text.font.FontWeight
+import androidx.navigation.NavController
 
 @Composable
-fun LoginView(viewModel: LoginViewModel = viewModel()) {
+fun LoginView(
+    viewModel: LoginViewModel,
+    navController: NavController
+) {
     var viewPassword by remember { mutableStateOf(false) }
 
     Column(

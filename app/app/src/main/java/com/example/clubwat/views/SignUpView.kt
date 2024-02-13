@@ -31,10 +31,16 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 
 @Composable
-fun SignUpView(viewModel: SignUpViewModel = viewModel()) {
+fun SignUpView(
+    viewModel: SignUpViewModel,
+    navController: NavController
+) {
     var viewPassword by remember { mutableStateOf(false) }
+    val passwordError by viewModel.passwordError
+    val allValuesError by viewModel.allValuesError
 
     Column(
         modifier = Modifier
@@ -86,10 +92,28 @@ fun SignUpView(viewModel: SignUpViewModel = viewModel()) {
                 }
             },
         )
+        if (passwordError != null) {
+            Text(
+                text = passwordError!!,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
         Spacer(modifier = Modifier.height(16.dp))
         Button(
             onClick = {
-                viewModel.sendVerificationEmail()
+                viewModel.validatePasswordAndSignUp(viewModel.password.value)
+                viewModel.areAllValuesFilled(
+                    viewModel.firstName.value,
+                    viewModel.lastName.value,
+                    viewModel.email.value,
+                    viewModel.password.value
+                )
+                if (viewModel.allValuesError.value == null &&
+                    viewModel.passwordError.value == null) {
+                    viewModel.sendVerificationEmail()
+                    navController.navigate("verification")
+                }
             },
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFDA9206)
             ),
@@ -99,7 +123,13 @@ fun SignUpView(viewModel: SignUpViewModel = viewModel()) {
         ) {
             Text("Sign Up")
         }
-
+        if (allValuesError != null) {
+            Text(
+                text = allValuesError!!,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
         Spacer(modifier = Modifier.height(16.dp))
         ClickableText(
             text = AnnotatedString("Already have an account?"),
@@ -108,7 +138,7 @@ fun SignUpView(viewModel: SignUpViewModel = viewModel()) {
             ),
             overflow = TextOverflow.Ellipsis,
             onClick = {
-                // navController.navigate("LoginView")
+                navController.navigate("login")
             }
         )
     }

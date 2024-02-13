@@ -35,9 +35,14 @@ import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
+import androidx.navigation.NavController
 
 @Composable
-fun CodeVerificationView(viewModel: CodeVerificationViewModel = viewModel()) {
+fun CodeVerificationView(
+    viewModel: CodeVerificationViewModel,
+    navController: NavController
+)
+{
     val codeLength = 6
     val verificationCode = remember { mutableStateListOf(*Array(codeLength) { "" }) }
     val focusRequesters = List(codeLength) { FocusRequester() } // move focus to a specific composable
@@ -95,7 +100,7 @@ fun CodeVerificationView(viewModel: CodeVerificationViewModel = viewModel()) {
         }
         Button(
             onClick = {
-                // "Done" logic here
+//                viewModel.validateVerificationCode()
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -103,7 +108,9 @@ fun CodeVerificationView(viewModel: CodeVerificationViewModel = viewModel()) {
         ) {
             Text("Done")
         }
-        TextButton(onClick = {}) {
+        TextButton(onClick = {
+//            viewModel.sendVerificationCode()
+        }) {
             Text("Resend code")
         }
     }
