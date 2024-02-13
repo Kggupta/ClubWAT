@@ -76,7 +76,15 @@ fun LoginView(
         )
         Spacer(modifier = Modifier.height(16.dp))
         Button(
-            onClick = { viewModel.login() },
+            onClick = {
+
+                viewModel.login { isLoggedIn ->
+                    if (isLoggedIn) {
+                        navController.navigate("home")
+                    }
+                    }
+
+                      },
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFDA9206)
             ),
             modifier = Modifier

@@ -1,5 +1,6 @@
 package com.example.clubwat.views
 
+import HomeViewModel
 import LoginViewModel
 import SignUpViewModel
 import android.os.Bundle
@@ -21,6 +22,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.clubwat.model.UserRepository
 import com.example.clubwat.viewmodels.CodeVerificationViewModel
 import com.example.clubwat.viewmodels.factories.CodeVerificationViewModelFactory
+import com.example.clubwat.viewmodels.factories.HomeViewModelFactory
 import com.example.clubwat.viewmodels.factories.LoginViewModelFactory
 import com.example.clubwat.viewmodels.factories.SignUpViewModelFactory
 
@@ -34,6 +36,7 @@ class MainActivity : ComponentActivity() {
                 val signUpViewModel: SignUpViewModel by viewModels { SignUpViewModelFactory(userRepository) }
                 val loginViewModel: LoginViewModel by viewModels { LoginViewModelFactory(userRepository) }
                 val codeVerificationViewModel: CodeVerificationViewModel by viewModels { CodeVerificationViewModelFactory(userRepository) }
+                val homeViewModel: HomeViewModel by viewModels { HomeViewModelFactory(userRepository) }
 
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                     NavHost(navController = navController, startDestination = "signup") {
@@ -45,6 +48,9 @@ class MainActivity : ComponentActivity() {
                         }
                         composable("verification") {
                             CodeVerificationView(viewModel = codeVerificationViewModel, navController = navController)
+                        }
+                        composable("home") {
+                            HomeView(viewModel = homeViewModel, navController = navController)
                         }
                     }
                 }
