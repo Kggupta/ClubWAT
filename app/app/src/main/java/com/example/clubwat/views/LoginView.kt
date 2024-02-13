@@ -1,6 +1,5 @@
 package com.example.clubwat.views
 import LoginViewModel
-import SignUpViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -49,9 +48,8 @@ fun LoginView(viewModel: LoginViewModel = viewModel()) {
             painter = painterResource(id = R.drawable.waterloo_logo),
             contentDescription = "Logo",
             modifier = Modifier
-                // Make the image take up to 70% of the column's width while maintaining the aspect ratio
                 .fillMaxWidth(fraction = 0.7f)
-                .aspectRatio(2f) // Adjust the ratio according to your image's aspect ratio
+                .aspectRatio(2f)
         )
         OutlinedTextField(
             value = viewModel.email.value,

@@ -39,8 +39,8 @@ import androidx.compose.ui.input.key.type
 @Composable
 fun CodeVerificationView(viewModel: CodeVerificationViewModel = viewModel()) {
     val codeLength = 6
-    val code = remember { mutableStateListOf(*Array(codeLength) { "" }) }
-    val focusRequesters = List(codeLength) { FocusRequester() }
+    val verificationCode = remember { mutableStateListOf(*Array(codeLength) { "" }) }
+    val focusRequesters = List(codeLength) { FocusRequester() } // move focus to a specific composable
 
     Column(
         modifier = Modifier
@@ -71,10 +71,10 @@ fun CodeVerificationView(viewModel: CodeVerificationViewModel = viewModel()) {
         ) {
             for (i in 0 until codeLength) {
                 CodeInputField(
-                    code[i],
+                    verificationCode[i],
                     onValueChange = {
                         if (it.length <= 1) {
-                            code[i] = it
+                            verificationCode[i] = it
                             if (it.length == 1 && i < codeLength - 1) {
                                 focusRequesters[i + 1].requestFocus()
                             }
@@ -95,7 +95,7 @@ fun CodeVerificationView(viewModel: CodeVerificationViewModel = viewModel()) {
         }
         Button(
             onClick = {
-                // Handle the "Done" action here
+                // "Done" logic here
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -123,6 +123,7 @@ fun CodeInputField(
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         modifier = modifier
             .onKeyEvent { keyEvent ->
+                // after user has completed key press for backspace
                 if (keyEvent.type == KeyEventType.KeyUp && keyEvent.key == Key.Backspace && digit.isEmpty()) {
                     onBackspace()
                     true
@@ -133,4 +134,3 @@ fun CodeInputField(
             .focusRequester(focusRequester),
     )
 }
-
