@@ -2,11 +2,11 @@ POST http://localhost:3000/api/v1/user/login
 content-type: application/json
 
 {
-    "email": "k44gupta@uwaterloo.ca",
+    "email": "a33patil@uwaterloo.ca",
     "password": "Password1$"
 }
 
 ###
 
 GET http://localhost:3000/api/v1/user/decode-token-test-endpoint
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiZW1haWwiOiJrNDRndXB0YUB1d2F0ZXJsb28uY2EiLCJwYXNzd29yZCI6IlBhc3N3b3JkMSQiLCJmaXJzdF9uYW1lIjoiS2VzaGF2IiwibGFzdF9uYW1lIjoiR3VwdGEiLCJhZG1pbl9mbGFnIjpmYWxzZSwiaWF0IjoxNzA3MDkxNjI0fQ.cgJgwyBzXnnMbeJPn_FxIuHk0NFHv37rAgbOTlcRRfE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhMzNwYXRpbEB1d2F0ZXJsb28uY2EiLCJwYXNzd29yZCI6IlBhc3N3b3JkMSQiLCJmaXJzdF9uYW1lIjoiQWJoaW5pdCIsImxhc3RfbmFtZSI6IlBhdGlsIiwiYWRtaW5fZmxhZyI6ZmFsc2UsImlhdCI6MTcwNzg1OTI1Nn0.LVEwMMDqYgiut52aI0t9BaK5hbr7I3XQC8ArIKrT_BE

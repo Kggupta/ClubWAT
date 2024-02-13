@@ -37,6 +37,7 @@ model Club {
   title           String
   description     String
   membership_fee  Float
+  is_approved      Boolean        @default(false)
   categories      ClubCategory[]
   admins          ClubAdmin[]
 }

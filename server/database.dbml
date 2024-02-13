@@ -9,6 +9,7 @@ Table User {
   first_name String [not null]
   last_name String [not null]
   admin_flag Boolean [not null]
+  admins ClubAdmin [not null]
 }
 
 Table UserEmailVerification {
@@ -16,3 +17,44 @@ Table UserEmailVerification {
   email String [unique, not null]
   code Int [not null]
 }
+
+Table Club {
+  id Int [pk, increment]
+  title String [not null]
+  description String [not null]
+  membership_fee Float [not null]
+  categories ClubCategory [not null]
+  admins ClubAdmin [not null]
+}
+
+Table Category {
+  id Int [pk, increment]
+  type String [not null]
+  name String [not null]
+  clubs ClubCategory [not null]
+}
+
+Table ClubCategory {
+  id Int [pk, increment]
+  club_id Int [not null]
+  category_id Int [not null]
+  club Club [not null]
+  category Category [not null]
+}
+
+Table ClubAdmin {
+  id Int [pk, increment]
+  user_id Int [not null]
+  club_id Int [not null]
+  position String [not null]
+  user User [not null]
+  club Club [not null]
+}
+
+Ref: ClubCategory.club_id > Club.id
+
+Ref: ClubCategory.category_id > Category.id
+
+Ref: ClubAdmin.user_id > User.id
+
+Ref: ClubAdmin.club_id > Club.id

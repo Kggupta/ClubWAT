@@ -76,6 +76,66 @@ router.get<void, ClubResponse>("/", authenticateToken, async (req, res) => {
     }
 });
 
+router.get<void, ClubResponse>("/approved", authenticateToken, async (req, res) => {
+    try {
+        let query = {};
+        if (req.query.withCategories === 'true') {
+            query = {
+                isApproved: true,
+                include: {
+                    categories: {
+                        select: {
+                            category: {
+                                select: {
+                                    id: true,
+                                    type: true,
+                                    name: true
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        let clubs: ClubWithCategories[] = await prisma.club.findMany(query);
+
+        res.json({ data: clubs }).status(OK_CODE);
+    } catch (error) {
+        res.sendStatus(INTERNAL_ERROR_CODE);
+    }
+});
+
+router.get<void, ClubResponse>("/not-approved", authenticateToken, async (req, res) => {
+    try {
+        let query = {};
+        if (req.query.withCategories === 'true') {
+            query = {
+                isApproved: false,
+                include: {
+                    categories: {
+                        select: {
+                            category: {
+                                select: {
+                                    id: true,
+                                    type: true,
+                                    name: true
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        let clubs: ClubWithCategories[] = await prisma.club.findMany(query);
+
+        res.json({ data: clubs }).status(OK_CODE);
+    } catch (error) {
+        res.sendStatus(INTERNAL_ERROR_CODE);
+    }
+});
+
 router.get<ChosenClub, ClubAdminResponse>("/:id", authenticateToken, async (req, res) => {
     try {
         const clubId = Number(req.params.id);
