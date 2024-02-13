@@ -2,6 +2,7 @@ package com.example.clubwat.views
 import SignUpViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -26,7 +27,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.clubwat.R
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun SignUpView(viewModel: SignUpViewModel = viewModel()) {
@@ -84,7 +88,9 @@ fun SignUpView(viewModel: SignUpViewModel = viewModel()) {
         )
         Spacer(modifier = Modifier.height(16.dp))
         Button(
-            onClick = { viewModel.signUp() },
+            onClick = {
+                viewModel.sendVerificationEmail()
+            },
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFDA9206)
             ),
             modifier = Modifier
@@ -93,5 +99,17 @@ fun SignUpView(viewModel: SignUpViewModel = viewModel()) {
         ) {
             Text("Sign Up")
         }
+
+        Spacer(modifier = Modifier.height(16.dp))
+        ClickableText(
+            text = AnnotatedString("Already have an account?"),
+            style = MaterialTheme.typography.headlineMedium.copy(
+                fontSize = 16.sp
+            ),
+            overflow = TextOverflow.Ellipsis,
+            onClick = {
+                // navController.navigate("LoginView")
+            }
+        )
     }
 }

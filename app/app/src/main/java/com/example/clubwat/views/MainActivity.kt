@@ -11,6 +11,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.clubwat.ui.theme.ClubWATTheme
+//import androidx.navigation.compose.NavHost
+//import androidx.navigation.compose.composable
+//import androidx.navigation.compose.rememberNavController
+
+//    val navController = rememberNavController()
+//    NavHost(navController = navController, startDestination = "mainScreen") {
+//        composable("mainScreen") { MainScreen(navController) }
+//        composable("loginView") { LoginView() }
+//    }
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,7 +27,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             ClubWATTheme {
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    CodeVerificationView()
+                    SignUpView()
                 }
             }
         }
