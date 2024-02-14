@@ -76,7 +76,7 @@ router.post<EmailVerificationRequest, void>(
       await prisma.userEmailVerification.deleteMany({
         where: { email: verificationRequest.email },
       });
-      console.log(verificationCode);
+
       await prisma.userEmailVerification.create({
         data: { email: verificationRequest.email, code: verificationCode },
       });
@@ -180,7 +180,7 @@ router.get<UserRequest, UserDetailsResponse>(
       return res.sendStatus(INVALID_REQUEST_CODE);
     }
 
-    const user = await prisma.user.findFirst({
+    const user: UserDetailsResponse | null = await prisma.user.findFirst({
       where: { id: userId },
       select: { email: true, first_name: true, last_name: true },
     });
