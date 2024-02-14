@@ -41,6 +41,8 @@ import androidx.navigation.NavController
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.TopAppBar
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -117,10 +119,16 @@ fun CodeVerificationView(
         }
         Button(
             onClick = {
-                val verificationCodeString = verificationCode.joinToString(separator = "")
-                viewModel.code.value = verificationCodeString
-                viewModel.register()
-//                navController.navigate("home")
+                // Launch a coroutine in the viewModelScope or lifecycleScope
+                viewModel.viewModelScope.launch {
+                    val verificationCodeString = verificationCode.joinToString(separator = "")
+                    viewModel.code.value = verificationCodeString
+                    viewModel.register { isRegistered ->
+                        if (isRegistered) {
+                            navController.navigate("home")
+                        }
+                    }
+                }
             },
             modifier = Modifier
                 .fillMaxWidth()

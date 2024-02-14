@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.clubwat.model.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
@@ -17,17 +18,15 @@ class CodeVerificationViewModel(private val userRepository: UserRepository): Vie
     private var password = userRepository.currentUser?.password
     var code = mutableStateOf("")
 
-    fun register() {
+    fun register(callback: (Boolean) -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {
+            var registered = false
             try {
                 val url = URL("http://10.0.2.2:3000/api/v1/user/register")
                 (url.openConnection() as HttpURLConnection).apply {
                     requestMethod = "POST"
                     doOutput = true
                     setRequestProperty("Content-Type", "application/json")
-                    println(email?.value)
-                    println(code)
-                    println(password)
 
                     val requestBody = """
                         {
@@ -42,8 +41,9 @@ class CodeVerificationViewModel(private val userRepository: UserRepository): Vie
                     OutputStreamWriter(outputStream).use { it.write(requestBody) }
 
                     val responseCode = responseCode
+                    registered = responseCode == HttpURLConnection.HTTP_CREATED
                     println(responseCode)
-                    if (responseCode == HttpURLConnection.HTTP_OK) {
+                    if (registered) {
                         // Handle the response
                         val response = inputStream.bufferedReader().use { it.readText() }
                         println("Registration Successful: $response")
@@ -55,6 +55,9 @@ class CodeVerificationViewModel(private val userRepository: UserRepository): Vie
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
+            }
+            withContext(Dispatchers.Main) {
+                callback(registered)
             }
         }
     }
