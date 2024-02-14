@@ -10,6 +10,9 @@ Table User {
   last_name String [not null]
   admin_flag Boolean [not null]
   admins ClubAdmin [not null]
+  attendingEvents AttendingEvents [not null]
+  bookmarkedEvents BookmarkedEvents [not null]
+  feedbackEvents FeedbackEvents [not null]
 }
 
 Table UserEmailVerification {
@@ -26,6 +29,7 @@ Table Club {
   is_approved Boolean [not null, default: false]
   categories ClubCategory [not null]
   admins ClubAdmin [not null]
+  events Events [not null]
 }
 
 Table Category {
@@ -52,6 +56,45 @@ Table ClubAdmin {
   club Club [not null]
 }
 
+Table Events {
+  id Int [pk, increment]
+  title String [not null]
+  description String [not null]
+  start_date DateTime [not null]
+  end_date DateTime [not null]
+  club_id Int [not null]
+  club Club [not null]
+  feedback_events FeedbackEvents [not null]
+  attending_events AttendingEvents [not null]
+  bookmarked_events BookmarkedEvents [not null]
+}
+
+Table AttendingEvents {
+  id Int [pk, increment]
+  user_email String [not null]
+  event_id Int [not null]
+  user User [not null]
+  event Events [not null]
+}
+
+Table BookmarkedEvents {
+  id Int [pk, increment]
+  user_id Int [not null]
+  event_id Int [not null]
+  user User [not null]
+  event Events [not null]
+}
+
+Table FeedbackEvents {
+  id Int [pk, increment]
+  event_id Int [not null]
+  feedback String [not null]
+  created DateTime [not null]
+  user_email String [not null]
+  user User [not null]
+  event Events [not null]
+}
+
 Ref: ClubCategory.club_id > Club.id
 
 Ref: ClubCategory.category_id > Category.id
@@ -59,3 +102,17 @@ Ref: ClubCategory.category_id > Category.id
 Ref: ClubAdmin.user_id > User.id
 
 Ref: ClubAdmin.club_id > Club.id
+
+Ref: Events.club_id > Club.id
+
+Ref: AttendingEvents.user_email > User.email
+
+Ref: AttendingEvents.event_id > Events.id
+
+Ref: BookmarkedEvents.user_id > User.id
+
+Ref: BookmarkedEvents.event_id > Events.id
+
+Ref: FeedbackEvents.user_email > User.email
+
+Ref: FeedbackEvents.event_id > Events.id

@@ -19,5 +19,4 @@ router.use("/club", clubRoutes);
 router.use("/club/admin", adminRoutes);
 router.use("/category", clubCategoryRoutes);
 
-
 export default router;

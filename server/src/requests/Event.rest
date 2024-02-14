@@ -1,0 +1,39 @@
+GET http://localhost:3000/api/v1/club/2/events
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhMzNwYXRpbEB1d2F0ZXJsb28uY2EiLCJwYXNzd29yZCI6IlBhc3N3b3JkMSQiLCJmaXJzdF9uYW1lIjoiQWJoaW5pdCIsImxhc3RfbmFtZSI6IlBhdGlsIiwiYWRtaW5fZmxhZyI6ZmFsc2UsImlhdCI6MTcwNzg5NTAyNH0.sAKv4NDYCHvcyyvnfPvuCTwqno23SxC7sCPb3tlLUTc
+content-type: application/json
+
+###
+
+POST http://localhost:3000/api/v1/club/2/events
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhMzNwYXRpbEB1d2F0ZXJsb28uY2EiLCJwYXNzd29yZCI6IlBhc3N3b3JkMSQiLCJmaXJzdF9uYW1lIjoiQWJoaW5pdCIsImxhc3RfbmFtZSI6IlBhdGlsIiwiYWRtaW5fZmxhZyI6ZmFsc2UsImlhdCI6MTcwNzg5NTAyNH0.sAKv4NDYCHvcyyvnfPvuCTwqno23SxC7sCPb3tlLUTc
+content-type: application/json
+
+{
+    "id": "123",
+    "title": "Event 1",
+    "description": "This is event one",
+    "start_date": "2023-04-15T14:00:00Z",
+    "end_date": "2023-04-17T14:00:00Z",
+    "club_id": "2"
+}
+
+###
+
+PUT http://localhost:3000/api/v1/club/2/events/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhMzNwYXRpbEB1d2F0ZXJsb28uY2EiLCJwYXNzd29yZCI6IlBhc3N3b3JkMSQiLCJmaXJzdF9uYW1lIjoiQWJoaW5pdCIsImxhc3RfbmFtZSI6IlBhdGlsIiwiYWRtaW5fZmxhZyI6ZmFsc2UsImlhdCI6MTcwNzg5NTAyNH0.sAKv4NDYCHvcyyvnfPvuCTwqno23SxC7sCPb3tlLUTc
+content-type: application/json
+
+{
+    "id": "123",
+    "title": "Event 1",
+    "description": "This is event one",
+    "start_date": "2023-04-15T14:00:00Z",
+    "end_date": "2023-04-17T14:00:00Z",
+    "club_id": "3"
+}
+
+###
+
+DELETE http://localhost:3000/api/v1/club/2/events/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhMzNwYXRpbEB1d2F0ZXJsb28uY2EiLCJwYXNzd29yZCI6IlBhc3N3b3JkMSQiLCJmaXJzdF9uYW1lIjoiQWJoaW5pdCIsImxhc3RfbmFtZSI6IlBhdGlsIiwiYWRtaW5fZmxhZyI6ZmFsc2UsImlhdCI6MTcwNzg5NTAyNH0.sAKv4NDYCHvcyyvnfPvuCTwqno23SxC7sCPb3tlLUTc
+content-type: application/json
