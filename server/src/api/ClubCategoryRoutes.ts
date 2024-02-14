@@ -5,13 +5,33 @@ import {
   INVALID_REQUEST_CODE,
   OK_CODE
 } from "../lib/StatusCodes";
-import { authenticateToken, verifyIsClubAdmin } from "../middlewares";
+import { authenticateToken } from "../middlewares";
 const router = express.Router();
 
 type CategoryDetails = {
     type: string
     name: string
 }
+
+type CategoryResponse = {
+    id: number,
+    type: string,
+    name: string
+}
+
+router.get<void, CategoryResponse[]>("/", authenticateToken, async (req, res) => {
+    try {
+        let query = {}
+
+        let categories: CategoryResponse[] = await prisma.category.findMany(query)
+        console.log(categories)
+
+        res.status(OK_CODE).json(categories);
+
+    } catch (error) {
+        res.sendStatus(INTERNAL_ERROR_CODE);
+    }
+});
 
 router.post<CategoryDetails, void>("/", authenticateToken, async (req, res) => {
     try {

@@ -17,7 +17,7 @@ router.get<{}, MessageResponse>("/", (req, res) => {
 router.use("/user", userRoutes);
 router.use("/club", clubRoutes);
 router.use("/club/admin", adminRoutes);
-router.use("/club/category", clubCategoryRoutes);
+router.use("/category", clubCategoryRoutes);
 
 
 export default router;
