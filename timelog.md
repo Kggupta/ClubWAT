@@ -25,3 +25,4 @@
 | 02/11/2024 |        |        |        |         |         | 4       | Connected Auth to APIs; added some more APIs            |
 | 02/12/2024 |        |        | 4      |         |         |         | Modified Signup & Login page. Created Verification Page.|
 | 02/13/2024 |        |        | 5.5    |         |         |         | Added Navigation, Password Checks, & Factory Classes.   |
+| 02/14/2024 | 0.5    |        |        |         |         |         | GET endpoint for user by ID                             |
