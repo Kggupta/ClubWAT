@@ -38,6 +38,7 @@ fun LoginView(
     navController: NavController
 ) {
     val allValuesError by viewModel.allValuesError
+    val loginError by viewModel.loginError
     var viewPassword by remember { mutableStateOf(false) }
 
     Column(
@@ -102,6 +103,13 @@ fun LoginView(
         if (allValuesError != null) {
             Text(
                 text = allValuesError!!,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
+        if (allValuesError == null && loginError != null) {
+            Text(
+                text = loginError!!,
                 color = MaterialTheme.colorScheme.error,
                 style = MaterialTheme.typography.bodySmall
             )

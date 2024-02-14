@@ -16,6 +16,7 @@ class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
     var email = mutableStateOf("")
     var password = mutableStateOf("")
     var allValuesError = mutableStateOf<String?>(null)
+    val loginError = mutableStateOf<String?>(null)
 
     fun areAllValuesFilled(email: String, password:String) {
         if (email != "" && password != "") {
@@ -65,11 +66,13 @@ class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
                         updateUserInfoBasedOnToken(token)
                         println("Response: $response")
                     } else {
+                        loginError.value = "Invalid Email or Password"
                         val response = errorStream.bufferedReader().use { it.readText() }
                         println("Error Response: $response")
                     }
                 }
             } catch (e: Exception) {
+                loginError.value = "Invalid Email or Password"
                 e.printStackTrace()
             }
             withContext(Dispatchers.Main) {
