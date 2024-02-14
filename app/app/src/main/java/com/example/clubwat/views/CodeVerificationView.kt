@@ -163,8 +163,15 @@ fun CodeInputField(
 ) {
     OutlinedTextField(
         value = digit,
-        onValueChange = onValueChange,
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        onValueChange = { input ->
+            if (input.all { it.isDigit() }) {
+                onValueChange(input)
+            }
+        },
+        singleLine = true,
+        keyboardOptions = KeyboardOptions.Default.copy(
+            keyboardType = KeyboardType.Number
+        ),
         modifier = modifier
             .onKeyEvent { keyEvent ->
                 // after user has completed key press for backspace
