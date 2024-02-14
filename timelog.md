@@ -24,3 +24,4 @@
 | 02/10/2024 |        |        |        |         |         | 2       | Added ClubAdmin and Club APIs                           |
 | 02/11/2024 |        |        |        |         |         | 4       | Connected Auth to APIs; added some more APIs            |
 | 02/14/2024 | 0.5    |        |        |         |         |         | GET endpoint for user by ID                             |
+| 02/14/2024 | 1      |        |        |         |         |         | Dev DB setup research and implementation                |
