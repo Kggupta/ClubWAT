@@ -27,3 +27,4 @@
 | 02/11/2024 |        |        |        |         | 2       |         | Reviewed ClubAdmin + Club APIs                          |
 | 02/11/2024 |        |        |        |         | 1       |         | Scoped club approval, club admin config and events CRUD |
 | 02/13/2024 |        |        |        |         | 4       |         | Implemented Club approval + Categories endpoints        |
+| 02/14/2024 | 0.5    |        |        |         |         |         | GET endpoint for user by ID                             |

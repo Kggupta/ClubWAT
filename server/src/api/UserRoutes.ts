@@ -76,7 +76,7 @@ router.post<EmailVerificationRequest, void>(
       await prisma.userEmailVerification.deleteMany({
         where: { email: verificationRequest.email },
       });
-      console.log(verificationCode);
+
       await prisma.userEmailVerification.create({
         data: { email: verificationRequest.email, code: verificationCode },
       });
@@ -161,7 +161,36 @@ router.post<RegistrationRequest, RegistrationResponse>(
   }
 );
 
-router.get("/decode-token-test-endpoint", authenticateToken, (req, res) => {
-  res.json(req.body.user);
-});
+type UserRequest = {
+  id: number;
+};
+
+type UserDetailsResponse = {
+  email: string;
+  first_name: string;
+  last_name: string;
+};
+
+router.get<UserRequest, UserDetailsResponse>(
+  "/:id",
+  authenticateToken,
+  async (req, res) => {
+    const userId = Number(req.params.id);
+    if (!userId) {
+      return res.sendStatus(INVALID_REQUEST_CODE);
+    }
+
+    const user: UserDetailsResponse | null = await prisma.user.findFirst({
+      where: { id: userId },
+      select: { email: true, first_name: true, last_name: true },
+    });
+
+    if (!user) {
+      return res.sendStatus(NOT_FOUND_CODE);
+    }
+
+    res.status(OK_CODE).json(user);
+  }
+);
+
 export default router;
