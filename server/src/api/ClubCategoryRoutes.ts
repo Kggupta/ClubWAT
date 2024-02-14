@@ -24,8 +24,6 @@ router.get<void, CategoryResponse[]>("/", authenticateToken, async (req, res) =>
         let query = {}
 
         let categories: CategoryResponse[] = await prisma.category.findMany(query)
-        console.log(categories)
-
         res.status(OK_CODE).json(categories);
 
     } catch (error) {
