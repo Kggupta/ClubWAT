@@ -41,6 +41,7 @@ import androidx.navigation.NavController
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 
@@ -54,6 +55,7 @@ fun CodeVerificationView(
     val codeLength = 6
     val verificationCode = remember { mutableStateListOf(*Array(codeLength) { "" }) }
     val focusRequesters = List(codeLength) { FocusRequester() } // move focus to a specific composable
+    val verificationError by viewModel.verificationError
 
     Column(
         modifier = Modifier
@@ -140,6 +142,13 @@ fun CodeVerificationView(
             viewModel.sendVerificationEmail()
         }) {
             Text("Resend code")
+        }
+        if (verificationError != null) {
+            Text(
+                text = verificationError!!,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall
+            )
         }
     }
 }

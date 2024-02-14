@@ -5,6 +5,7 @@ import com.example.clubwat.model.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.json.JSONObject
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
@@ -39,6 +40,9 @@ class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
                     loggedIn = responseCode == HttpURLConnection.HTTP_OK
                     if (loggedIn) {
                         val response = inputStream.bufferedReader().use { it.readText() }
+                        val jsonResponse = JSONObject(response)
+                        val token = jsonResponse.optString("data", null.toString())
+                        userRepository.currentUser?.userId?.value = token
                         println("Response: $response")
                     } else {
                         val response = errorStream.bufferedReader().use { it.readText() }

@@ -7,6 +7,7 @@ import com.example.clubwat.model.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.json.JSONObject
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
@@ -17,6 +18,7 @@ class CodeVerificationViewModel(private val userRepository: UserRepository): Vie
     private var email = userRepository.currentUser?.email
     private var password = userRepository.currentUser?.password
     var code = mutableStateOf("")
+    var verificationError = mutableStateOf<String?>(null)
 
     fun register(callback: (Boolean) -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -46,9 +48,13 @@ class CodeVerificationViewModel(private val userRepository: UserRepository): Vie
                     if (registered) {
                         // Handle the response
                         val response = inputStream.bufferedReader().use { it.readText() }
+                        val jsonResponse = JSONObject(response)
+                        val token = jsonResponse.optString("data", null.toString())
+                        userRepository.currentUser?.userId?.value = token
                         println("Registration Successful: $response")
                     } else {
                         // Handle error
+                        verificationError.value = "The verification code is incorrect."
                         val response = errorStream.bufferedReader().use { it.readText() }
                         println("Registration Failed: $response")
                     }
