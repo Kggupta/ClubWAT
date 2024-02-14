@@ -11,14 +11,11 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 class CodeVerificationViewModel(private val userRepository: UserRepository): ViewModel() {
-    var firstName = userRepository.currentUser?.firstName
-    var lastName = userRepository.currentUser?.lastName
-    var email = userRepository.currentUser?.email
-    var password = userRepository.currentUser?.password
+    private var firstName = userRepository.currentUser?.firstName
+    private var lastName = userRepository.currentUser?.lastName
+    private var email = userRepository.currentUser?.email
+    private var password = userRepository.currentUser?.password
     var code = mutableStateOf("")
-    fun validateVerificationCode(verificationCode: Int) {
-
-    }
 
     fun register() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -62,5 +59,31 @@ class CodeVerificationViewModel(private val userRepository: UserRepository): Vie
         }
     }
 
-    fun sendVerificationCode() {}
+    fun sendVerificationEmail() {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                println(email?.value)
+                val url = URL("http://10.0.2.2:3000/api/v1/user/registration-email-verification")
+                (url.openConnection() as HttpURLConnection).apply {
+                    requestMethod = "POST"
+                    doOutput = true
+                    setRequestProperty("Content-Type", "application/json")
+
+                    val body = """{"email": "${email?.value}"}"""
+
+                    OutputStreamWriter(outputStream).use { it.write(body) }
+                    val responseCode = responseCode
+                    if (responseCode == HttpURLConnection.HTTP_OK) {
+                        val response = inputStream.bufferedReader().use { it.readText() }
+                        println("Response: $response")
+                    } else {
+                        val response = errorStream.bufferedReader().use { it.readText() }
+                        println("Error Response: $response")
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
 }

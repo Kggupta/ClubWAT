@@ -6,10 +6,6 @@ class UserRepository {
     var currentUser: User? = null
 
     fun createUser(firstName: MutableState<String>, lastName: MutableState<String>, email: MutableState<String>, password: MutableState<String>) {
-        currentUser = User(firstName, lastName, email, password)
+        currentUser = User(null, firstName, lastName, email, password)
     }
-
-//    fun getCurrentUser(): User? {
-//        return currentUser
-//    }
 }

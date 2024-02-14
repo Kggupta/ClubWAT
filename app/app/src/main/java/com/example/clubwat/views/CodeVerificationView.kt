@@ -10,7 +10,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -27,7 +30,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.clubwat.R
 import com.example.clubwat.viewmodels.CodeVerificationViewModel
 import androidx.compose.ui.input.key.Key
@@ -36,7 +38,11 @@ import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
 import androidx.navigation.NavController
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.TopAppBar
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CodeVerificationView(
     viewModel: CodeVerificationViewModel,
@@ -53,6 +59,17 @@ fun CodeVerificationView(
             .padding(26.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        TopAppBar(
+            title = { },
+            navigationIcon = {
+                IconButton(onClick = { navController.navigateUp() }) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back"
+                    )
+                }
+            }
+        )
         Text(
             text = "Verification",
             fontWeight = FontWeight.Bold,
@@ -101,9 +118,9 @@ fun CodeVerificationView(
         Button(
             onClick = {
                 val verificationCodeString = verificationCode.joinToString(separator = "")
-                // Update the viewModel's code value
                 viewModel.code.value = verificationCodeString
                 viewModel.register()
+//                navController.navigate("home")
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -112,7 +129,7 @@ fun CodeVerificationView(
             Text("Done")
         }
         TextButton(onClick = {
-//            viewModel.sendVerificationCode()
+            viewModel.sendVerificationEmail()
         }) {
             Text("Resend code")
         }

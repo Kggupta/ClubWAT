@@ -16,11 +16,6 @@ class SignUpViewModel(private val userRepository: UserRepository) : ViewModel() 
     var passwordError = mutableStateOf<String?>(null)
     var allValuesError = mutableStateOf<String?>(null)
 
-    fun signUp() {
-        viewModelScope.launch {
-        }
-    }
-
     fun createUser() {
         userRepository.createUser(firstName, lastName, email, password)
     }
@@ -59,14 +54,11 @@ class SignUpViewModel(private val userRepository: UserRepository) : ViewModel() 
                     val body = """{"email": "${email.value}"}"""
 
                     OutputStreamWriter(outputStream).use { it.write(body) }
-                    // Read the response
                     val responseCode = responseCode
                     if (responseCode == HttpURLConnection.HTTP_OK) {
-                        // Handle the response
                         val response = inputStream.bufferedReader().use { it.readText() }
                         println("Response: $response")
                     } else {
-                        // Handle error
                         val response = errorStream.bufferedReader().use { it.readText() }
                         println("Error Response: $response")
                     }
