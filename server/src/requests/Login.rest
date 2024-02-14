@@ -5,8 +5,3 @@ content-type: application/json
     "email": "k44gupta@uwaterloo.ca",
     "password": "Password1$"
 }
-
-###
-
-GET http://localhost:3000/api/v1/user/1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiZW1haWwiOiJrNDRndXB0YUB1d2F0ZXJsb28uY2EiLCJwYXNzd29yZCI6IlBhc3N3b3JkMSQiLCJmaXJzdF9uYW1lIjoiS2VzaGF2IiwibGFzdF9uYW1lIjoiR3VwdGEiLCJhZG1pbl9mbGFnIjpmYWxzZSwiaWF0IjoxNzA3MDkxNjI0fQ.cgJgwyBzXnnMbeJPn_FxIuHk0NFHv37rAgbOTlcRRfE
