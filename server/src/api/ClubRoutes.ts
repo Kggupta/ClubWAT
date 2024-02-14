@@ -54,6 +54,23 @@ type includeQuery = {
     }
 }
 
+type Events = {
+    id: number,
+    title: string,
+    description: string,
+    start_date: Date,
+    end_date: Date
+}
+
+type EventsResponse = {
+    data: Events[]
+}
+
+type ChosenEvent = {
+    id: string
+    eventId: string
+}
+
 async function addClubCategories(clubId: number, categories: number[]) {
     if (!categories.length) return;
 
@@ -220,7 +237,7 @@ router.delete<ChosenClub, void>("/:id", authenticateToken, verifyIsClubAdmin, as
 
 
 // Events routes
-router.get("/:id/events", authenticateToken, async (req, res) => {
+router.get<ChosenClub, EventsResponse>("/:id/events", authenticateToken, async (req, res) => {
     try {
         const clubId = Number(req.params.id);
         if (!clubId) {
@@ -229,13 +246,13 @@ router.get("/:id/events", authenticateToken, async (req, res) => {
         const events = await prisma.events.findMany({
             where: { club_id: clubId },
         });
-        res.status(OK_CODE).json(events);
+        res.status(OK_CODE).json({ data: events });
     } catch (error) {
         res.sendStatus(INTERNAL_ERROR_CODE);
     }
 });
 
-router.post("/:id/events", authenticateToken, async (req, res) => {
+router.post<ChosenClub, Events>("/:id/events", authenticateToken, async (req, res) => {
     try {
         const clubId = Number(req.params.id);
         const { title, description, start_date, end_date } = req.body;
@@ -257,7 +274,7 @@ router.post("/:id/events", authenticateToken, async (req, res) => {
     }
 });
 
-router.put("/:id/events/:eventId", authenticateToken, async (req, res) => {
+router.put<ChosenEvent, Events>("/:id/events/:eventId", authenticateToken, async (req, res) => {
     try {
         const eventId = Number(req.params.eventId);
         const { title, description, start_date, end_date } = req.body;
@@ -272,7 +289,7 @@ router.put("/:id/events/:eventId", authenticateToken, async (req, res) => {
     }
 });
 
-router.delete("/:id/events/:eventId", authenticateToken, async (req, res) => {
+router.delete<ChosenEvent, void>("/:id/events/:eventId", authenticateToken, async (req, res) => {
     try {
         const eventId = Number(req.params.eventId);
         await prisma.events.delete({
@@ -283,7 +300,5 @@ router.delete("/:id/events/:eventId", authenticateToken, async (req, res) => {
         res.sendStatus(INTERNAL_ERROR_CODE);
     }
 });
-
-
 
 export default router;
