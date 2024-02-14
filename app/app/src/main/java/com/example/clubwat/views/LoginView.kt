@@ -90,9 +90,7 @@ fun LoginView(
                     if (isLoggedIn) {
                         navController.navigate("home")
                     }
-                }
-
-                      },
+                } },
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFDA9206)
             ),
             modifier = Modifier

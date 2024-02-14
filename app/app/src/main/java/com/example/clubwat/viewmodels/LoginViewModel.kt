@@ -9,6 +9,8 @@ import org.json.JSONObject
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
+import com.auth0.jwt.JWT
+import com.auth0.jwt.interfaces.DecodedJWT
 
 class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
     var email = mutableStateOf("")
@@ -20,6 +22,23 @@ class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
             allValuesError.value = null
         } else {
             allValuesError.value = "Please fill in all values."
+        }
+    }
+
+    private fun updateUserInfoBasedOnToken(userToken: String) {
+        try {
+            val decodedJWT = JWT.decode(userToken)
+            decodedJWT?.let { jwt ->
+                val firstName = jwt.getClaim("first_name").asString()
+                val lastName = jwt.getClaim("last_name").asString()
+                val email = jwt.getClaim("email").asString()
+
+                userRepository.currentUser?.firstName?.value = firstName
+                userRepository.currentUser?.lastName?.value = lastName
+                userRepository.currentUser?.email?.value = email
+            }
+        } catch (e: Exception) {
+            println(e.printStackTrace())
         }
     }
 
@@ -43,6 +62,7 @@ class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
                         val jsonResponse = JSONObject(response)
                         val token = jsonResponse.optString("data", null.toString())
                         userRepository.currentUser?.userId?.value = token
+                        updateUserInfoBasedOnToken(token)
                         println("Response: $response")
                     } else {
                         val response = errorStream.bufferedReader().use { it.readText() }

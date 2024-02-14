@@ -69,5 +69,5 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.7.7")
     implementation("androidx.compose.material:material-icons-core:1.6.1")
     implementation("androidx.compose.material:material-icons-extended:1.6.1")
-
+    implementation("com.auth0:java-jwt:3.18.2")
 }
