@@ -37,7 +37,7 @@ class SignUpViewModel(private val userRepository: UserRepository) : ViewModel() 
     }
 
     private fun isValidPassword(password: String): Boolean {
-        val passwordPattern = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$"
+        val passwordPattern = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=])(?=\\S+$).{8,}$"
         return password.matches(passwordPattern.toRegex())
     }
 
