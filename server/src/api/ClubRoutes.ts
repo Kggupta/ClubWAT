@@ -36,6 +36,24 @@ type ClubAdminResponse = {
     data: ClubAdmin[]
 }
 
+type ClubStatus = {
+    status: string
+}
+
+type includeQuery = {
+    categories: {
+        select: {
+            category: {
+                select: {
+                    id: true,
+                    type: true,
+                    name: true
+                }
+            }
+        }
+    }
+}
+
 async function addClubCategories(clubId: number, categories: number[]) {
     if (!categories.length) return;
 
@@ -47,80 +65,26 @@ async function addClubCategories(clubId: number, categories: number[]) {
     await prisma.clubCategory.createMany({ data: clubCategories });
 }
 
-router.get<void, ClubResponse>("/", authenticateToken, async (req, res) => {
+router.get<ClubStatus, ClubResponse>("/:status?", authenticateToken, async (req, res) => {
     try {
-        let query = {};
-        if (req.query.withCategories === 'true') {
-            query = {
-                include: {
-                    categories: {
-                        select: {
-                            category: {
-                                select: {
-                                    id: true,
-                                    type: true,
-                                    name: true
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+        let query: { where?: { is_approved: boolean }; include?: includeQuery } = {};
+
+        // Determine the approval status based on the route
+        if (req.params.status === 'approved') {
+            query.where = { is_approved: true };
+        } else if (req.params.status === 'not-approved') {
+            query.where = { is_approved: false };
         }
 
-        let clubs: ClubWithCategories[] = await prisma.club.findMany(query);
-
-        res.json({ data: clubs }).status(OK_CODE);
-    } catch (error) {
-        res.sendStatus(INTERNAL_ERROR_CODE);
-    }
-});
-
-router.get<void, ClubResponse>("/approved", authenticateToken, async (req, res) => {
-    try {
-        let query = {};
         if (req.query.withCategories === 'true') {
-            query = {
-                isApproved: true,
-                include: {
-                    categories: {
-                        select: {
-                            category: {
-                                select: {
-                                    id: true,
-                                    type: true,
-                                    name: true
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        let clubs: ClubWithCategories[] = await prisma.club.findMany(query);
-
-        res.json({ data: clubs }).status(OK_CODE);
-    } catch (error) {
-        res.sendStatus(INTERNAL_ERROR_CODE);
-    }
-});
-
-router.get<void, ClubResponse>("/not-approved", authenticateToken, async (req, res) => {
-    try {
-        let query = {};
-        if (req.query.withCategories === 'true') {
-            query = {
-                isApproved: false,
-                include: {
-                    categories: {
-                        select: {
-                            category: {
-                                select: {
-                                    id: true,
-                                    type: true,
-                                    name: true
-                                }
+            query.include = {
+                categories: {
+                    select: {
+                        category: {
+                            select: {
+                                id: true,
+                                type: true,
+                                name: true
                             }
                         }
                     }
@@ -207,7 +171,8 @@ router.put<ClubDetails, void>("/:id", authenticateToken, verifyIsClubAdmin, asyn
                 data: {
                     title: req.body.title,
                     description: req.body.description,
-                    membership_fee: req.body.membership_fee
+                    membership_fee: req.body.membership_fee,
+                    is_approved: req.body.is_approved
                 }
             }),
             (async () => {

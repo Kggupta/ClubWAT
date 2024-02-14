@@ -23,6 +23,7 @@ Table Club {
   title String [not null]
   description String [not null]
   membership_fee Float [not null]
+  is_approved Boolean [not null, default: false]
   categories ClubCategory [not null]
   admins ClubAdmin [not null]
 }
