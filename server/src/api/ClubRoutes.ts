@@ -129,7 +129,8 @@ router.post<ClubDetails, void>("/", authenticateToken, async (req, res) => {
             data: {
                 title: req.body.title,
                 description: req.body.description,
-                membership_fee: req.body.membership_fee
+                membership_fee: req.body.membership_fee,
+                is_approved: false
             }
         });
 
@@ -153,7 +154,7 @@ router.post<ClubDetails, void>("/", authenticateToken, async (req, res) => {
 router.put<ClubDetails, void>("/:id", authenticateToken, verifyIsClubAdmin, async (req, res) => {
     try {
         if (!req.body.title || !req.body.description ||
-            !req.body.membership_fee || !req.body.categories) {
+            !req.body.membership_fee || !req.body.categories || !req.body.is_approved) {
             return res.sendStatus(INVALID_REQUEST_CODE);
         }
 
