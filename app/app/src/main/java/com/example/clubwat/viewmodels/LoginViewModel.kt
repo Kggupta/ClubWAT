@@ -12,8 +12,16 @@ import java.net.URL
 class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
     var email = mutableStateOf("")
     var password = mutableStateOf("")
+    var allValuesError = mutableStateOf<String?>(null)
 
-    // Function to handle sign up logic
+    fun areAllValuesFilled(email: String, password:String) {
+        if (email != "" && password != "") {
+            allValuesError.value = null
+        } else {
+            allValuesError.value = "Please fill in all values."
+        }
+    }
+
     fun login(callback: (Boolean) -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {
             var loggedIn = false

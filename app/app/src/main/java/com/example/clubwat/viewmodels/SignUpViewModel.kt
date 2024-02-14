@@ -13,7 +13,6 @@ class SignUpViewModel(private val userRepository: UserRepository) : ViewModel() 
     var lastName = mutableStateOf("")
     var email = mutableStateOf("")
     var password = mutableStateOf("")
-    var code = mutableStateOf("")
     var passwordError = mutableStateOf<String?>(null)
     var allValuesError = mutableStateOf<String?>(null)
 

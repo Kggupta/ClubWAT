@@ -39,7 +39,7 @@ class MainActivity : ComponentActivity() {
                 val homeViewModel: HomeViewModel by viewModels { HomeViewModelFactory(userRepository) }
 
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    NavHost(navController = navController, startDestination = "signup") {
+                    NavHost(navController = navController, startDestination = "login") {
                         composable("signup") {
                             SignUpView(viewModel = signUpViewModel, navController = navController)
                         }

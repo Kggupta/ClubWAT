@@ -2,6 +2,7 @@ package com.example.clubwat.views
 import LoginViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -26,7 +27,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.clubwat.R
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 
 @Composable
@@ -34,6 +38,7 @@ fun LoginView(
     viewModel: LoginViewModel,
     navController: NavController
 ) {
+    val allValuesError by viewModel.allValuesError
     var viewPassword by remember { mutableStateOf(false) }
 
     Column(
@@ -77,12 +82,16 @@ fun LoginView(
         Spacer(modifier = Modifier.height(16.dp))
         Button(
             onClick = {
+                viewModel.areAllValuesFilled(
+                    viewModel.email.value,
+                    viewModel.password.value
+                )
 
                 viewModel.login { isLoggedIn ->
                     if (isLoggedIn) {
                         navController.navigate("home")
                     }
-                    }
+                }
 
                       },
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFDA9206)
@@ -93,6 +102,23 @@ fun LoginView(
         ) {
             Text("Login")
         }
-
+        if (allValuesError != null) {
+            Text(
+                text = allValuesError!!,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+        ClickableText(
+            text = AnnotatedString("Don't have an account? Sign up now!"),
+            style = MaterialTheme.typography.headlineMedium.copy(
+                fontSize = 16.sp
+            ),
+            overflow = TextOverflow.Ellipsis,
+            onClick = {
+                navController.navigate("signup")
+            }
+        )
     }
 }
