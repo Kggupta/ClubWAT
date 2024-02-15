@@ -1,0 +1,21 @@
+GET http://localhost:3000/api/v1/club/discussion/:clubId
+Authorization: Bearer [token]
+content-type: application/json
+
+###
+
+POST http://localhost:3000/api/v1/club/discussion/:clubId
+Authorization: Bearer [token]
+content-type: application/json
+
+{
+    "user_id": 1,
+    "club_id": 1,
+    "message": "This club is awesome"
+}
+
+### 
+
+DELETE http://localhost:3000/api/v1/club/discussion/:clubId/:messageId
+Authorization: Bearer [token]
+content-type: application/json

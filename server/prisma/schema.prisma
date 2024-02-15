@@ -24,6 +24,7 @@ model User {
   last_name  String
   admin_flag Boolean
   admins     ClubAdmin[]
+  club_discussions ClubDiscussion[]
 }
 
 model UserEmailVerification {
@@ -40,6 +41,7 @@ model Club {
   is_approved    Boolean        @default(false)
   categories     ClubCategory[]
   admins         ClubAdmin[]
+  discussions     ClubDiscussion[]
 }
 
 model Category {
@@ -64,4 +66,14 @@ model ClubAdmin {
   position String
   user     User   @relation(fields: [user_id], references: [id])
   club     Club   @relation(fields: [club_id], references: [id])
+}
+
+model ClubDiscussion {
+  id          Int       @id @default(autoincrement())
+  user_id     Int
+  club_id     Int
+  message String
+  create_date DateTime
+  user        User      @relation(fields: [user_id], references: [id])
+  club        Club      @relation(fields: [club_id], references: [id])
 }

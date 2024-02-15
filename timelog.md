@@ -10,6 +10,7 @@
 | 01/22/2024 |        |        |        |         | 4       |         | Created user scenarios for searching clubs & recs        |
 | 01/22/2024 |        |        |        |         | 1       |         | Added to stakeholders and human human values             |
 | 01/28/2024 |        |        |        |         | 1       |         | Presentation Slides Prep + Review                        |
+| 01/25/2024 |        |        |        | 1       |         |         | Created presentation slides                              |
 | 01/20/2024 |        | 3      |        |         |         |         | Wrote the introduction for the report                    |
 | 01/20/2024 |        | 2      |        |         |         |         | Figma mockups for recommendation system                  |
 | 01/25/2024 |        | 1      |        |         |         |         | Proof read report                                        |
@@ -19,6 +20,7 @@
 | 02/03/2024 |        |        |        |         |         | 4       | Designed a SQL Database Schema for the project           |
 | 01/23/2024 |        |        |        |         |         | 2       | Added on to stakeholders in project proposal             |
 | 01/26/2024 |        |        |        |         |         | 1       | Proof read proposal report and made minor edits          |
+| 01/26/2024 |        |        |        | 1       |         |         | Proof read the report                                    |
 | 02/06/2024 | 0.2    |        |        |         |         |         | Autogenerate db model                                    |
 | 02/06/2024 |        |        |        |         |         | 5       | Setup dev environments locally & built Club APIs         |
 | 02/10/2024 |        |        |        |         |         | 2       | Added ClubAdmin and Club APIs                            |
@@ -31,3 +33,7 @@
 | 02/13/2024 |        |        |        |         | 5       |         | Implemented Club approval + Categories endpoints         |
 | 02/14/2024 | 0.5    |        |        |         |         |         | GET endpoint for user by ID                              |
 | 02/14/2024 | 4      |        |        |         |         |         | D2 writeup + auto format code                            |
+| 02/15/2024 |        |        |        | 0.5     |         |         | Modified club discussions in the database schemma        |
+| 02/16/2024 |        |        |        | 6       |         |         | Implemented club discussions backend                     |
+| 02/16/2024 |        |        |        | 1       |         |         | Reviewed D2 writeup                                      |
+| 02/16/2024 | 1      |        |        |         |         |         | Debug club discussions backend                           |
