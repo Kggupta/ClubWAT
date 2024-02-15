@@ -39,3 +39,4 @@
 | 02/16/2024 | 1      |        |        |         |         |         | Debug club discussions backend                           |
 | 02/15/2024 | 0.5    |        |        |         |         |         | Delete user endpoint                                     |
 | 02/15/2024 | 2      |        |        |         |         |         | Password hashing and salting for security                |
+| 02/15/2024 |        |        |        |         |         | 0.5     | Minor Backend Enhancements                               |
