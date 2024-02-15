@@ -2,6 +2,11 @@ POST http://localhost:3000/api/v1/user/login
 content-type: application/json
 
 {
-    "email": "k44gupta@uwaterloo.ca",
+    "email": "a33patil@uwaterloo.ca",
     "password": "Password1$"
 }
+
+###
+
+GET http://localhost:3000/api/v1/user/decode-token-test-endpoint
+Authorization: Bearer [token]
