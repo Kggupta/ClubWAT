@@ -11,6 +11,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 import com.auth0.jwt.JWT
 import com.auth0.jwt.interfaces.DecodedJWT
+import com.example.clubwat.BuildConfig
 
 class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
     var email = mutableStateOf("")
@@ -47,7 +48,7 @@ class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             var loggedIn = false
             try {
-                val url = URL("http://10.0.2.2:3000/api/v1/user/login")
+                val url = URL(BuildConfig.LOGIN_URL)
                 (url.openConnection() as HttpURLConnection).apply {
                     requestMethod = "POST"
                     doOutput = true

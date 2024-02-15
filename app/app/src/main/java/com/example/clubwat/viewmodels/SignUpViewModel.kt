@@ -1,6 +1,7 @@
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.clubwat.BuildConfig
 import com.example.clubwat.model.UserRepository
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.Dispatchers
@@ -45,7 +46,7 @@ class SignUpViewModel(private val userRepository: UserRepository) : ViewModel() 
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 println(email.value)
-                val url = URL("http://10.0.2.2:3000/api/v1/user/registration-email-verification")
+                val url = URL(BuildConfig.EMAIL_VERIFICATION_URL)
                 (url.openConnection() as HttpURLConnection).apply {
                     requestMethod = "POST"
                     doOutput = true

@@ -1,3 +1,5 @@
+import org.gradle.kotlin.dsl.*
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -14,9 +16,25 @@ android {
         versionCode = 1
         versionName = "1.0"
 
+        buildFeatures {
+            buildConfig = true
+        }
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
+        }
+        val registerApi = properties["REGISTER_API_URL"]?.toString()
+        if (registerApi != null) {
+            buildConfigField("String", "REGISTER_API_URL", registerApi)
+        }
+        val loginApi = properties["LOGIN_URL"]?.toString()
+        if (loginApi != null) {
+            buildConfigField("String", "LOGIN_URL", loginApi)
+        }
+        val emailVerificationEmail = properties["EMAIL_VERIFICATION_URL"]?.toString()
+        if (emailVerificationEmail != null) {
+            buildConfigField("String", "EMAIL_VERIFICATION_URL", emailVerificationEmail)
         }
     }
 
