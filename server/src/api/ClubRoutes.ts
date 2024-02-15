@@ -4,6 +4,7 @@ import { Club, ClubAdmin, ClubCategory } from "@prisma/client";
 import {
   INTERNAL_ERROR_CODE,
   INVALID_REQUEST_CODE,
+  NOT_FOUND_CODE,
   OK_CODE
 } from "../lib/StatusCodes";
 import { authenticateToken, verifyIsClubAdmin } from "../middlewares";
@@ -97,8 +98,8 @@ router.get<ClubParam, ClubResponse>("/:param?", authenticateToken, async (req, r
             query.where = { id: clubId };
             const club: Club | null = await prisma.club.findFirst(query);
 
-            if (club === null) {
-                return res.sendStatus(INVALID_REQUEST_CODE); // Or another appropriate response
+            if (club == null) {
+                return res.sendStatus(NOT_FOUND_CODE);
             }
 
             return res.json({ data: [club] }).status(OK_CODE);
