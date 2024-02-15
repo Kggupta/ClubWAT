@@ -36,8 +36,8 @@ type ClubAdminResponse = {
     data: ClubAdmin[]
 }
 
-type ClubStatus = {
-    status?: string
+type ClubParam = {
+    param: string
 }
 
 type includeQuery = {
@@ -65,15 +65,12 @@ async function addClubCategories(clubId: number, categories: number[]) {
     await prisma.clubCategory.createMany({ data: clubCategories });
 }
 
-router.get("/:param?", authenticateToken, async (req, res) => {
+router.get<ClubParam, ClubResponse>("/:param?", authenticateToken, async (req, res) => {
     try {
         const param = req.params.param;
+        let query: { where?: { id?: number, is_approved?: boolean }; include?: includeQuery } = {};
 
-        if (param === 'approved' || param === 'not-approved') {
-            let query: { where?: { is_approved: boolean }; include?: includeQuery } = {};
-            query.where = { is_approved: param === 'approved' };
-
-            if (req.query.withCategories === 'true') {
+         if (req.query.withCategories === 'true') {
                 query.include = {
                     categories: {
                         select: {
@@ -89,30 +86,47 @@ router.get("/:param?", authenticateToken, async (req, res) => {
                 };
             }
 
+        if (param === 'approved' || param === 'not-approved') {
+            query.where = { is_approved: param === 'approved' };
             let clubs: ClubWithCategories[] = await prisma.club.findMany(query);
+            
             return res.json({ data: clubs }).status(OK_CODE);
-        } else if (param && !isNaN(Number(param))) {
-            const clubId = Number(param);
-            const admins: ClubAdmin[] = await prisma.clubAdmin.findMany({
-                where: {
-                    club_id: clubId
-                },
-                include: {
-                    user: true
-                }
-            });
 
-            return res.json({ data: admins }).status(OK_CODE);
+        } else if (param && !isNaN(Number(param))) {
+            const clubId = Number(param); 
+            query.where = { id: clubId };
+            const club: Club | null = await prisma.club.findFirst(query);
+
+            if (club === null) {
+                return res.sendStatus(INVALID_REQUEST_CODE); // Or another appropriate response
+            }
+
+            return res.json({ data: [club] }).status(OK_CODE);
         } else if (param) {
             return res.sendStatus(INVALID_REQUEST_CODE);
         } else {
-            let clubs: ClubWithCategories[] = await prisma.club.findMany({
-                include: {
-                    categories: true
-                }
-            })
+            let clubs: ClubWithCategories[] = await prisma.club.findMany(query);
             return res.json({ data: clubs }).status(OK_CODE);
         }
+    } catch (error) {
+        res.sendStatus(INTERNAL_ERROR_CODE);
+    }
+});
+
+router.get<ChosenClub, ClubAdminResponse>("/:id/admins", authenticateToken, async (req, res) => {
+    try {
+        const param = req.params.id;
+        const clubId = Number(param);
+        const admins: ClubAdmin[] = await prisma.clubAdmin.findMany({
+            where: {
+                club_id: clubId
+            },
+            include: {
+                user: true
+            }
+        });
+
+        return res.json({ data: admins }).status(OK_CODE);
     } catch (error) {
         res.sendStatus(INTERNAL_ERROR_CODE);
     }
