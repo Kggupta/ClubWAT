@@ -29,3 +29,5 @@
 | 02/13/2024 |        |        |        |         | 5       |         | Implemented Club approval + Categories endpoints        |
 | 02/14/2024 | 0.5    |        |        |         |         |         | GET endpoint for user by ID                             |
 | 02/14/2024 | 4      |        |        |         |         |         | D2 writeup + auto format code                           |
+| 02/15/2024 | 0.5    |        |        |         |         |         | Delete user endpoint                                    |
+| 02/15/2024 | 2      |        |        |         |         |         | Password hashing and salting for security               |
