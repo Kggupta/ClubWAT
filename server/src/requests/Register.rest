@@ -3,7 +3,7 @@ POST http://localhost:3000/api/v1/user/registration-email-verification
 content-type: application/json
 
 {
-    "email": "a33patil@uwaterloo.ca"
+    "email": "a378gupt@uwaterloo.ca"
 }
 
 ###
