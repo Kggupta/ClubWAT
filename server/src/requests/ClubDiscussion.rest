@@ -1,11 +1,11 @@
 GET http://localhost:3000/api/v1/club/discussion/:clubId
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZW1haWwiOiJpbW9oYW5ha0B1d2F0ZXJsb28uY2EiLCJwYXNzd29yZCI6IlBhc3N3b3JkMSQiLCJmaXJzdF9uYW1lIjoiSXNzaGFuYSIsImxhc3RfbmFtZSI6Ik1vaGFuYWt1bWFyIiwiYWRtaW5fZmxhZyI6ZmFsc2UsImlhdCI6MTcwODAxMjkwM30.LxzvXFRg62jjQC7koH6wERaBLFVKNo4vxlQ9M5QsFEg
+Authorization: Bearer [token]
 content-type: application/json
 
 ###
 
 POST http://localhost:3000/api/v1/club/discussion/:clubId
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZW1haWwiOiJpbW9oYW5ha0B1d2F0ZXJsb28uY2EiLCJwYXNzd29yZCI6IlBhc3N3b3JkMSQiLCJmaXJzdF9uYW1lIjoiSXNzaGFuYSIsImxhc3RfbmFtZSI6Ik1vaGFuYWt1bWFyIiwiYWRtaW5fZmxhZyI6ZmFsc2UsImlhdCI6MTcwODAxMjkwM30.LxzvXFRg62jjQC7koH6wERaBLFVKNo4vxlQ9M5QsFEg
+Authorization: Bearer [token]
 content-type: application/json
 
 {
@@ -17,5 +17,5 @@ content-type: application/json
 ### 
 
 DELETE http://localhost:3000/api/v1/club/discussion/:clubId/:messageId
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZW1haWwiOiJpbW9oYW5ha0B1d2F0ZXJsb28uY2EiLCJwYXNzd29yZCI6IlBhc3N3b3JkMSQiLCJmaXJzdF9uYW1lIjoiSXNzaGFuYSIsImxhc3RfbmFtZSI6Ik1vaGFuYWt1bWFyIiwiYWRtaW5fZmxhZyI6ZmFsc2UsImlhdCI6MTcwODAxMjkwM30.LxzvXFRg62jjQC7koH6wERaBLFVKNo4vxlQ9M5QsFEg
+Authorization: Bearer [token]
 content-type: application/json
