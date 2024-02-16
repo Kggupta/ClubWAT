@@ -14,6 +14,7 @@ import {
 } from "../lib/StatusCodes";
 import sendEmail from "../lib/EmailService";
 import { passwordStrength } from "check-password-strength";
+import PasswordHashingService from "../lib/PasswordHashingService";
 
 const router = express.Router();
 
@@ -29,9 +30,12 @@ router.post<LoginRequest, LoginResponse>("/login", async (req, res) => {
     const foundUser: User = await prisma.user.findUniqueOrThrow({
       where: {
         email: email,
-        password: password,
       },
     });
+
+    if (!PasswordHashingService.compareHash(password, foundUser.password)) {
+      throw new Error("Incorrect Password");
+    }
 
     res.status(OK_CODE);
     const token = jwt.sign(
@@ -147,7 +151,9 @@ router.post<RegistrationRequest, RegistrationResponse>(
         email: registrationRequest.email,
         first_name: registrationRequest.first_name,
         last_name: registrationRequest.last_name,
-        password: registrationRequest.password,
+        password: PasswordHashingService.hashPassword(
+          registrationRequest.password
+        ),
       },
     });
 
@@ -192,5 +198,24 @@ router.get<UserRequest, UserDetailsResponse>(
     res.status(OK_CODE).json(user);
   }
 );
+
+router.delete<void, void>("", authenticateToken, async (req, res) => {
+  const userId = Number(req.body.user.id);
+  if (!userId) {
+    return res.sendStatus(INVALID_REQUEST_CODE);
+  }
+
+  const user: User | null = await prisma.user.findFirst({
+    where: { id: userId },
+  });
+
+  if (!user) {
+    return res.sendStatus(NOT_FOUND_CODE);
+  }
+
+  await prisma.user.delete({ where: { id: userId } });
+
+  res.sendStatus(OK_CODE);
+});
 
 export default router;
