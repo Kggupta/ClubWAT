@@ -8,7 +8,7 @@ import {
   OK_CODE,
   UNAUTHORIZED_CODE,
 } from "../lib/StatusCodes";
-import { authenticateToken, verifyIsClubAdmin } from "../middlewares";
+import { authenticateToken } from "../middlewares";
 
 const router = express.Router();
 
