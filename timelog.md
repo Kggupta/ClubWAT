@@ -32,6 +32,7 @@
 | 02/11/2024 |        |        |        |         | 1       |         | Scoped club approval, club admin config and events CRUD  |
 | 02/13/2024 |        |        |        |         | 5       |         | Implemented Club approval + Categories endpoints         |
 | 02/14/2024 | 0.5    |        |        |         |         |         | GET endpoint for user by ID                              |
+| 02/14/2024 | 1      |        |        |         |         |         | Dev DB setup research and implementation                 |
 | 02/14/2024 | 4      |        |        |         |         |         | D2 writeup + auto format code                            |
 | 02/15/2024 |        |        |        | 0.5     |         |         | Modified club discussions in the database schemma        |
 | 02/16/2024 |        |        |        | 6       |         |         | Implemented club discussions backend                     |
