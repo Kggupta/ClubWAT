@@ -76,6 +76,7 @@ fun ProfileView(
             )
         }
 
+        // title is user name
         viewModel.firstName?.let {
             Text(
                 text = it.value,
