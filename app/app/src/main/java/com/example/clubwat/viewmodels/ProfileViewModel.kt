@@ -7,8 +7,16 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
     var firstName = userRepository.currentUser?.firstName
     var lastName = userRepository.currentUser?.lastName
 
+    var user = userRepository.currentUser
+
     fun logout() {
-        // userRepository.currentUser?.firstName = "";
+        // Resetting the values to null
+        user?.userId?.value = ""
+        user?.firstName?.value = ""
+        user?.lastName?.value = ""
+        user?.email?.value = ""
+        user?.password?.value = ""
+
     }
 
 }
