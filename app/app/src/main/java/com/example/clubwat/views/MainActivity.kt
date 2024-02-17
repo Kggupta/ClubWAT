@@ -20,9 +20,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.clubwat.model.UserRepository
 import com.example.clubwat.viewmodels.CodeVerificationViewModel
+import com.example.clubwat.viewmodels.ProfileViewModel
 import com.example.clubwat.viewmodels.factories.CodeVerificationViewModelFactory
 import com.example.clubwat.viewmodels.factories.HomeViewModelFactory
 import com.example.clubwat.viewmodels.factories.LoginViewModelFactory
+import com.example.clubwat.viewmodels.factories.ProfileViewModelFactory
 import com.example.clubwat.viewmodels.factories.SignUpViewModelFactory
 
 class MainActivity : ComponentActivity() {
@@ -36,6 +38,7 @@ class MainActivity : ComponentActivity() {
                 val loginViewModel: LoginViewModel by viewModels { LoginViewModelFactory(userRepository) }
                 val codeVerificationViewModel: CodeVerificationViewModel by viewModels { CodeVerificationViewModelFactory(userRepository) }
                 val homeViewModel: HomeViewModel by viewModels { HomeViewModelFactory(userRepository) }
+                val profileViewModel: ProfileViewModel by viewModels { ProfileViewModelFactory(userRepository) }
 
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                     NavHost(navController = navController, startDestination = "login") {
@@ -50,6 +53,9 @@ class MainActivity : ComponentActivity() {
                         }
                         composable("home") {
                             HomeView(viewModel = homeViewModel, navController = navController)
+                        }
+                        composable("profile") {
+                            ProfileView(viewModel = profileViewModel, navController = navController)
                         }
                     }
                 }
