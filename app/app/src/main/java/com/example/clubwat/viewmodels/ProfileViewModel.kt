@@ -4,10 +4,10 @@ import androidx.lifecycle.ViewModel
 import com.example.clubwat.model.UserRepository
 
 class ProfileViewModel(private val userRepository: UserRepository) : ViewModel() {
-    var firstName = userRepository.currentUser?.firstName
-    var lastName = userRepository.currentUser?.lastName
 
-    var user = userRepository.currentUser
+    private var user = userRepository.currentUser
+    var firstName = userRepository.currentUser?.firstName
+    private var lastName = userRepository.currentUser?.lastName
 
     fun logout() {
         // Resetting the values to null
@@ -16,7 +16,6 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
         user?.lastName?.value = ""
         user?.email?.value = ""
         user?.password?.value = ""
-
     }
 
 }

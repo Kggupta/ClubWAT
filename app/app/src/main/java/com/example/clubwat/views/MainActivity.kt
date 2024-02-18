@@ -41,7 +41,7 @@ class MainActivity : ComponentActivity() {
                 val profileViewModel: ProfileViewModel by viewModels { ProfileViewModelFactory(userRepository) }
 
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    NavHost(navController = navController, startDestination = "profile") {
+                    NavHost(navController = navController, startDestination = "login") {
                         composable("signup") {
                             SignUpView(viewModel = signUpViewModel, navController = navController)
                         }

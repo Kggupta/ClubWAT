@@ -59,13 +59,18 @@ fun ProfileView(
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Text(
+            text = "Profile",
+            fontWeight = FontWeight.Bold,
+            fontSize = 30.sp
+        )
 
 
         Spacer(modifier = Modifier.height(16.dp))
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
-                .size(130.dp)
+                .size(100.dp)
                 .padding(16.dp)
         ) {
             // Replace with your image loading logic

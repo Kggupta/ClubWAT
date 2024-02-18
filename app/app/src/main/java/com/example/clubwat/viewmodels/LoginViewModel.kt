@@ -14,6 +14,8 @@ import com.auth0.jwt.interfaces.DecodedJWT
 import com.example.clubwat.BuildConfig
 
 class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
+    var firstName = mutableStateOf("")
+    var lastName = mutableStateOf("")
     var email = mutableStateOf("")
     var password = mutableStateOf("")
     var allValuesError = mutableStateOf<String?>(null)
@@ -35,9 +37,13 @@ class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
                 val lastName = jwt.getClaim("last_name").asString()
                 val email = jwt.getClaim("email").asString()
 
-                userRepository.currentUser?.firstName?.value = firstName
-                userRepository.currentUser?.lastName?.value = lastName
-                userRepository.currentUser?.email?.value = email
+
+                userRepository.currentUser?.apply {
+                    this.firstName.value = firstName ?: this.firstName.value // Use existing value as fallback
+                    this.lastName.value = lastName ?: this.lastName.value
+                    this.email.value = email ?: this.email.value
+                }
+
             }
         } catch (e: Exception) {
             println(e.printStackTrace())
@@ -64,6 +70,8 @@ class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
                         val jsonResponse = JSONObject(response)
                         val token = jsonResponse.optString("data", null.toString())
                         userRepository.currentUser?.userId?.value = token
+                        // initialize empty user initially
+                        userRepository.createUser(firstName, lastName, email, password)
                         updateUserInfoBasedOnToken(token)
                         println("Response: $response")
                     } else {
