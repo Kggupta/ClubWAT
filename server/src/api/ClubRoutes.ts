@@ -71,21 +71,21 @@ router.get<ClubParam, ClubResponse>("/:param?", authenticateToken, async (req, r
         const param = req.params.param;
         let query: { where?: { id?: number, is_approved?: boolean }; include?: includeQuery } = {};
 
-         if (req.query.withCategories === 'true') {
-                query.include = {
-                    categories: {
-                        select: {
-                            category: {
-                                select: {
-                                    id: true,
-                                    type: true,
-                                    name: true
-                                }
+        if (req.query.withCategories === 'true') {
+            query.include = {
+                categories: {
+                    select: {
+                        category: {
+                            select: {
+                                id: true,
+                                type: true,
+                                name: true
                             }
                         }
                     }
-                };
-            }
+                }
+            };
+        }
 
         if (param === 'approved' || param === 'not-approved') {
             query.where = { is_approved: param === 'approved' };

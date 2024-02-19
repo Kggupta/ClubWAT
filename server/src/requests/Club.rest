@@ -1,5 +1,5 @@
-GET http://localhost:3000/api/v1/club/2/admins
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhMzNwYXRpbEB1d2F0ZXJsb28uY2EiLCJwYXNzd29yZCI6IlBhc3N3b3JkMSQiLCJmaXJzdF9uYW1lIjoiQWJoaW5pdCIsImxhc3RfbmFtZSI6IlBhdGlsIiwiYWRtaW5fZmxhZyI6ZmFsc2UsImlhdCI6MTcwNzkzODI3N30.EAS6n1JlHDaQw7XLQZfCXEjXf7YtfbSikhWZFuS9_J0
+GET http://localhost:3000/api/v1/club/:id/admins
+Authorization: Bearer [token]
 content-type: application/json
 
 ###
