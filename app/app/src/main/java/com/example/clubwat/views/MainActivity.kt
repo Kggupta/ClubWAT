@@ -14,6 +14,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -21,10 +22,12 @@ import com.example.clubwat.model.UserRepository
 import com.example.clubwat.ui.theme.ClubWATTheme
 import com.example.clubwat.viewmodels.CodeVerificationViewModel
 import com.example.clubwat.viewmodels.ForYouViewModel
+import com.example.clubwat.viewmodels.ProfileViewModel
 import com.example.clubwat.viewmodels.factories.CodeVerificationViewModelFactory
 import com.example.clubwat.viewmodels.factories.ForYouViewModelFactory
 import com.example.clubwat.viewmodels.factories.HomeViewModelFactory
 import com.example.clubwat.viewmodels.factories.LoginViewModelFactory
+import com.example.clubwat.viewmodels.factories.ProfileViewModelFactory
 import com.example.clubwat.viewmodels.factories.SignUpViewModelFactory
 import com.example.clubwat.views.NavigationBar.NavBar
 
@@ -42,10 +45,11 @@ class MainActivity : ComponentActivity() {
                 val codeVerificationViewModel: CodeVerificationViewModel by viewModels { CodeVerificationViewModelFactory(userRepository) }
                 val homeViewModel: HomeViewModel by viewModels { HomeViewModelFactory(userRepository) }
                 val forYouViewModel: ForYouViewModel by viewModels { ForYouViewModelFactory(userRepository) }
+                val profileViewModel: ProfileViewModel by viewModels { ProfileViewModelFactory(userRepository) }
 
                 Scaffold(
                     bottomBar = {
-                        if (currentUser?.userId != "") {
+                        if (currentUser?.userId != null) {
                             NavBar(navController)
                         }
                     }
@@ -54,7 +58,7 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(innerPadding),
-                        color = MaterialTheme.colorScheme.background
+                        color = Color.White
                     ) {
                         NavHost(navController = navController, startDestination = "login") {
                             composable("signup") {
@@ -71,6 +75,9 @@ class MainActivity : ComponentActivity() {
                             }
                             composable("forYou") {
                                 ForYouView(viewModel = forYouViewModel, navController = navController)
+                            }
+                            composable("profile") {
+                                ProfileView(viewModel = profileViewModel, navController = navController)
                             }
                         }
                     }

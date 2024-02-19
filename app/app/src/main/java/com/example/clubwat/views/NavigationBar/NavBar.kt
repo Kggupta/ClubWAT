@@ -52,7 +52,7 @@ fun RowScope.AddItem(
             if (name == "Home") { navController.navigate("home") }
             if (name == "For You") { navController.navigate("forYou") }
             if (name == "Search") { navController.navigate("home") }
-            if (name == "Profile") { navController.navigate("home") }
+            if (name == "Profile") { navController.navigate("profile") }
         },
         colors = NavigationBarItemDefaults.colors()
     )

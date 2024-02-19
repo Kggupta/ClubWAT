@@ -13,6 +13,16 @@ class UserRepository {
         _currentUser.value = User("", firstName = firstName, lastName = lastName, email = email, password = password)
     }
 
+    fun resetUser() {
+        _currentUser.value = User(
+            userId = null,
+            firstName = mutableStateOf(""),
+            lastName = mutableStateOf(""),
+            email = mutableStateOf(""),
+            password = mutableStateOf("")
+        )
+    }
+
     fun setUserId(newUserId: String) {
         val user = _currentUser.value
         if (user != null) {
