@@ -96,7 +96,7 @@ fun LoginView(
 
                 viewModel.login { isLoggedIn ->
                     if (isLoggedIn) {
-                        navController.navigate("profile")
+                        navController.navigate("home")
                     }
                 } },
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFDA9206)

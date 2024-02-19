@@ -15,7 +15,7 @@ class UserRepository {
 
     fun resetUser() {
         _currentUser.value = User(
-            userId = "",
+            userId = null,
             firstName = mutableStateOf(""),
             lastName = mutableStateOf(""),
             email = mutableStateOf(""),

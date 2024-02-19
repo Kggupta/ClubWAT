@@ -49,7 +49,7 @@ class MainActivity : ComponentActivity() {
 
                 Scaffold(
                     bottomBar = {
-                        if (currentUser?.userId != "") {
+                        if (currentUser?.userId != null) {
                             NavBar(navController)
                         }
                     }
