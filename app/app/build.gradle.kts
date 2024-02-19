@@ -1,5 +1,3 @@
-import org.gradle.kotlin.dsl.*
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -88,4 +86,7 @@ dependencies {
     implementation("androidx.compose.material:material-icons-core:1.6.1")
     implementation("androidx.compose.material:material-icons-extended:1.6.1")
     implementation("com.auth0:java-jwt:3.18.2")
+    implementation("androidx.compose.material3:material3:1.2.0")
+    implementation("androidx.compose.material3:material3-window-size-class:1.2.0")
+    implementation("androidx.compose.material:material:1.6.1")
 }

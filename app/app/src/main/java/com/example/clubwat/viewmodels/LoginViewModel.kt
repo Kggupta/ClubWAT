@@ -1,6 +1,8 @@
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.auth0.jwt.JWT
+import com.example.clubwat.BuildConfig
 import com.example.clubwat.model.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -9,11 +11,10 @@ import org.json.JSONObject
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
-import com.auth0.jwt.JWT
-import com.auth0.jwt.interfaces.DecodedJWT
-import com.example.clubwat.BuildConfig
 
 class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
+    var firstName = mutableStateOf("")
+    var lastName = mutableStateOf("")
     var email = mutableStateOf("")
     var password = mutableStateOf("")
     var allValuesError = mutableStateOf<String?>(null)
@@ -31,13 +32,9 @@ class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
         try {
             val decodedJWT = JWT.decode(userToken)
             decodedJWT?.let { jwt ->
-                val firstName = jwt.getClaim("first_name").asString()
-                val lastName = jwt.getClaim("last_name").asString()
-                val email = jwt.getClaim("email").asString()
-
-                userRepository.currentUser?.firstName?.value = firstName
-                userRepository.currentUser?.lastName?.value = lastName
-                userRepository.currentUser?.email?.value = email
+                firstName.value = jwt.getClaim("first_name").asString()
+                lastName.value = jwt.getClaim("last_name").asString()
+                userRepository.createUser(firstName, lastName, email, password)
             }
         } catch (e: Exception) {
             println(e.printStackTrace())
@@ -63,8 +60,8 @@ class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
                         val response = inputStream.bufferedReader().use { it.readText() }
                         val jsonResponse = JSONObject(response)
                         val token = jsonResponse.optString("data", null.toString())
-                        userRepository.currentUser?.userId?.value = token
                         updateUserInfoBasedOnToken(token)
+                        userRepository.setUserId(token)
                         println("Response: $response")
                     } else {
                         loginError.value = "Invalid Email or Password"

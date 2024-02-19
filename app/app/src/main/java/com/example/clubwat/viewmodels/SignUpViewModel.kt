@@ -3,8 +3,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.clubwat.BuildConfig
 import com.example.clubwat.model.UserRepository
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.json.JSONObject
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
@@ -58,6 +59,9 @@ class SignUpViewModel(private val userRepository: UserRepository) : ViewModel() 
                     val responseCode = responseCode
                     if (responseCode == HttpURLConnection.HTTP_OK) {
                         val response = inputStream.bufferedReader().use { it.readText() }
+                        val jsonResponse = JSONObject(response)
+                        val token = jsonResponse.optString("data", null.toString())
+                        userRepository.setUserId(token)
                         println("Response: $response")
                     } else {
                         val response = errorStream.bufferedReader().use { it.readText() }
