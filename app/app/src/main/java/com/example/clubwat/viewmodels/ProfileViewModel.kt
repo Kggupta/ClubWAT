@@ -5,17 +5,10 @@ import com.example.clubwat.model.UserRepository
 
 class ProfileViewModel(private val userRepository: UserRepository) : ViewModel() {
 
-    private var user = userRepository.currentUser
-    var firstName = userRepository.currentUser?.firstName
-    private var lastName = userRepository.currentUser?.lastName
+    var firstName = userRepository.currentUser.value?.firstName
 
     fun logout() {
-        // Resetting the values to null
-        user?.userId?.value = ""
-        user?.firstName?.value = ""
-        user?.lastName?.value = ""
-        user?.email?.value = ""
-        user?.password?.value = ""
+        userRepository.resetUser()
     }
 
 }

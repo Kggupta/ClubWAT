@@ -14,10 +14,10 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 class CodeVerificationViewModel(private val userRepository: UserRepository): ViewModel() {
-    private var firstName = userRepository.currentUser?.firstName
-    private var lastName = userRepository.currentUser?.lastName
-    private var email = userRepository.currentUser?.email
-    private var password = userRepository.currentUser?.password
+    private var firstName = userRepository.currentUser.value?.firstName
+    private var lastName = userRepository.currentUser.value?.lastName
+    private var email = userRepository.currentUser.value?.email
+    private var password = userRepository.currentUser.value?.password
     var code = mutableStateOf("")
     var verificationError = mutableStateOf<String?>(null)
 
@@ -51,7 +51,8 @@ class CodeVerificationViewModel(private val userRepository: UserRepository): Vie
                         val response = inputStream.bufferedReader().use { it.readText() }
                         val jsonResponse = JSONObject(response)
                         val token = jsonResponse.optString("data", null.toString())
-                        userRepository.currentUser?.userId?.value = token
+                        println(token)
+                        userRepository.setUserId(token)
                         println("Registration Successful: $response")
                     } else {
                         // Handle error
@@ -85,6 +86,9 @@ class CodeVerificationViewModel(private val userRepository: UserRepository): Vie
                     val responseCode = responseCode
                     if (responseCode == HttpURLConnection.HTTP_OK) {
                         val response = inputStream.bufferedReader().use { it.readText() }
+                        val jsonResponse = JSONObject(response)
+                        val token = jsonResponse.optString("data", null.toString())
+                        userRepository.setUserId(token)
                         println("Response: $response")
                     } else {
                         val response = errorStream.bufferedReader().use { it.readText() }

@@ -27,6 +27,8 @@
 | 02/11/2024 |        |        |        |         |         | 4       | Connected Auth to APIs; added some more APIs             |
 | 02/12/2024 |        |        | 4      |         |         |         | Modified Signup & Login page. Created Verification Page. |
 | 02/13/2024 |        |        | 5.5    |         |         |         | Added Navigation, Password Checks, & Factory Classes.    |
+| 02/13/2024 |        | 3      |        |         |         |         | Added login, register & Auth code API                    |
+| 03/13/2024 |        | 5      |        |         |         |         | Created the UI for Login and Register                    |
 | 02/10/2024 |        |        |        |         | 3       |         | Setup dev environment locally + tested out endpoints     |
 | 02/11/2024 |        |        |        |         | 2       |         | Reviewed ClubAdmin + Club APIs                           |
 | 02/11/2024 |        |        |        |         | 1       |         | Scoped club approval, club admin config and events CRUD  |
@@ -41,3 +43,6 @@
 | 02/15/2024 | 0.5    |        |        |         |         |         | Delete user endpoint                                     |
 | 02/15/2024 | 2      |        |        |         |         |         | Password hashing and salting for security                |
 | 02/15/2024 |        |        |        |         |         | 0.5     | Minor Backend Enhancements                               |
+| 02/18/2024 |        |        | 3      |         |         |         | Fixed how we save data to the User class                 |
+| 02/18/2024 |        |        | 4      |         |         |         | Added bottom navigation bar                              |
+| 02/19/2024 |        | 3      |        |         |         |         | Created Profile Page                                     |
