@@ -27,7 +27,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -38,7 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.clubwat.R
-import com.example.clubwat.ui.theme.Yellow
+import com.example.clubwat.ui.theme.LightOrange
 
 @Composable
 fun SignUpView(
@@ -123,7 +122,7 @@ fun SignUpView(
                     navController.navigate("verification")
                 }
             },
-            colors = ButtonDefaults.buttonColors(containerColor = Yellow
+            colors = ButtonDefaults.buttonColors(containerColor = LightOrange
             ),
             modifier = Modifier
                 .width(300.dp)
