@@ -11,6 +11,7 @@ Table User {
   admin_flag Boolean [not null]
   admins ClubAdmin [not null]
   club_discussions ClubDiscussion [not null]
+  club_members ClubMember [not null]
 }
 
 Table UserEmailVerification {
@@ -28,6 +29,7 @@ Table Club {
   categories ClubCategory [not null]
   admins ClubAdmin [not null]
   discussions ClubDiscussion [not null]
+  club_members ClubMember [not null]
 }
 
 Table Category {
@@ -64,6 +66,15 @@ Table ClubDiscussion {
   club Club [not null]
 }
 
+Table ClubMember {
+  id Int [pk, increment]
+  user_id Int [not null]
+  club_id Int [not null]
+  user User [not null]
+  club Club [not null]
+  is_approved Boolean [not null]
+}
+
 Ref: ClubCategory.club_id > Club.id
 
 Ref: ClubCategory.category_id > Category.id
@@ -75,3 +86,7 @@ Ref: ClubAdmin.club_id > Club.id
 Ref: ClubDiscussion.user_id > User.id
 
 Ref: ClubDiscussion.club_id > Club.id
+
+Ref: ClubMember.user_id > User.id
+
+Ref: ClubMember.club_id > Club.id

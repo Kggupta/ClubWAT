@@ -2,6 +2,7 @@ package com.example.clubwat.views
 
 import HomeViewModel
 import LoginViewModel
+import SearchViewModel
 import SignUpViewModel
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -19,14 +20,17 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.clubwat.model.UserRepository
 import com.example.clubwat.ui.theme.ClubWATTheme
+import com.example.clubwat.viewmodels.ClubDetailsViewModel
 import com.example.clubwat.viewmodels.CodeVerificationViewModel
 import com.example.clubwat.viewmodels.ForYouViewModel
 import com.example.clubwat.viewmodels.ProfileViewModel
+import com.example.clubwat.viewmodels.factories.ClubDetailsViewModelFactory
 import com.example.clubwat.viewmodels.factories.CodeVerificationViewModelFactory
 import com.example.clubwat.viewmodels.factories.ForYouViewModelFactory
 import com.example.clubwat.viewmodels.factories.HomeViewModelFactory
 import com.example.clubwat.viewmodels.factories.LoginViewModelFactory
 import com.example.clubwat.viewmodels.factories.ProfileViewModelFactory
+import com.example.clubwat.viewmodels.factories.SearchViewModelFactory
 import com.example.clubwat.viewmodels.factories.SignUpViewModelFactory
 import com.example.clubwat.views.NavigationBar.NavBar
 
@@ -45,6 +49,8 @@ class MainActivity : ComponentActivity() {
                 val homeViewModel: HomeViewModel by viewModels { HomeViewModelFactory(userRepository) }
                 val forYouViewModel: ForYouViewModel by viewModels { ForYouViewModelFactory(userRepository) }
                 val profileViewModel: ProfileViewModel by viewModels { ProfileViewModelFactory(userRepository) }
+                val searchViewModel: SearchViewModel by viewModels { SearchViewModelFactory(userRepository) }
+                val clubDetailsViewModel: ClubDetailsViewModel by viewModels { ClubDetailsViewModelFactory(userRepository) }
 
                 Scaffold(
                     bottomBar = {
@@ -59,7 +65,7 @@ class MainActivity : ComponentActivity() {
                             .padding(innerPadding),
                         color = Color.White
                     ) {
-                        NavHost(navController = navController, startDestination = "home") {
+                        NavHost(navController = navController, startDestination = "login") {
                             composable("signup") {
                                 SignUpView(viewModel = signUpViewModel, navController = navController)
                             }
@@ -77,6 +83,16 @@ class MainActivity : ComponentActivity() {
                             }
                             composable("profile") {
                                 ProfileView(viewModel = profileViewModel, navController = navController)
+                            }
+                            composable("search") {
+                                SearchView(viewModel = searchViewModel, navController = navController)
+                            }
+                            composable("club/{clubId}") { backStackEntry ->
+                                ClubDetailsView(
+                                    viewModel = clubDetailsViewModel,
+                                    navController = navController,
+                                    clubId = backStackEntry.arguments?.getString("clubId")
+                                )
                             }
                         }
                     }

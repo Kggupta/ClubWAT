@@ -47,3 +47,6 @@
 | 02/18/2024 |        |        | 4      |         |         |         | Added bottom navigation bar                              |
 | 02/19/2024 |        | 3      |        |         |         |         | Created Profile Page                                     |
 | 02/21/2024 |        |        | 3.5    |         |         |         | Added basic home page view with tab rows                 |
+| 02/21/2024 | 6      |        |        |         |         |         | Club browsing page backend + fe                          |
+| 02/21/2024 | 2      |        |        |         |         |         | Club detail view fe + backend                            |
+| 02/21/2024 | 2      |        |        |         |         |         | Club join/leave/request to join logic fe + backend       |
