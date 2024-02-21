@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.clubwat.R
+import com.example.clubwat.ui.theme.Yellow
 
 @Composable
 fun SignUpView(
@@ -122,7 +123,7 @@ fun SignUpView(
                     navController.navigate("verification")
                 }
             },
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFDA9206)
+            colors = ButtonDefaults.buttonColors(containerColor = Yellow
             ),
             modifier = Modifier
                 .width(300.dp)

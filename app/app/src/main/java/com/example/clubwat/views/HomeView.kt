@@ -19,6 +19,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,6 +35,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.clubwat.R
+import com.example.clubwat.ui.theme.LightYellow
 
 @Composable
 fun HomeView(
@@ -57,7 +59,7 @@ fun HomeView(
                         Icon(Icons.Filled.Inbox, null)
                     }
                 },
-                backgroundColor = Color.LightGray,
+                backgroundColor = LightYellow,
                 contentColor = Color.Black
             )
         },
@@ -102,7 +104,7 @@ fun CustomTabRow(selectedTabIndex: Int, onTabSelected: (Int) -> Unit) {
     val tabTitles = listOf("Your Clubs", "Your Events")
     TabRow(
         selectedTabIndex = selectedTabIndex,
-        backgroundColor = Color.LightGray,
+        backgroundColor = LightYellow,
         contentColor = Color.White,
         indicator = { tabPositions ->
             TabRowDefaults.Indicator(

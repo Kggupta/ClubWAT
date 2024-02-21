@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.clubwat.R
+import com.example.clubwat.ui.theme.Yellow
 
 @Composable
 fun LoginView(
@@ -99,7 +100,7 @@ fun LoginView(
                         navController.navigate("home")
                     }
                 } },
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFDA9206)
+            colors = ButtonDefaults.buttonColors(containerColor = Yellow
             ),
             modifier = Modifier
                 .width(300.dp)
