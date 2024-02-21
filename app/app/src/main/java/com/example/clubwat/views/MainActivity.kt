@@ -9,7 +9,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.getValue
@@ -60,7 +59,7 @@ class MainActivity : ComponentActivity() {
                             .padding(innerPadding),
                         color = Color.White
                     ) {
-                        NavHost(navController = navController, startDestination = "login") {
+                        NavHost(navController = navController, startDestination = "home") {
                             composable("signup") {
                                 SignUpView(viewModel = signUpViewModel, navController = navController)
                             }
