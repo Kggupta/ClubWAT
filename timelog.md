@@ -46,4 +46,4 @@
 | 02/18/2024 |        |        | 3      |         |         |         | Fixed how we save data to the User class                 |
 | 02/18/2024 |        |        | 4      |         |         |         | Added bottom navigation bar                              |
 | 02/19/2024 |        | 3      |        |         |         |         | Created Profile Page                                     |
-| 02/21/2024 |        |        | 3.5    |         |         |         | Added basic home page view with row bars                 |
+| 02/21/2024 |        |        | 3.5    |         |         |         | Added basic home page view with tab rows                 |
