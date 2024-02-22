@@ -8,7 +8,7 @@ import {
   INVALID_REQUEST_CODE,
   NOT_FOUND_CODE,
   OK_CODE,
-  UNAUTHORIZED_CODE
+  UNAUTHORIZED_CODE,
 } from "./lib/StatusCodes";
 import { ClubAdmin } from "@prisma/client";
 
@@ -28,7 +28,8 @@ export function errorHandler(
   res: Response<ErrorResponse>,
   next: NextFunction
 ) {
-  const statusCode = res.statusCode !== OK_CODE ? res.statusCode : INTERNAL_ERROR_CODE;
+  const statusCode =
+    res.statusCode !== OK_CODE ? res.statusCode : INTERNAL_ERROR_CODE;
   res.status(statusCode);
   res.json({
     message: err.message,
@@ -44,12 +45,15 @@ export function authenticateToken(
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
   if (!token) return res.sendStatus(UNAUTHORIZED_CODE);
-
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string, (err: any, user: any) => {
-    if (err) return res.sendStatus(UNAUTHORIZED_CODE);
-    req.body.user = user;
-    next();
-  });
+  jwt.verify(
+    token,
+    process.env.ACCESS_TOKEN_SECRET as string,
+    (err: any, user: any) => {
+      if (err) return res.sendStatus(UNAUTHORIZED_CODE);
+      req.body.user = user;
+      next();
+    }
+  );
 }
 
 export async function verifyIsClubAdmin(
@@ -63,8 +67,8 @@ export async function verifyIsClubAdmin(
   const isAdmin: ClubAdmin | null = await prisma.clubAdmin.findFirst({
     where: {
       user_id: req.body.user.id,
-      club_id: clubId
-    }
+      club_id: clubId,
+    },
   });
 
   if (!isAdmin) return res.sendStatus(UNAUTHORIZED_CODE);
