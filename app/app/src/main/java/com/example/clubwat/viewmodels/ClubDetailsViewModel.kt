@@ -1,6 +1,5 @@
 package com.example.clubwat.viewmodels
 
-import android.R.array
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.clubwat.BuildConfig
@@ -10,14 +9,10 @@ import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
-import androidx.compose.ui.graphics.Color
-import com.example.clubwat.ui.theme.LightOrange
-import kotlinx.coroutines.flow.update
-import java.io.OutputStreamWriter
 
 class ClubDetailsViewModel(private val userRepository: UserRepository) : ViewModel() {
     private var _club = MutableStateFlow<ClubDetails?>(null)

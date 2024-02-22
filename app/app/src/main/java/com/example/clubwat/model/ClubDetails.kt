@@ -1,7 +1,5 @@
 package com.example.clubwat.model
 
-import androidx.compose.runtime.MutableState
-
 data class ClubDetails(
     val id: Int,
     val title: String,

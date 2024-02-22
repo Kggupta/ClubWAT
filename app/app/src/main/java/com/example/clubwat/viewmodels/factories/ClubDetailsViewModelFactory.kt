@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.clubwat.model.UserRepository
 import com.example.clubwat.viewmodels.ClubDetailsViewModel
-import com.example.clubwat.viewmodels.CodeVerificationViewModel
 
 class ClubDetailsViewModelFactory(private val userRepository: UserRepository) : ViewModelProvider.Factory {
 
