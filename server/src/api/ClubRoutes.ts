@@ -277,6 +277,7 @@ router.get("/search", authenticateToken, async (req, res) => {
     where: {
       title: { startsWith: "%" + query, mode: "insensitive" },
     },
+    orderBy: { title: "asc" },
   });
 
   res.status(OK_CODE).json(clubs);

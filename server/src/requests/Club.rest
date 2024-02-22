@@ -22,6 +22,11 @@ content-type: application/json
 
 ###
 
+GET http://localhost:3000/api/v1/club/search
+Authorization: Bearer [token]
+content-type: application/json
+###
+
 POST http://localhost:3000/api/v1/club
 Authorization: Bearer [token]
 content-type: application/json

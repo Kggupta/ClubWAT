@@ -69,21 +69,6 @@ fun ClubDetailsView(
             fontWeight = FontWeight.Bold,
             fontSize = 30.sp
         )
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .size(150.dp)
-                .padding(16.dp)
-        ) {
-            // get API to check if user has PP, if not, have an empty image
-            Image(
-                // change this to profile pic
-                painter = painterResource(id = R.drawable.waterloocirclelogo),
-                contentDescription = "Profile Picture",
-                modifier = Modifier
-                    .size(100.dp)
-            )
-        }
         Text(text = viewModel.getClubTitle(), fontSize = 20.sp, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(16.dp))
         if (club != null && club!!.isJoined) {
