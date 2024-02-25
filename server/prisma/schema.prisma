@@ -25,6 +25,7 @@ model User {
   admin_flag Boolean
   admins     ClubAdmin[]
   club_discussions ClubDiscussion[]
+  club_members ClubMember[]
 }
 
 model UserEmailVerification {
@@ -42,6 +43,7 @@ model Club {
   categories     ClubCategory[]
   admins         ClubAdmin[]
   discussions     ClubDiscussion[]
+  club_members ClubMember[]
 }
 
 model Category {
@@ -76,4 +78,13 @@ model ClubDiscussion {
   create_date DateTime
   user        User      @relation(fields: [user_id], references: [id])
   club        Club      @relation(fields: [club_id], references: [id])
+}
+
+model ClubMember {
+  id Int @id @default(autoincrement())
+  user_id Int
+  club_id Int
+  user User @relation(fields: [user_id], references: [id])
+  club Club @relation(fields: [club_id], references: [id])
+  is_approved Boolean
 }

@@ -1,14 +1,16 @@
 package com.example.clubwat.viewmodels.factories
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.clubwat.model.UserRepository
-import com.example.clubwat.viewmodels.ProfileViewModel
+import com.example.clubwat.viewmodels.ClubDetailsViewModel
 
-class ProfileViewModelFactory(private val userRepository: UserRepository) : ViewModelProvider.Factory {
+class ClubDetailsViewModelFactory(private val userRepository: UserRepository) : ViewModelProvider.Factory {
+
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(ProfileViewModel::class.java)) {
+        if (modelClass.isAssignableFrom(ClubDetailsViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return ProfileViewModel(userRepository) as T
+            return ClubDetailsViewModel(userRepository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
