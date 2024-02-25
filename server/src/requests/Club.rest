@@ -25,6 +25,12 @@ content-type: application/json
 GET http://localhost:3000/api/v1/club/search
 Authorization: Bearer [token]
 content-type: application/json
+
+###
+
+GET http://localhost:3000/api/v1/club/my-clubs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjksImVtYWlsIjoiazQ0Z3VwdGFAdXdhdGVybG9vLmNhIiwicGFzc3dvcmQiOiIkMmIkMTIkWXZ2cFI0Z2Fpb0RZZ0JybmhMT2gvLmt5M2hITDQ4M3FXQm1qLlBHOHhwNUdNb040cWhia1MiLCJmaXJzdF9uYW1lIjoiS2VzaGF2IiwibGFzdF9uYW1lIjoiR3VwdGEiLCJhZG1pbl9mbGFnIjpmYWxzZSwiaWF0IjoxNzA4ODcyNDYzfQ.U0E8WQAa3Fro9Zwrfr6i7g1TBOdHWwTUdXkDw5IiX3Y
+content-type: application/json
 ###
 
 POST http://localhost:3000/api/v1/club

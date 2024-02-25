@@ -283,6 +283,21 @@ router.get("/search", authenticateToken, async (req, res) => {
   res.status(OK_CODE).json(clubs);
 });
 
+router.get("/my-clubs", authenticateToken, async (req, res) => {
+  const userId = req.body.user.id;
+
+  const clubs: Club[] = (
+    await prisma.clubMember.findMany({
+      where: {
+        user_id: userId,
+      },
+      include: { club: true },
+    })
+  ).map((x) => x.club);
+
+  res.status(OK_CODE).json(clubs);
+});
+
 router.put("/:id/manage-membership", authenticateToken, async (req, res) => {
   const clubId = parseInt(req.params.id, 10);
   const userId = parseInt(req.body.user.id || -1, 10);
