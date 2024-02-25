@@ -18,6 +18,14 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
     var religion = mutableStateOf("")
     var currentInput = mutableStateOf("")
 
+    var faculties = mutableStateOf<List<String>>(listOf())
+    var religions = mutableStateOf<List<String>>(listOf())
+    var ethnicities = mutableStateOf<List<String>>(listOf())
+
+    // send to api as: (id, name, type)
+    //    where 'type' would be the categories you've got already (program, hobbies, ethnicity, religion).
+
+
 
     fun addHobbies() {
         if (currentInput.value.isNotBlank()) {
@@ -46,6 +54,18 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
     }
 
     fun editFriends() {
+
+    }
+
+    fun getFaculties() {
+        // call api to get all faculties and store in arr
+    }
+
+    fun getEthicity() {
+
+    }
+
+    fun getReligion() {
 
     }
 
