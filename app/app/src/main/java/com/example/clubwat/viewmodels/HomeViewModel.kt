@@ -26,8 +26,7 @@ class HomeViewModel(private val userRepository: UserRepository) : ViewModel() {
                 if (responseCode == HttpURLConnection.HTTP_OK) {
                     val response = con.inputStream.bufferedReader().use { it.readText() }
                     val clubsList: List<Club> = Gson().fromJson(response, object : TypeToken<List<Club>>() {}.type)
-                    val sortedClubsList = clubsList.sortedBy { it.title }
-                    allClubs.value = sortedClubsList
+                    allClubs.value = clubsList
                     println(clubsList)
                 }
             } catch (e: Exception) {
