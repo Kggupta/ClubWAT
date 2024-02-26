@@ -89,7 +89,7 @@ fun HomeView(
                 }
                 Spacer(Modifier.height(16.dp))
                 if (selectedTabIndex == 0) {
-                    YourClubsContent()
+                    YourClubsContent(viewModel)
                 } else {
                     YourEventsContent()
                 }
@@ -126,10 +126,9 @@ fun CustomTabRow(selectedTabIndex: Int, onTabSelected: (Int) -> Unit) {
     }
 }
 
-
 @Composable
-fun YourClubsContent() {
-    Text("Hello")
+fun YourClubsContent(viewModel: HomeViewModel) {
+    viewModel.getAllClubs()
 }
 
 @Composable
