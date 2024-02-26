@@ -44,7 +44,7 @@ fun ClubDetailsView(
 
     Box(modifier = Modifier
         .fillMaxSize()) {
-        IconButton(modifier=Modifier.align(Alignment.TopStart), onClick= {navController.navigate("search")}) {
+        IconButton(modifier=Modifier.align(Alignment.TopStart), onClick= {navController.popBackStack()}) {
             Icon(
                 painterResource(id = R.drawable.baseline_arrow_back_24),
                 contentDescription = "Back"
