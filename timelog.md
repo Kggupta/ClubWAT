@@ -52,3 +52,4 @@
 | 02/21/2024 | 2      |        |        |         |         |         | Club join/leave/request to join logic fe + backend       |
 | 02/22/2024 | 0.5    |        |        |         |         |         | Sorting club browsing, update club details look/feel     |
 | 02/25/2024 | 1      |        |        |         |         |         | Get my clubs endpoint                                    |
+| 02/25/2024 |        |        | 5      |         |         |         | Added all of the user's clubs on the home screen         |
