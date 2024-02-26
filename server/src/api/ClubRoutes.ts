@@ -158,7 +158,7 @@ router.post<ClubDetails, void>("/", authenticateToken, async (req, res) => {
     if (
       !req.body.title ||
       !req.body.description ||
-      !req.body.membership_fee ||
+      (!req.body.membership_fee && req.body.membership_fee !== 0) ||
       !req.body.categories ||
       !req.body.position
     ) {
@@ -200,7 +200,7 @@ router.put<ClubDetails, void>(
       if (
         !req.body.title ||
         !req.body.description ||
-        !req.body.membership_fee ||
+        (!req.body.membership_fee && req.body.membership_fee !== 0) ||
         !req.body.categories ||
         !req.body.is_approved
       ) {
