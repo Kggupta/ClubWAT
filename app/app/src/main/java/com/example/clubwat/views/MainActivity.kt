@@ -43,6 +43,7 @@ class MainActivity : ComponentActivity() {
             ClubWATTheme {
                 val navController = rememberNavController()
                 val currentUser by userRepository.currentUser
+
                 val signUpViewModel: SignUpViewModel by viewModels { SignUpViewModelFactory(userRepository) }
                 val loginViewModel: LoginViewModel by viewModels { LoginViewModelFactory(userRepository) }
                 val codeVerificationViewModel: CodeVerificationViewModel by viewModels { CodeVerificationViewModelFactory(userRepository) }
