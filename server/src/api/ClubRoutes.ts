@@ -292,6 +292,7 @@ router.get("/my-clubs", authenticateToken, async (req, res) => {
         user_id: userId,
       },
       include: { club: true },
+      orderBy: { club: { title: "asc" } },
     })
   ).map((x) => x.club);
 
