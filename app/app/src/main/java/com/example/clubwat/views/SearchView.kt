@@ -104,7 +104,7 @@ fun SearchView(
                     Row(modifier = Modifier.clickable {
                         navController.navigate("club/${club.id}")
                     }){
-                        Text(text=club.title, modifier=Modifier.fillMaxWidth().padding(14.dp))
+                        ClubItem(club = club, navController = navController)
                     }
                 }
             }

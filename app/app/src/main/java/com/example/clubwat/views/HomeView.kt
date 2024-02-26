@@ -147,26 +147,6 @@ fun YourClubsContent(viewModel: HomeViewModel, navController: NavController) {
 }
 
 @Composable
-fun ClubItem(club: Club, navController: NavController) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .clickable { navController.navigate("club/${club.id}") }
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(text = club.title, fontWeight = FontWeight.Bold)
-            val descriptionToShow = if (club.description.length > 150) {
-                "${club.description.take(75)}..."
-            } else {
-                club.description
-            }
-            Text(text = descriptionToShow)
-        }
-    }
-}
-
-@Composable
 fun YourEventsContent() {
     Text("Bye")
 }
