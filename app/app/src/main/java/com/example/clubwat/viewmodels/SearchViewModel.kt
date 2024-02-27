@@ -2,6 +2,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.clubwat.BuildConfig
 import com.example.clubwat.model.Club
+import com.example.clubwat.model.Event
 import com.example.clubwat.model.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,9 +23,16 @@ class SearchViewModel(private val userRepository: UserRepository) : ViewModel() 
     private val _clubs: MutableStateFlow<MutableList<Club>> = MutableStateFlow(arrayListOf())
     val clubs = _clubs.asStateFlow()
 
-    fun onSearchQueryChanged(search: String) {
+    private val _events: MutableStateFlow<MutableList<Event>> = MutableStateFlow(arrayListOf())
+    val events = _events.asStateFlow()
+
+    fun onSearchQueryChanged(search: String, isClub: Boolean) {
         _searchQuery.value = search
-        searchClubs(search)
+        if (isClub) {
+            searchClubs(search)
+        } else {
+            searchClubs(search)
+        }
     }
 
     fun onIsSearchingChanged(isSearching: Boolean) {
