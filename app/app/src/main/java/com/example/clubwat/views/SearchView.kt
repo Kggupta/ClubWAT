@@ -8,6 +8,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Tab
+import androidx.compose.material.TabRow
+import androidx.compose.material.TabRowDefaults
+import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -23,6 +27,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -38,12 +45,14 @@ fun SearchView(
     navController: NavController
 ) {
     LaunchedEffect(Unit) {
-        viewModel.onSearchQueryChanged("")
+        viewModel.onSearchQueryChanged("", true)
     }
 
     val text by viewModel.searchQuery.collectAsState()
     val active by viewModel.isSearching.collectAsState()
     val clubs by viewModel.clubs.collectAsState()
+    val events by viewModel.events.collectAsState()
+    var selectedTabIndex by remember { mutableIntStateOf(0) }
 
     Scaffold {
         Column(){
@@ -63,25 +72,32 @@ fun SearchView(
                 backgroundColor = LightYellow,
                 contentColor = Color.Black
             )
+            SearchTab(selectedTabIndex = selectedTabIndex) { index ->
+                selectedTabIndex = index
+            }
             SearchBar(
                 modifier = Modifier.fillMaxWidth().padding(14.dp),
                 query = text,
-                onQueryChange = viewModel::onSearchQueryChanged,
+                onQueryChange = { viewModel.onSearchQueryChanged(it, selectedTabIndex == 0) },
                 onSearch = {
-                    viewModel.onSearchQueryChanged(text)
+                    viewModel.onSearchQueryChanged(text, selectedTabIndex == 0)
                     viewModel.onIsSearchingChanged(false)
                 },
                 active = active,
                 onActiveChange = {viewModel.onIsSearchingChanged(it)},
                 placeholder = {
-                    Text("Search Clubs")
+                    if (selectedTabIndex == 0) {
+                        Text("Search Clubs")
+                    } else {
+                        Text("Search Events")
+                    }
                 },
                 leadingIcon = {
                     Icon(imageVector= Icons.Default.Search, contentDescription="Search")
                 },
                 trailingIcon = {
                     Icon(modifier = Modifier.clickable {
-                        viewModel.onSearchQueryChanged("")
+                        viewModel.onSearchQueryChanged("", selectedTabIndex == 0)
                         viewModel.onIsSearchingChanged(false)
                     },
                         imageVector = Icons.Default.Close,
@@ -100,11 +116,22 @@ fun SearchView(
                 }
             }
             LazyColumn(modifier=Modifier.fillMaxWidth()) {
-                items(clubs) {club ->
-                    Row(modifier = Modifier.clickable {
-                        navController.navigate("club/${club.id}")
-                    }){
-                        ClubItem(club = club, navController = navController)
+                if (selectedTabIndex == 0) {
+                    items(clubs) {club ->
+                        Row(modifier = Modifier.clickable {
+                            navController.navigate("club/${club.id}")
+                        }){
+                            ClubItem(club = club, navController = navController)
+                        }
+                    }
+                } else {
+                    items(events) {event ->
+                        Row(modifier = Modifier.clickable {
+                            // change later
+                            navController.navigate("club/${event.clubId}")
+                        }){
+                            EventItem(event = event, navController = navController)
+                        }
                     }
                 }
             }
@@ -112,3 +139,42 @@ fun SearchView(
 
     }
 }
+
+@Composable
+fun SearchTab(selectedTabIndex: Int, onTabSelected: (Int) -> Unit) {
+    val tabTitles = listOf("Clubs", "Events")
+    TabRow(
+        selectedTabIndex = selectedTabIndex,
+        backgroundColor = LightYellow,
+        contentColor = Color.White,
+        indicator = { tabPositions ->
+            TabRowDefaults.Indicator(
+                Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex]),
+                color = Color.Black,
+            )
+        }
+    ) {
+        tabTitles.forEachIndexed { index, title ->
+            Tab(
+                selected = selectedTabIndex == index,
+                onClick = { onTabSelected(index) },
+                text = { Text(
+                    text = title,
+                    fontWeight = FontWeight.Bold,
+                )
+                }
+            )
+        }
+    }
+}
+
+/*
+@Preview
+@Composable
+fun SearchTabPreview() {
+    var selectedTabIndex by remember { mutableIntStateOf(0) }
+    SearchTab(selectedTabIndex = selectedTabIndex) { index ->
+        selectedTabIndex = index
+    }
+}
+*/
