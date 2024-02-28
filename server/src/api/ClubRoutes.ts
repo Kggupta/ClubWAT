@@ -1,12 +1,6 @@
 import express from "express";
 import { prisma } from "../lib/prisma";
-import {
-  Category,
-  Club,
-  ClubAdmin,
-  ClubCategory,
-  ClubMember,
-} from "@prisma/client";
+import { Club, ClubAdmin, ClubCategory, ClubMember } from "@prisma/client";
 import {
   INTERNAL_ERROR_CODE,
   INVALID_REQUEST_CODE,
@@ -39,10 +33,6 @@ type ChosenClub = {
   id: string;
 };
 
-type ClubSearch = {
-  searchQuery?: string;
-};
-
 type ClubAdminResponse = {
   data: ClubAdmin[];
 };
@@ -64,41 +54,6 @@ type includeQuery = {
     };
   };
 };
-
-type ClubStatus = {
-    status: string
-}
-
-type includeQuery = {
-    categories: {
-        select: {
-            category: {
-                select: {
-                    id: true,
-                    type: true,
-                    name: true
-                }
-            }
-        }
-    }
-}
-
-type Events = {
-    id: number,
-    title: string,
-    description: string,
-    start_date: Date,
-    end_date: Date
-}
-
-type EventsResponse = {
-    data: Events[]
-}
-
-type ChosenEvent = {
-    id: string
-    eventId: string
-}
 
 async function addClubCategories(clubId: number, categories: number[]) {
   if (!categories.length) return;

@@ -1,3 +1,22 @@
+GET http://localhost:3000/api/v1/club/:id/admins
+Authorization: Bearer [token]
+content-type: application/json
+
+###
+
+GET http://localhost:3000/api/v1/club/status/approved
+Authorization: Bearer [token]
+content-type: application/json
+
+###
+
+GET http://localhost:3000/api/v1/club/status/not-approved
+Authorization: Bearer [token]
+content-type: application/json
+
+###
+
+
 GET http://localhost:3000/api/v1/club/:id
 Authorization: Bearer [token]
 content-type: application/json

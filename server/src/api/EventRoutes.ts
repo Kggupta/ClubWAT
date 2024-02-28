@@ -42,6 +42,14 @@ eventRoutes.get<EventsQuery, EventsResponse>(
           },
         });
         res.status(OK_CODE).json({ data: events });
+      } else if (req.params.id) {
+        const clubId = Number(req.params.id);
+        const events = await prisma.events.findMany({
+          where: {
+            club_id: clubId,
+          },
+        });
+        res.status(OK_CODE).json({ data: events });
       } else {
         const events = await prisma.events.findMany();
         res.status(OK_CODE).json({ data: events });
