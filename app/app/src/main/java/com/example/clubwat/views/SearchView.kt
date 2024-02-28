@@ -79,14 +79,10 @@ fun SearchView(
                 }
             )
             SearchTab(selectedTabIndex = selectedTabIndex) { index ->
-<<<<<<< HEAD
                 if (selectedTabIndex != index) {
                     selectedTabIndex = index
                     viewModel.onSearchQueryChanged("", index == 0)
                 }
-=======
-                selectedTabIndex = index
->>>>>>> b2e2d3c70beb217e45422813eb8b8c30e6eb6da1
             }
             SearchBar(
                 modifier = Modifier.fillMaxWidth().padding(14.dp),
