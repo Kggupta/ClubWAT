@@ -1,6 +1,8 @@
 package com.example.clubwat.views
 import SearchViewModel
 import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,11 +10,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Tab
-import androidx.compose.material.TabRow
-import androidx.compose.material.TabRowDefaults
-import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
-import androidx.compose.material.TopAppBar
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
+import androidx.compose.material3.TabRowDefaults
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Inbox
@@ -23,6 +25,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -37,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.clubwat.ui.theme.LightYellow
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -57,6 +61,10 @@ fun SearchView(
     Scaffold {
         Column(){
             TopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = LightYellow,
+                    titleContentColor = Color.Black
+                ),
                 title = {
                     Text(
                         text = "Search",
@@ -68,12 +76,13 @@ fun SearchView(
                     IconButton(onClick = {/* Do Something*/ }) {
                         Icon(Icons.Filled.Inbox, null)
                     }
-                },
-                backgroundColor = LightYellow,
-                contentColor = Color.Black
+                }
             )
             SearchTab(selectedTabIndex = selectedTabIndex) { index ->
-                selectedTabIndex = index
+                if (selectedTabIndex != index) {
+                    selectedTabIndex = index
+                    viewModel.onSearchQueryChanged("", index == 0)
+                }
             }
             SearchBar(
                 modifier = Modifier.fillMaxWidth().padding(14.dp),
@@ -106,11 +115,22 @@ fun SearchView(
                 }
             ) {
                 LazyColumn(modifier=Modifier.fillMaxWidth()) {
-                    items(clubs) {club ->
-                        Row(modifier = Modifier.clickable {
-                            navController.navigate("club/${club.id}")
-                        }){
-                            Text(text=club.title, modifier=Modifier.fillMaxWidth().padding(14.dp))
+                    if (selectedTabIndex == 0) {
+                        items(clubs) {club ->
+                            Row(modifier = Modifier.clickable {
+                                navController.navigate("club/${club.id}")
+                            }){
+                                Text(text=club.title, modifier=Modifier.fillMaxWidth().padding(14.dp))
+                            }
+                        }
+                    } else {
+                        items(events) {event ->
+                            Row(modifier = Modifier.clickable {
+                                // change later
+                                navController.navigate("club/${event.clubId}")
+                            }){
+                                Text(text=event.title, modifier=Modifier.fillMaxWidth().padding(14.dp))
+                            }
                         }
                     }
                 }
@@ -145,8 +165,8 @@ fun SearchTab(selectedTabIndex: Int, onTabSelected: (Int) -> Unit) {
     val tabTitles = listOf("Clubs", "Events")
     TabRow(
         selectedTabIndex = selectedTabIndex,
-        backgroundColor = LightYellow,
-        contentColor = Color.White,
+        containerColor = LightYellow,
+        contentColor = Color.Black,
         indicator = { tabPositions ->
             TabRowDefaults.Indicator(
                 Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex]),
@@ -167,14 +187,3 @@ fun SearchTab(selectedTabIndex: Int, onTabSelected: (Int) -> Unit) {
         }
     }
 }
-
-/*
-@Preview
-@Composable
-fun SearchTabPreview() {
-    var selectedTabIndex by remember { mutableIntStateOf(0) }
-    SearchTab(selectedTabIndex = selectedTabIndex) { index ->
-        selectedTabIndex = index
-    }
-}
-*/

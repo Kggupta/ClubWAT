@@ -1,3 +1,5 @@
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.clubwat.BuildConfig
@@ -12,6 +14,10 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.util.Date
 
 class SearchViewModel(private val userRepository: UserRepository) : ViewModel() {
     private val _searchQuery = MutableStateFlow("")
@@ -26,12 +32,13 @@ class SearchViewModel(private val userRepository: UserRepository) : ViewModel() 
     private val _events: MutableStateFlow<MutableList<Event>> = MutableStateFlow(arrayListOf())
     val events = _events.asStateFlow()
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun onSearchQueryChanged(search: String, isClub: Boolean) {
         _searchQuery.value = search
         if (isClub) {
             searchClubs(search)
         } else {
-            searchClubs(search)
+            searchEvents(search)
         }
     }
 
@@ -67,6 +74,48 @@ class SearchViewModel(private val userRepository: UserRepository) : ViewModel() 
                     }
 
                     _clubs.value = clubs
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun searchEvents(search: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val query = BuildConfig.SEARCH_EVENT_URL
+                // change once Search Events API is complete
+                /*if (search.isNotEmpty()) {
+                    query += "?searchQuery=$search"
+                }*/
+                val obj = URL(query)
+                val con = obj.openConnection() as HttpURLConnection
+                con.requestMethod = "GET"
+                con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+                val responseCode = con.responseCode
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    val response = JSONObject(con.inputStream.bufferedReader().use { it.readText() })
+                    val jsonResponse = response.getJSONArray("data")
+                    val events = emptyList<Event>().toMutableList()
+
+                    for (i in 0 until jsonResponse.length()) {
+                        val jsonObject: JSONObject = jsonResponse.get(i) as JSONObject
+                        val id = jsonObject.optString("id", null.toString())
+                        val title = jsonObject.optString("title", "No Name")
+                        val description = jsonObject.optString("description", "None")
+                        val clubId = jsonObject.optInt("club_id", 0)
+                        val tempStartDate = LocalDateTime.parse("2024-01-27 10:13:26.000",
+                                                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"))
+                        val tempEndDate = LocalDateTime.parse("2024-01-27 10:13:26.000",
+                                                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"))
+                        val startDate = Date.from(tempStartDate.atZone(ZoneId.systemDefault()).toInstant())
+                        val endDate = Date.from(tempEndDate.atZone(ZoneId.systemDefault()).toInstant())
+                        events.add(Event(id, title, description, startDate, endDate, clubId))
+                    }
+
+                    _events.value = events
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
