@@ -60,6 +60,16 @@ Table ClubAdmin {
   club Club [not null]
 }
 
+Table ClubDiscussion {
+  id Int [pk, increment]
+  user_id Int [not null]
+  club_id Int [not null]
+  message String [not null]
+  create_date DateTime [not null]
+  user User [not null]
+  club Club [not null]
+}
+
 Table Events {
   id Int [pk, increment]
   title String [not null]
@@ -97,15 +107,6 @@ Table FeedbackEvents {
   user_email String [not null]
   user User [not null]
   event Events [not null]
-  
-Table ClubDiscussion {
-  id Int [pk, increment]
-  user_id Int [not null]
-  club_id Int [not null]
-  message String [not null]
-  create_date DateTime [not null]
-  user User [not null]
-  club Club [not null]
 }
 
 Table ClubMember {
@@ -125,6 +126,10 @@ Ref: ClubAdmin.user_id > User.id
 
 Ref: ClubAdmin.club_id > Club.id
 
+Ref: ClubDiscussion.user_id > User.id
+
+Ref: ClubDiscussion.club_id > Club.id
+
 Ref: Events.club_id > Club.id
 
 Ref: AttendingEvents.user_email > User.email
@@ -138,10 +143,6 @@ Ref: BookmarkedEvents.event_id > Events.id
 Ref: FeedbackEvents.user_email > User.email
 
 Ref: FeedbackEvents.event_id > Events.id
-
-Ref: ClubDiscussion.user_id > User.id
-
-Ref: ClubDiscussion.club_id > Club.id
 
 Ref: ClubMember.user_id > User.id
 

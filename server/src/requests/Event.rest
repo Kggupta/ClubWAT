@@ -1,11 +1,11 @@
 GET http://localhost:3000/api/v1/club/5/event
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJhMzNwYXRpbEB1d2F0ZXJsb28uY2EiLCJwYXNzd29yZCI6IlBhc3N3b3JkMSQiLCJmaXJzdF9uYW1lIjoiQWJoaW5pdCIsImxhc3RfbmFtZSI6IlBhdGlsIiwiYWRtaW5fZmxhZyI6ZmFsc2UsImlhdCI6MTcwOTA3NTE4OH0.Po9_nFMszCfDBA4TZC3nle9lN--0isuhf4mifj9d_0Y
+Authorization: Bearer [token]
 content-type: application/json
 
 ###
 
 POST http://localhost:3000/api/v1/club/5/event
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJhMzNwYXRpbEB1d2F0ZXJsb28uY2EiLCJwYXNzd29yZCI6IlBhc3N3b3JkMSQiLCJmaXJzdF9uYW1lIjoiQWJoaW5pdCIsImxhc3RfbmFtZSI6IlBhdGlsIiwiYWRtaW5fZmxhZyI6ZmFsc2UsImlhdCI6MTcwOTA3NTE4OH0.Po9_nFMszCfDBA4TZC3nle9lN--0isuhf4mifj9d_0Y
+Authorization: Bearer [token]
 content-type: application/json
 
 {
@@ -18,7 +18,7 @@ content-type: application/json
 ###
 
 PUT http://localhost:3000/api/v1/club/5/event/2
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJhMzNwYXRpbEB1d2F0ZXJsb28uY2EiLCJwYXNzd29yZCI6IlBhc3N3b3JkMSQiLCJmaXJzdF9uYW1lIjoiQWJoaW5pdCIsImxhc3RfbmFtZSI6IlBhdGlsIiwiYWRtaW5fZmxhZyI6ZmFsc2UsImlhdCI6MTcwOTA3NTE4OH0.Po9_nFMszCfDBA4TZC3nle9lN--0isuhf4mifj9d_0Y
+Authorization: Bearer [token]
 content-type: application/json
 
 {
@@ -32,5 +32,5 @@ content-type: application/json
 ###
 
 DELETE http://localhost:3000/api/v1/club/5/event/2
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJhMzNwYXRpbEB1d2F0ZXJsb28uY2EiLCJwYXNzd29yZCI6IlBhc3N3b3JkMSQiLCJmaXJzdF9uYW1lIjoiQWJoaW5pdCIsImxhc3RfbmFtZSI6IlBhdGlsIiwiYWRtaW5fZmxhZyI6ZmFsc2UsImlhdCI6MTcwOTA3NTE4OH0.Po9_nFMszCfDBA4TZC3nle9lN--0isuhf4mifj9d_0Y
+Authorization: Bearer [token]
 content-type: application/json
