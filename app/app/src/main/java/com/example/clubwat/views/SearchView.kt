@@ -10,19 +10,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-<<<<<<< HEAD
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.TopAppBar
-=======
-import androidx.compose.material.Tab
-import androidx.compose.material.TabRow
-import androidx.compose.material.TabRowDefaults
-import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
-import androidx.compose.material.TopAppBar
->>>>>>> b2e2d3c70beb217e45422813eb8b8c30e6eb6da1
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Inbox
@@ -177,13 +169,8 @@ fun SearchTab(selectedTabIndex: Int, onTabSelected: (Int) -> Unit) {
     val tabTitles = listOf("Clubs", "Events")
     TabRow(
         selectedTabIndex = selectedTabIndex,
-<<<<<<< HEAD
         containerColor = LightYellow,
         contentColor = Color.Black,
-=======
-        backgroundColor = LightYellow,
-        contentColor = Color.White,
->>>>>>> b2e2d3c70beb217e45422813eb8b8c30e6eb6da1
         indicator = { tabPositions ->
             TabRowDefaults.Indicator(
                 Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex]),
@@ -204,17 +191,3 @@ fun SearchTab(selectedTabIndex: Int, onTabSelected: (Int) -> Unit) {
         }
     }
 }
-<<<<<<< HEAD
-=======
-
-/*
-@Preview
-@Composable
-fun SearchTabPreview() {
-    var selectedTabIndex by remember { mutableIntStateOf(0) }
-    SearchTab(selectedTabIndex = selectedTabIndex) { index ->
-        selectedTabIndex = index
-    }
-}
-*/
->>>>>>> b2e2d3c70beb217e45422813eb8b8c30e6eb6da1
