@@ -32,13 +32,20 @@ class SearchViewModel(private val userRepository: UserRepository) : ViewModel() 
     private val _events: MutableStateFlow<MutableList<Event>> = MutableStateFlow(arrayListOf())
     val events = _events.asStateFlow()
 
+<<<<<<< HEAD
     @RequiresApi(Build.VERSION_CODES.O)
+=======
+>>>>>>> b2e2d3c70beb217e45422813eb8b8c30e6eb6da1
     fun onSearchQueryChanged(search: String, isClub: Boolean) {
         _searchQuery.value = search
         if (isClub) {
             searchClubs(search)
         } else {
+<<<<<<< HEAD
             searchEvents(search)
+=======
+            searchClubs(search)
+>>>>>>> b2e2d3c70beb217e45422813eb8b8c30e6eb6da1
         }
     }
 
