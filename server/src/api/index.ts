@@ -2,9 +2,8 @@ import express from "express";
 
 import MessageResponse from "../interfaces/MessageResponse";
 import userRoutes from "./UserRoutes";
-import clubRoutes from './ClubRoutes';
-import eventRoutes from './EventRoutes';
-import clubCategoryRoutes from './ClubCategoryRoutes';
+import clubRoutes from "./ClubRoutes";
+import eventRoutes from "./EventRoutes";
 import categoryRoutes from "./CategoryRoutes";
 import clubAdminRoutes from "./ClubAdminRoutes";
 import clubDiscussion from "./ClubDiscussionRoutes";
@@ -20,7 +19,6 @@ router.get<{}, MessageResponse>("/", (req, res) => {
 router.use("/user", userRoutes);
 router.use("/club", clubRoutes);
 router.use("/club/:id/event", eventRoutes);
-router.use("/category", clubCategoryRoutes);
 router.use("/club/admin", clubAdminRoutes);
 router.use("/category", categoryRoutes);
 router.use("/club/discussion", clubDiscussion);
