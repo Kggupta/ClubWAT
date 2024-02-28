@@ -3,7 +3,7 @@ POST http://localhost:3000/api/v1/user/registration-email-verification
 content-type: application/json
 
 {
-    "email": "k44gupta@uwaterloo.ca"
+    "email": "a33patil@uwaterloo.ca"
 }
 
 ###
@@ -12,9 +12,9 @@ POST http://localhost:3000/api/v1/user/register
 content-type: application/json
 
 {
-    "email": "k44gupta@uwaterloo.ca",
+    "email": "a33patil@uwaterloo.ca",
 		"password": "Password1$",
-		"first_name": "Keshav",
-		"last_name": "Gupta",
-		"code": 470010
+		"first_name": "Abhinit",
+		"last_name": "Patil",
+		"code": 846027
 }

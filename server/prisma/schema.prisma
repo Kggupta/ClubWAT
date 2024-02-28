@@ -17,13 +17,17 @@ datasource db {
 }
 
 model User {
-  id         Int         @id @default(autoincrement())
-  email      String      @unique
-  password   String
-  first_name String
-  last_name  String
-  admin_flag Boolean
-  admins     ClubAdmin[]
+  id          Int     @id @default(autoincrement())
+  email       String  @unique
+  password    String
+  first_name  String
+  last_name   String
+  admin_flag  Boolean
+
+  admins      ClubAdmin[]
+  attendingEvents   AttendingEvents[]
+  bookmarkedEvents  BookmarkedEvents[]
+  feedbackEvents    FeedbackEvents[]
   club_discussions ClubDiscussion[]
   club_members ClubMember[]
 }
@@ -35,13 +39,15 @@ model UserEmailVerification {
 }
 
 model Club {
-  id             Int            @id @default(autoincrement())
-  title          String
-  description    String
-  membership_fee Float
-  is_approved    Boolean        @default(false)
-  categories     ClubCategory[]
-  admins         ClubAdmin[]
+  id              Int             @id @default(autoincrement())
+  title           String
+  description     String
+  membership_fee  Float
+  is_approved      Boolean        @default(false)
+
+  categories      ClubCategory[]
+  admins          ClubAdmin[]
+  events          Events[]
   discussions     ClubDiscussion[]
   club_members ClubMember[]
 }
@@ -78,6 +84,49 @@ model ClubDiscussion {
   create_date DateTime
   user        User      @relation(fields: [user_id], references: [id])
   club        Club      @relation(fields: [club_id], references: [id])
+}
+
+model Events {
+  id            Int       @id @default(autoincrement())
+  title         String
+  description   String
+  start_date    DateTime
+  end_date      DateTime
+  club_id       Int
+  club          Club      @relation(fields: [club_id], references: [id])
+
+  feedback_events FeedbackEvents[]
+  attending_events AttendingEvents[]
+  bookmarked_events BookmarkedEvents[]
+}
+
+model AttendingEvents {
+  id          Int    @id @default(autoincrement())
+  user_email  String
+  event_id    Int
+
+  user  User  @relation(fields: [user_email], references: [email])
+  event Events @relation(fields: [event_id], references: [id])
+}
+
+model BookmarkedEvents {
+  id        Int    @id @default(autoincrement())
+  user_id   Int
+  event_id  Int
+
+  user  User  @relation(fields: [user_id], references: [id])
+  event Events @relation(fields: [event_id], references: [id])
+}
+
+model FeedbackEvents {
+  id        Int      @id @default(autoincrement())
+  event_id  Int
+  feedback  String
+  created   DateTime
+  user_email String
+
+  user  User  @relation(fields: [user_email], references: [email])
+  event Events @relation(fields: [event_id], references: [id])
 }
 
 model ClubMember {

@@ -1,12 +1,6 @@
 import express from "express";
 import { prisma } from "../lib/prisma";
-import {
-  Category,
-  Club,
-  ClubAdmin,
-  ClubCategory,
-  ClubMember,
-} from "@prisma/client";
+import { Club, ClubAdmin, ClubCategory, ClubMember } from "@prisma/client";
 import {
   INTERNAL_ERROR_CODE,
   INVALID_REQUEST_CODE,
@@ -37,10 +31,6 @@ type ClubResponse = {
 
 type ChosenClub = {
   id: string;
-};
-
-type ClubSearch = {
-  searchQuery?: string;
 };
 
 type ClubAdminResponse = {
@@ -102,7 +92,6 @@ router.get<ClubParam, ClubResponse>(
           },
         };
       }
-
       if (param === "approved" || param === "not-approved") {
         query.where = { is_approved: param === "approved" };
         let clubs: ClubWithCategories[] = await prisma.club.findMany(query);
@@ -208,7 +197,6 @@ router.put<ClubDetails, void>(
       }
 
       const clubId = Number(req.params.id);
-
       Promise.all([
         prisma.club.update({
           where: {
