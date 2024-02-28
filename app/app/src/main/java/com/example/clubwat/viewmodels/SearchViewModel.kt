@@ -14,9 +14,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
+import java.time.Instant
 import java.util.Date
 
 class SearchViewModel(private val userRepository: UserRepository) : ViewModel() {
@@ -106,12 +104,9 @@ class SearchViewModel(private val userRepository: UserRepository) : ViewModel() 
                         val title = jsonObject.optString("title", "No Name")
                         val description = jsonObject.optString("description", "None")
                         val clubId = jsonObject.optInt("club_id", 0)
-                        val tempStartDate = LocalDateTime.parse("2024-01-27 10:13:26.000",
-                                                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"))
-                        val tempEndDate = LocalDateTime.parse("2024-01-27 10:13:26.000",
-                                                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"))
-                        val startDate = Date.from(tempStartDate.atZone(ZoneId.systemDefault()).toInstant())
-                        val endDate = Date.from(tempEndDate.atZone(ZoneId.systemDefault()).toInstant())
+                        val startDate = Date.from(Instant.parse(jsonObject.optString("start_date", "None")))
+                        val endDate = Date.from(Instant.parse(jsonObject.optString("end_date", "None")))
+
                         events.add(Event(id, title, description, startDate, endDate, clubId))
                     }
 
