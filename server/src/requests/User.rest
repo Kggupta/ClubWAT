@@ -1,0 +1,7 @@
+GET http://localhost:3000/api/v1/user/12
+Authorization: Bearer [token]
+
+###
+
+DELETE http://localhost:3000/api/v1/user/
+Authorization: Bearer [token]

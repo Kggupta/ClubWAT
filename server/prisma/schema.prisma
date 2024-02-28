@@ -6,7 +6,7 @@ generator client {
 }
 
 generator dbml {
-  provider = "prisma-dbml-generator"
+  provider   = "prisma-dbml-generator"
   output     = "../"
   outputName = "database.dbml"
 }
@@ -28,6 +28,8 @@ model User {
   attendingEvents   AttendingEvents[]
   bookmarkedEvents  BookmarkedEvents[]
   feedbackEvents    FeedbackEvents[]
+  club_discussions ClubDiscussion[]
+  club_members ClubMember[]
 }
 
 model UserEmailVerification {
@@ -46,28 +48,40 @@ model Club {
   categories      ClubCategory[]
   admins          ClubAdmin[]
   events          Events[]
+  discussions     ClubDiscussion[]
+  club_members ClubMember[]
 }
 
 model Category {
-  id    Int     @id @default(autoincrement())
+  id    Int            @id @default(autoincrement())
   type  String
   name  String
   clubs ClubCategory[]
 }
 
 model ClubCategory {
-  id          Int       @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   club_id     Int
   category_id Int
-  club        Club      @relation(fields: [club_id], references: [id])
-  category    Category  @relation(fields: [category_id], references: [id])
+  club        Club     @relation(fields: [club_id], references: [id])
+  category    Category @relation(fields: [category_id], references: [id])
 }
 
 model ClubAdmin {
+  id       Int    @id @default(autoincrement())
+  user_id  Int
+  club_id  Int
+  position String
+  user     User   @relation(fields: [user_id], references: [id])
+  club     Club   @relation(fields: [club_id], references: [id])
+}
+
+model ClubDiscussion {
   id          Int       @id @default(autoincrement())
   user_id     Int
   club_id     Int
-  position    String
+  message String
+  create_date DateTime
   user        User      @relation(fields: [user_id], references: [id])
   club        Club      @relation(fields: [club_id], references: [id])
 }
@@ -113,4 +127,13 @@ model FeedbackEvents {
 
   user  User  @relation(fields: [user_email], references: [email])
   event Events @relation(fields: [event_id], references: [id])
+}
+
+model ClubMember {
+  id Int @id @default(autoincrement())
+  user_id Int
+  club_id Int
+  user User @relation(fields: [user_id], references: [id])
+  club Club @relation(fields: [club_id], references: [id])
+  is_approved Boolean
 }

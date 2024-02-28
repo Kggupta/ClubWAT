@@ -13,6 +13,8 @@ Table User {
   attendingEvents AttendingEvents [not null]
   bookmarkedEvents BookmarkedEvents [not null]
   feedbackEvents FeedbackEvents [not null]
+  club_discussions ClubDiscussion [not null]
+  club_members ClubMember [not null]
 }
 
 Table UserEmailVerification {
@@ -30,6 +32,8 @@ Table Club {
   categories ClubCategory [not null]
   admins ClubAdmin [not null]
   events Events [not null]
+  discussions ClubDiscussion [not null]
+  club_members ClubMember [not null]
 }
 
 Table Category {
@@ -93,6 +97,24 @@ Table FeedbackEvents {
   user_email String [not null]
   user User [not null]
   event Events [not null]
+  
+Table ClubDiscussion {
+  id Int [pk, increment]
+  user_id Int [not null]
+  club_id Int [not null]
+  message String [not null]
+  create_date DateTime [not null]
+  user User [not null]
+  club Club [not null]
+}
+
+Table ClubMember {
+  id Int [pk, increment]
+  user_id Int [not null]
+  club_id Int [not null]
+  user User [not null]
+  club Club [not null]
+  is_approved Boolean [not null]
 }
 
 Ref: ClubCategory.club_id > Club.id
@@ -116,3 +138,11 @@ Ref: BookmarkedEvents.event_id > Events.id
 Ref: FeedbackEvents.user_email > User.email
 
 Ref: FeedbackEvents.event_id > Events.id
+
+Ref: ClubDiscussion.user_id > User.id
+
+Ref: ClubDiscussion.club_id > Club.id
+
+Ref: ClubMember.user_id > User.id
+
+Ref: ClubMember.club_id > Club.id

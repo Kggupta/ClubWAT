@@ -1,0 +1,14 @@
+GET http://localhost:3000/api/v1/category
+Authorization: Bearer [token]
+content-type: application/json
+
+###
+
+POST http://localhost:3000/api/v1/category
+Authorization: Bearer [token]
+content-type: application/json
+
+{
+    "type": "active",
+    "name": "sports"
+}
