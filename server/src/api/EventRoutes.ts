@@ -3,14 +3,15 @@ import { prisma } from "../lib/prisma";
 import {
   INTERNAL_ERROR_CODE,
   INVALID_REQUEST_CODE,
-  OK_CODE
+  OK_CODE,
+  CREATED_CODE
 } from "../lib/StatusCodes";
 import { authenticateToken, verifyIsClubAdmin } from "../middlewares";
 const eventRoutes = express.Router({ mergeParams: true });
 
 type EventsQuery = {
+    id?: string // This is clubId
     eventId?: string
-    id?: string
 }
 
 type Events = {
@@ -62,7 +63,7 @@ eventRoutes.post<EventsQuery, Events>("/", authenticateToken, verifyIsClubAdmin,
                 club_id: club_Id,
             },
         });
-        res.status(OK_CODE).json(event);
+        res.status(CREATED_CODE).json(event);
     } catch (error) {
         res.sendStatus(INTERNAL_ERROR_CODE);
     }
