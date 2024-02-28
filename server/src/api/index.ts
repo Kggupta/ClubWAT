@@ -3,6 +3,7 @@ import express from "express";
 import MessageResponse from "../interfaces/MessageResponse";
 import userRoutes from "./UserRoutes";
 import clubRoutes from './ClubRoutes';
+import eventRoutes from './EventRoutes';
 import clubCategoryRoutes from './ClubCategoryRoutes';
 import adminRoutes from './AdminRoutes';
 
@@ -17,6 +18,7 @@ router.get<{}, MessageResponse>("/", (req, res) => {
 router.use("/user", userRoutes);
 router.use("/club", clubRoutes);
 router.use("/club/admin", adminRoutes);
+router.use("/club/:id/event", eventRoutes);
 router.use("/category", clubCategoryRoutes);
 
 export default router;
