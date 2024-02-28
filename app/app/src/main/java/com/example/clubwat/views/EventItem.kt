@@ -36,12 +36,3 @@ fun EventItem(event: Event, navController: NavController) {
         }
     }
 }
-
-/*@Preview
-@Composable
-fun EventItemPreview() {
-    val calendar = Calendar.getInstance()
-    val currentDate = calendar.time
-    val t = Event("111", "ygwqdguwqdgwqodwdwqddwqdwqddwqdqwdwdwdwqddwqdw", "ygwqdguwqdgwqodwdwqddwqdwqddwqdqwdwdwdwqddwqdw", currentDate, currentDate, 4)
-    EventItem(t)
-}*/

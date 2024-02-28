@@ -126,7 +126,7 @@ fun SearchView(
                     } else {
                         items(events) {event ->
                             Row(modifier = Modifier.clickable {
-                                // change later
+                                // change later when building event details view
                                 navController.navigate("club/${event.clubId}")
                             }){
                                 Text(text=event.title, modifier=Modifier.fillMaxWidth().padding(14.dp))
@@ -147,7 +147,7 @@ fun SearchView(
                 } else {
                     items(events) {event ->
                         Row(modifier = Modifier.clickable {
-                            // change later
+                            // change later when building event details view
                             navController.navigate("club/${event.clubId}")
                         }){
                             EventItem(event = event, navController = navController)
