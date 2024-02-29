@@ -83,11 +83,10 @@ class SearchViewModel(private val userRepository: UserRepository) : ViewModel() 
     private fun searchEvents(search: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val query = BuildConfig.SEARCH_EVENT_URL
-                // change once Search Events API is complete
-                /*if (search.isNotEmpty()) {
+                var query = BuildConfig.SEARCH_EVENT_URL
+                if (search.isNotEmpty()) {
                     query += "?searchQuery=$search"
-                }*/
+                }
                 val obj = URL(query)
                 val con = obj.openConnection() as HttpURLConnection
                 con.requestMethod = "GET"
