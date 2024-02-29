@@ -5,10 +5,12 @@ import com.example.clubwat.BuildConfig
 import com.example.clubwat.model.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
+import javax.security.auth.callback.Callback
 
 class SignUpViewModel(private val userRepository: UserRepository) : ViewModel() {
     var firstName = mutableStateOf("")
@@ -43,8 +45,9 @@ class SignUpViewModel(private val userRepository: UserRepository) : ViewModel() 
         return password.matches(passwordPattern.toRegex())
     }
 
-    fun sendVerificationEmail() {
+    fun sendVerificationEmail(callback: (Boolean) -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {
+            var emailSent = false
             try {
                 println(email.value)
                 val url = URL(BuildConfig.EMAIL_VERIFICATION_URL)
@@ -56,20 +59,26 @@ class SignUpViewModel(private val userRepository: UserRepository) : ViewModel() 
                     val body = """{"email": "${email.value}"}"""
 
                     OutputStreamWriter(outputStream).use { it.write(body) }
-                    val responseCode = responseCode
-                    if (responseCode == HttpURLConnection.HTTP_OK) {
+                    emailSent = responseCode == HttpURLConnection.HTTP_OK
+                    if (emailSent) {
                         val response = inputStream.bufferedReader().use { it.readText() }
                         val jsonResponse = JSONObject(response)
                         val token = jsonResponse.optString("data", null.toString())
                         userRepository.setUserId(token)
+
                         println("Response: $response")
                     } else {
                         val response = errorStream.bufferedReader().use { it.readText() }
+                        allValuesError.value = "This account already exists"
                         println("Error Response: $response")
                     }
                 }
             } catch (e: Exception) {
+                allValuesError.value = "This account already exists"
                 e.printStackTrace()
+            }
+            withContext(Dispatchers.Main) {
+                callback(emailSent)
             }
         }
     }
