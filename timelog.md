@@ -53,3 +53,4 @@
 | 02/22/2024 | 0.5    |        |        |         |         |         | Sorting club browsing, update club details look/feel     |
 | 02/25/2024 |        |        | 6      |         |         |         | Added all of the user's clubs on the home screen         |
 | 02/25/2024 | 1.2    |        |        |         |         |         | Get my clubs endpoint                                    |
+| 02/28/2024 |        |        |        |         |         | 5       | Completed most of the frontend work for browsing events  |
