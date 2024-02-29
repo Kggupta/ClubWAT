@@ -53,3 +53,4 @@
 | 02/22/2024 | 0.5    |        |        |         |         |         | Sorting club browsing, update club details look/feel     |
 | 02/25/2024 |        |        | 6      |         |         |         | Added all of the user's clubs on the home screen         |
 | 02/25/2024 | 1.2    |        |        |         |         |         | Get my clubs endpoint                                    |
+| 02/29/2024 | 1      |        |        |         |         |         | Handle user already exists and tries to register error   |
