@@ -61,7 +61,6 @@ export async function verifyIsClubAdmin(
   res: Response,
   next: NextFunction
 ) {
-  console.log(process.env.ENVIRONMENT);
   if (process.env.ENVIRONMENT === "PRODUCTION") {
     const clubId = Number(req.params.id);
     if (!clubId) return res.sendStatus(INVALID_REQUEST_CODE);
