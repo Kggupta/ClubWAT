@@ -5,9 +5,11 @@ import androidx.lifecycle.viewModelScope
 import com.example.clubwat.model.ClubDetails
 import com.example.clubwat.model.Data
 import com.example.clubwat.model.NetworkResult
+import com.example.clubwat.model.ProcessedData
 import com.example.clubwat.repository.DiscussionRepository
 import com.example.clubwat.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -19,6 +21,7 @@ class ClubDiscussionViewModel(
     private val _uiState = MutableStateFlow(DiscussionUiState.initial)
     val uiState: StateFlow<DiscussionUiState> = _uiState
 
+
     fun fetchUpdatedPosts(clubId: String) {
         viewModelScope.launch(Dispatchers.IO) {
             when (val response = discussionRepository.getPosts(clubId, userRepository.currentUser.value?.userId.toString())) {
@@ -28,10 +31,22 @@ class ClubDiscussionViewModel(
                             posts = processData(response.data?.data ?: emptyList())
                         )
                     )
+                    startPolling(clubId)
                 }
                 is NetworkResult.Error -> {
                     // Can be user to handle errors in future...
+                    delay(500)
+                    fetchUpdatedPosts(clubId) // try again after 5 seconds
                 }
+            }
+        }
+    }
+
+    private fun startPolling(clubId: String) {
+        viewModelScope.launch {
+            while (true) { // ONLY IN VM SCOPE
+                delay(15000) // delay 15 seconds then refetch
+                fetchUpdatedPosts(clubId)
             }
         }
     }
@@ -53,20 +68,20 @@ class ClubDiscussionViewModel(
         }
     }
 
-    private fun processData(posts: List<Data>): List<Data> {
-        val mutablePostList = mutableListOf<Data>()
+    private fun processData(posts: List<Data>): List<ProcessedData> {
+        val mutablePostList = mutableListOf<ProcessedData>()
         posts.forEach { post ->
             if (post.user.email == userRepository.currentUser.value?.email?.value) { // me identifier
-                mutablePostList.add(post.copy(user_id = 999))
+                mutablePostList.add(ProcessedData(true, post))
             } else { // someone else
-                mutablePostList.add(post)
+                mutablePostList.add(ProcessedData(messageData = post))
             }
         }
-        return mutablePostList
+        return mutablePostList.reversed()
     }
 
     data class DiscussionUiState(
-        val posts: List<Data>,
+        val posts: List<ProcessedData>,
         val clubDetails: ClubDetails?
     ) {
         companion object {

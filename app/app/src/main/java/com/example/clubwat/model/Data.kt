@@ -8,3 +8,8 @@ data class Data(
     val user: UserX,
     val user_id: Int
 )
+
+data class ProcessedData(
+    val isMe: Boolean = false,
+    val messageData: Data
+)

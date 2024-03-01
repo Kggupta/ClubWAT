@@ -3,6 +3,7 @@ package com.example.clubwat.views
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,8 +24,10 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,6 +37,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.clubwat.R
+import com.example.clubwat.ui.theme.LightOrange
 import com.example.clubwat.ui.theme.PurpleGrey80
 import com.example.clubwat.viewmodels.ClubDiscussionViewModel
 
@@ -68,7 +73,8 @@ fun ClubDiscussionView(
                 },
                 title = {
                     Column(
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
                             text = uiState.value.clubDetails?.title ?: "",
@@ -88,30 +94,60 @@ fun ClubDiscussionView(
                 modifier = Modifier
                     .wrapContentHeight()
             ) {
-                items(uiState.value.posts) { post ->
-                    val isMe = post.user_id == 999
-                    Row(
-                        horizontalArrangement = if (isMe) Arrangement.End else Arrangement.Start,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Card(
-                            modifier = Modifier
-                                .clip(
-                                    RoundedCornerShape(
-                                        topStart = 48f,
-                                        topEnd = 48f,
-                                        bottomStart = if (isMe) 48f else 0f,
-                                        bottomEnd = if (isMe) 0f else 48f
-                                    )
-                                )
-                                .background(PurpleGrey80)
-                                .padding(16.dp)
-                        ) {
-                            Text(text = "${post.user.first_name}: ${post.message}")
-                        }
-                    }
+                itemsIndexed(uiState.value.posts) { index, post ->
+                    val name =
+
+                        if (uiState.value.posts.getOrNull(index - 1)?.messageData?.user?.email == post.messageData.user.email || post.isMe)
+                            null
+                        else post.messageData.user.first_name
+                    MessageBubble(
+                        isMe = post.isMe,
+                        name = name,
+                        message = post.messageData.message
+                    )
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun MessageBubble(isMe: Boolean, name: String?, message: String) {
+    Column(
+        horizontalAlignment = if (isMe) Alignment.End else Alignment.Start,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 16.dp, start = 16.dp, end = 16.dp)
+    ) {
+        name?.let { name ->
+            Text(
+                text = name,
+                modifier = Modifier.background(
+                    color = Color.Transparent
+                ),
+                fontSize = 12.sp,
+            )
+        }
+        Box(
+            modifier = Modifier
+                .clip(
+                    RoundedCornerShape(
+                        topStart = 48f,
+                        topEnd = 48f,
+                        bottomStart = if (isMe) 48f else 0f,
+                        bottomEnd = if (isMe) 0f else 48f
+                    )
+                )
+                .background(if (isMe) LightOrange else PurpleGrey80)
+                .padding(16.dp)
+        ) {
+            Text(
+                text = message,
+                modifier = Modifier.background(
+                    color = Color.Transparent
+                ),
+                fontSize = 15.sp,
+            )
         }
     }
 }
@@ -119,5 +155,9 @@ fun ClubDiscussionView(
 @Preview
 @Composable
 fun ClubDiscussionViewPreview() {
-    ClubDiscussionView(viewModel = viewModel(), navController = rememberNavController(), clubId = "")
+    ClubDiscussionView(
+        viewModel = viewModel(),
+        navController = rememberNavController(),
+        clubId = ""
+    )
 }
