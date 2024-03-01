@@ -61,7 +61,7 @@ class SignUpViewModel(private val userRepository: UserRepository) : ViewModel() 
                     OutputStreamWriter(outputStream).use { it.write(body) }
                     emailSent = responseCode == HttpURLConnection.HTTP_OK
                     if (responseCode == HttpURLConnection.HTTP_BAD_REQUEST) {
-                        allValuesError.value = "Invalid details provided"
+                        allValuesError.value = "Please enter an @uwaterloo.ca email"
                     } else if (responseCode == HttpURLConnection.HTTP_CONFLICT) {
                         allValuesError.value = "This account already exists"
                     } else if (!emailSent) {
