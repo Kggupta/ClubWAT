@@ -60,14 +60,16 @@ class SignUpViewModel(private val userRepository: UserRepository) : ViewModel() 
 
                     OutputStreamWriter(outputStream).use { it.write(body) }
                     emailSent = responseCode == HttpURLConnection.HTTP_OK
-                    if (!emailSent) {
-                        val response = errorStream.bufferedReader().use { it.readText() }
+                    if (responseCode == HttpURLConnection.HTTP_BAD_REQUEST) {
+                        allValuesError.value = "Invalid details provided"
+                    } else if (responseCode == HttpURLConnection.HTTP_CONFLICT) {
                         allValuesError.value = "This account already exists"
-                        println("Error Response: $response")
+                    } else if (!emailSent) {
+                        allValuesError.value = "The account could not be created"
                     }
                 }
             } catch (e: Exception) {
-                allValuesError.value = "Invalid details provided"
+                allValuesError.value = "An unexpected error occurred"
                 e.printStackTrace()
             }
             withContext(Dispatchers.Main) {
