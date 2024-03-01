@@ -2,7 +2,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.clubwat.BuildConfig
-import com.example.clubwat.model.UserRepository
+import com.example.clubwat.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -10,7 +10,6 @@ import org.json.JSONObject
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
-import javax.security.auth.callback.Callback
 
 class SignUpViewModel(private val userRepository: UserRepository) : ViewModel() {
     var firstName = mutableStateOf("")

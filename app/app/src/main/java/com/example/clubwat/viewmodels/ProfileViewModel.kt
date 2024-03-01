@@ -1,7 +1,7 @@
 package com.example.clubwat.viewmodels
 
 import androidx.lifecycle.ViewModel
-import com.example.clubwat.model.UserRepository
+import com.example.clubwat.repository.UserRepository
 
 class ProfileViewModel(private val userRepository: UserRepository) : ViewModel() {
 
