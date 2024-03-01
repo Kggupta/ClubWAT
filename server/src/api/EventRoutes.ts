@@ -33,4 +33,12 @@ eventRoutes.get<void, EventsResponse>("/search", authenticateToken, async (req, 
   }
 });
 
+eventRoutes.get<void, EventsResponse>("/my-events", authenticateToken, async (req, res) => {
+  try {
+    /*add the code here*/
+  } catch (error) {
+    res.sendStatus(INTERNAL_ERROR_CODE);
+  }
+});
+
 export default eventRoutes;

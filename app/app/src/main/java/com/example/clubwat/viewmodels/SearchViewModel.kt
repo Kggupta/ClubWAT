@@ -6,11 +6,12 @@ import com.example.clubwat.BuildConfig
 import com.example.clubwat.model.Club
 import com.example.clubwat.model.Event
 import com.example.clubwat.model.UserRepository
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import org.json.JSONArray
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
@@ -59,17 +60,7 @@ class SearchViewModel(private val userRepository: UserRepository) : ViewModel() 
                 println("Response Code :: $responseCode")
                 if (responseCode == HttpURLConnection.HTTP_OK) {
                     val response = con.inputStream.bufferedReader().use { it.readText() }
-                    val jsonResponse = JSONArray(response)
-                    val clubs = emptyList<Club>().toMutableList()
-
-                    for (i in 0 until jsonResponse.length()) {
-                        val jsonObject: JSONObject = jsonResponse.get(i) as JSONObject
-                        val id = jsonObject.optString("id", null.toString())
-                        val title = jsonObject.optString("title", "No Name")
-                        val description = jsonObject.optString("description", "None")
-
-                        clubs.add(Club(id, title, description))
-                    }
+                    val clubs: MutableList<Club> = Gson().fromJson(response, object : TypeToken<List<Club>>() {}.type)
 
                     _clubs.value = clubs
                 }

@@ -7,3 +7,9 @@ content-type: application/json
 GET http://localhost:3000/api/v1/event/search
 Authorization: Bearer [token]
 content-type: application/json
+
+###
+
+GET http://localhost:3000/api/v1/event/my-events
+Authorization: Bearer [token]
+content-type: application/json
