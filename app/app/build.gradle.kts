@@ -40,6 +40,11 @@ android {
             buildConfigField("String", "SEARCH_CLUB_URL", searchClub)
         }
 
+        val searchEvent = properties["SEARCH_EVENT_URL"]?.toString()
+        if (searchEvent != null) {
+            buildConfigField("String", "SEARCH_EVENT_URL", searchEvent)
+        }
+
         val getClub = properties["GET_CLUB_URL"]?.toString()
         if (getClub != null) {
             buildConfigField("String", "GET_CLUB_URL", getClub)

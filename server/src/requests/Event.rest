@@ -1,35 +1,15 @@
-GET http://localhost:3000/api/v1/club/5/event
+GET http://localhost:3000/api/v1/event
 Authorization: Bearer [token]
 content-type: application/json
 
 ###
 
-POST http://localhost:3000/api/v1/club/5/event
+GET http://localhost:3000/api/v1/event/search
 Authorization: Bearer [token]
 content-type: application/json
 
-{
-    "title": "Event 2",
-    "description": "This is event two",
-    "start_date": "2023-04-15T14:00:00Z",
-    "end_date": "2023-04-17T14:00:00Z"
-}
-
 ###
 
-PUT http://localhost:3000/api/v1/club/5/event/2
-Authorization: Bearer [token]
-content-type: application/json
-
-{
-    "title": "Event 2",
-    "description": "This is event two",
-    "start_date": "2023-04-15T14:00:00Z",
-    "end_date": "2023-04-17T14:00:00Z",
-}
-
-###
-
-DELETE http://localhost:3000/api/v1/club/5/event/2
+GET http://localhost:3000/api/v1/event/my-events
 Authorization: Bearer [token]
 content-type: application/json
