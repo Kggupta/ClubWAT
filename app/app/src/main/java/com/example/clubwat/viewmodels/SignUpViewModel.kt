@@ -67,6 +67,7 @@ class SignUpViewModel(private val userRepository: UserRepository) : ViewModel() 
                     }
                 }
             } catch (e: Exception) {
+                allValuesError.value = "Invalid details provided"
                 e.printStackTrace()
             }
             withContext(Dispatchers.Main) {
