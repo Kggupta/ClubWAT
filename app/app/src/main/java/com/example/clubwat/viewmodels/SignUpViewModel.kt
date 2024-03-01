@@ -60,21 +60,13 @@ class SignUpViewModel(private val userRepository: UserRepository) : ViewModel() 
 
                     OutputStreamWriter(outputStream).use { it.write(body) }
                     emailSent = responseCode == HttpURLConnection.HTTP_OK
-                    if (emailSent) {
-                        val response = inputStream.bufferedReader().use { it.readText() }
-                        val jsonResponse = JSONObject(response)
-                        val token = jsonResponse.optString("data", null.toString())
-                        userRepository.setUserId(token)
-
-                        println("Response: $response")
-                    } else {
+                    if (!emailSent) {
                         val response = errorStream.bufferedReader().use { it.readText() }
                         allValuesError.value = "This account already exists"
                         println("Error Response: $response")
                     }
                 }
             } catch (e: Exception) {
-                allValuesError.value = "This account already exists"
                 e.printStackTrace()
             }
             withContext(Dispatchers.Main) {
