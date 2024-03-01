@@ -131,7 +131,6 @@ fun ClubDiscussionView(
                             viewModel.sendMessage(
                                 text,
                                 uiState.value.clubDetails?.id,
-                                uiState.value.posts.find { it.isMe }?.messageData?.user_id // WILL NOT WORK UNLESS THE GET REQUEST FINDS A MESSAGE FROM CURRENT USER
                             )
                         }
                         text = ""

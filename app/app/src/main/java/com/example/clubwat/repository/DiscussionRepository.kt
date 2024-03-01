@@ -83,7 +83,6 @@ class DiscussionRepositoryImpl : DiscussionRepository {
             con.setRequestProperty("Content-Type", "application/json")
 
             val jsonObject = JSONObject()
-            jsonObject.put("user_id", request.user_id)
             jsonObject.put("club_id", request.club_id)
             jsonObject.put("message", request.message)
             val jsonObjectString = jsonObject.toString()

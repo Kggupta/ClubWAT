@@ -78,15 +78,13 @@ class ClubDiscussionViewModel(
 
     fun sendMessage(
         message: String,
-        clubId: Int?,
-        userId: Int?
+        clubId: Int?
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             when (val response = discussionRepository.sendMessage(
                 SendDiscusionMessageRequest(
                     clubId,
-                    message,
-                    userId
+                    message
                 ),
                 userRepository.currentUser.value?.userId?.toString() ?: ""
             )) {
