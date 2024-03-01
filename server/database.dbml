@@ -10,9 +10,9 @@ Table User {
   last_name String [not null]
   admin_flag Boolean [not null]
   admins ClubAdmin [not null]
-  attendingEvents AttendingEvents [not null]
-  bookmarkedEvents BookmarkedEvents [not null]
-  feedbackEvents FeedbackEvents [not null]
+  event_attendance EventAttendance [not null]
+  event_bookmarks EventBookmark [not null]
+  event_feedback EventFeedback [not null]
   club_discussions ClubDiscussion [not null]
   club_members ClubMember [not null]
 }
@@ -31,7 +31,7 @@ Table Club {
   is_approved Boolean [not null, default: false]
   categories ClubCategory [not null]
   admins ClubAdmin [not null]
-  events Events [not null]
+  events Event [not null]
   discussions ClubDiscussion [not null]
   club_members ClubMember [not null]
 }
@@ -70,7 +70,7 @@ Table ClubDiscussion {
   club Club [not null]
 }
 
-Table Events {
+Table Event {
   id Int [pk, increment]
   title String [not null]
   description String [not null]
@@ -78,35 +78,35 @@ Table Events {
   end_date DateTime [not null]
   club_id Int [not null]
   club Club [not null]
-  feedback_events FeedbackEvents [not null]
-  attending_events AttendingEvents [not null]
-  bookmarked_events BookmarkedEvents [not null]
+  event_feedbacl EventFeedback [not null]
+  event_attendance EventAttendance [not null]
+  event_bookmark EventBookmark [not null]
 }
 
-Table AttendingEvents {
-  id Int [pk, increment]
-  user_email String [not null]
-  event_id Int [not null]
-  user User [not null]
-  event Events [not null]
-}
-
-Table BookmarkedEvents {
+Table EventAttendance {
   id Int [pk, increment]
   user_id Int [not null]
   event_id Int [not null]
   user User [not null]
-  event Events [not null]
+  event Event [not null]
 }
 
-Table FeedbackEvents {
+Table EventBookmark {
+  id Int [pk, increment]
+  user_id Int [not null]
+  event_id Int [not null]
+  user User [not null]
+  event Event [not null]
+}
+
+Table EventFeedback {
   id Int [pk, increment]
   event_id Int [not null]
   feedback String [not null]
   created DateTime [not null]
   user_email String [not null]
   user User [not null]
-  event Events [not null]
+  event Event [not null]
 }
 
 Table ClubMember {
@@ -130,19 +130,19 @@ Ref: ClubDiscussion.user_id > User.id
 
 Ref: ClubDiscussion.club_id > Club.id
 
-Ref: Events.club_id > Club.id
+Ref: Event.club_id > Club.id
 
-Ref: AttendingEvents.user_email > User.email
+Ref: EventAttendance.user_id > User.id
 
-Ref: AttendingEvents.event_id > Events.id
+Ref: EventAttendance.event_id > Event.id
 
-Ref: BookmarkedEvents.user_id > User.id
+Ref: EventBookmark.user_id > User.id
 
-Ref: BookmarkedEvents.event_id > Events.id
+Ref: EventBookmark.event_id > Event.id
 
-Ref: FeedbackEvents.user_email > User.email
+Ref: EventFeedback.user_email > User.email
 
-Ref: FeedbackEvents.event_id > Events.id
+Ref: EventFeedback.event_id > Event.id
 
 Ref: ClubMember.user_id > User.id
 
