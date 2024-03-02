@@ -38,7 +38,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.clubwat.model.Event
 import com.example.clubwat.model.EventWrapper
 import com.example.clubwat.ui.theme.LightYellow
 

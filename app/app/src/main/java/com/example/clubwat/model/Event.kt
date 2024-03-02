@@ -19,3 +19,14 @@ data class Event(
     var endDate: Date,
     var clubId: Int
 )
+
+enum class EventType(val value: Int) {
+    ATTEND(0),
+    BOOKMARK(1),
+    JOINED(2);
+
+    companion object {
+        fun from(value: Int) = entries.find { it.value == value }
+    }
+}
+
