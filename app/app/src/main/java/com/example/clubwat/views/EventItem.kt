@@ -9,15 +9,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.clubwat.model.Event
-import java.util.Calendar
-import java.util.Date
+import com.example.clubwat.model.EventWrapper
 
 @Composable
-fun EventItem(event: Event, navController: NavController) {
+fun EventItem(eventWrapper: EventWrapper, navController: NavController) {
+    val event = eventWrapper.event
+    val type = eventWrapper.type
     Card(
         modifier = Modifier
             .fillMaxWidth()

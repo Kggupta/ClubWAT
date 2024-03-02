@@ -1,7 +1,6 @@
 package com.example.clubwat.views
 import HomeViewModel
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,7 +17,6 @@ import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Inbox
-import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -40,7 +38,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.clubwat.R
-import com.example.clubwat.model.Club
 import com.example.clubwat.ui.theme.LightYellow
 
 @Composable
@@ -98,7 +95,7 @@ fun HomeView(
                 if (selectedTabIndex == 0) {
                     YourClubsContent(viewModel, navController)
                 } else {
-                    YourEventsContent()
+                    YourEventsContent(viewModel, navController)
                 }
             }
         }
@@ -147,6 +144,14 @@ fun YourClubsContent(viewModel: HomeViewModel, navController: NavController) {
 }
 
 @Composable
-fun YourEventsContent() {
-    Text("Bye")
+fun YourEventsContent(viewModel: HomeViewModel, navController: NavController) {
+    LaunchedEffect(key1 = true) {
+        viewModel.getAllEvents()
+    }
+    val eventWrappers = viewModel.allEvents.collectAsState().value
+    LazyColumn {
+        items(eventWrappers) { eventWrapper ->
+            EventItem(eventWrapper, navController)
+        }
+    }
 }
