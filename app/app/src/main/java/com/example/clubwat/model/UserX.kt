@@ -1,10 +1,15 @@
 package com.example.clubwat.model
 
+import com.google.gson.annotations.SerializedName
+
 data class UserX(
-    val admin_flag: Boolean,
+    @SerializedName("admin_flag")
+    val adminFlag: Boolean,
     val email: String,
-    val first_name: String,
+    @SerializedName("first_name")
+    val firstName: String,
     val id: Int,
-    val last_name: String,
+    @SerializedName("last_name")
+    val lastName: String,
     val password: String
 )

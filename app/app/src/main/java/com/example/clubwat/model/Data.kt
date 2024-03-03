@@ -1,12 +1,17 @@
 package com.example.clubwat.model
 
+import com.google.gson.annotations.SerializedName
+
 data class Data(
-    val club_id: Int,
-    val create_date: String,
+    @SerializedName("club_id")
+    val clubId: Int,
+    @SerializedName("create_date")
+    val createDate: String,
     val id: Int,
     val message: String,
     val user: UserX,
-    val user_id: Int
+    @SerializedName("user_id")
+    val userId: Int
 )
 
 data class ProcessedData(

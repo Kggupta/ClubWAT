@@ -9,16 +9,13 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -26,8 +23,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -50,10 +45,8 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.clubwat.R
 import com.example.clubwat.ui.theme.LightOrange
-import com.example.clubwat.ui.theme.PurpleGrey40
 import com.example.clubwat.ui.theme.PurpleGrey80
 import com.example.clubwat.viewmodels.ClubDiscussionViewModel
-import java.text.SimpleDateFormat
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "SimpleDateFormat")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -113,10 +106,10 @@ fun ClubDiscussionView(
                     val name =
                         if (uiState.value.posts.getOrNull(index - 1)?.messageData?.user?.email == post.messageData.user.email || post.isMe)
                             null
-                        else post.messageData.user.first_name
+                        else post.messageData.user.firstName
                     MessageBubble(
                         isMe = post.isMe,
-                        name = if (post.isMe.not()) name + " (${post.messageData.create_date})" else name,
+                        name = if (post.isMe.not()) name + " (${post.messageData.createDate})" else name,
                         message = post.messageData.message
                     )
                 }
