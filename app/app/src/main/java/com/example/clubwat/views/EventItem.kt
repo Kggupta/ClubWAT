@@ -56,7 +56,7 @@ fun EventItem(eventWrapper: EventWrapper, navController: NavController) {
     }
 }
 
-fun getIcon(type: Int?): ImageVector {
+fun getIcon(type: Int): ImageVector {
     return when (type) {
         EventType.ATTEND.value -> {
             Icons.Default.Done
