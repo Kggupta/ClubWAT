@@ -24,7 +24,7 @@ class ClubDiscussionViewModel(
 
     fun fetchUpdatedPosts(clubId: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            when (val response = discussionRepository.getPosts(
+            when (val response = discussionRepository.getMessages(
                 clubId,
                 userRepository.currentUser.value?.userId.toString()
             )) {

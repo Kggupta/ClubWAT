@@ -14,7 +14,7 @@ import java.net.URL
 interface DiscussionRepository {
     suspend fun getClub(clubId: String, userId: String): NetworkResult<ClubDetails>
 
-    suspend fun getPosts(clubId: String, userId: String): NetworkResult<DiscussionData>
+    suspend fun getMessages(clubId: String, userId: String): NetworkResult<DiscussionData>
 
     suspend fun sendMessage(request: SendDiscusionMessageRequest, bearer: String): NetworkResult<Any>
 }
@@ -46,7 +46,7 @@ class DiscussionRepositoryImpl : DiscussionRepository {
         )
     }
 
-    override suspend fun getPosts(clubId: String, userId: String): NetworkResult<DiscussionData> {
+    override suspend fun getMessages(clubId: String, userId: String): NetworkResult<DiscussionData> {
         try {
             val obj = URL("http://10.0.2.2:3000/api/v1/club/discussion/$clubId")
             val con = obj.openConnection() as HttpURLConnection
