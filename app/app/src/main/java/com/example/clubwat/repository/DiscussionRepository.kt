@@ -48,7 +48,7 @@ class DiscussionRepositoryImpl : DiscussionRepository {
 
     override suspend fun getMessages(clubId: String, userId: String): NetworkResult<DiscussionData> {
         try {
-            val obj = URL("http://10.0.2.2:3000/api/v1/club/discussion/$clubId")
+            val obj = URL(BuildConfig.CLUB_DISCUSSION_URL + clubId)
             val con = obj.openConnection() as HttpURLConnection
             con.requestMethod = "GET"
             con.setRequestProperty("Authorization", "Bearer $userId")
@@ -74,7 +74,7 @@ class DiscussionRepositoryImpl : DiscussionRepository {
 
     override suspend fun sendMessage(request: SendDiscusionMessageRequest, bearer: String): NetworkResult<Any> {
         try {
-            val obj = URL("http://10.0.2.2:3000/api/v1/club/discussion/${request.club_id}")
+            val obj = URL(BuildConfig.CLUB_DISCUSSION_URL + request.club_id)
             val con = obj.openConnection() as HttpURLConnection
             con.doOutput = true
             con.doInput = true

@@ -59,6 +59,11 @@ android {
         if (getAllEvents != null) {
             buildConfigField("String", "GET_ALL_EVENTS_FOR_USER", getAllEvents)
         }
+
+        val clubDiscussion = properties["CLUB_DISCUSSION_URL"]?.toString()
+        if (clubDiscussion != null) {
+            buildConfigField("String", "CLUB_DISCUSSION_URL", clubDiscussion)
+        }
     }
 
     buildTypes {
