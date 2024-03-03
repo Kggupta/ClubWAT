@@ -263,7 +263,7 @@ fun ProfileView(
                 OutlinedTextField(
                     value = viewModel.oldPassword.value,
                     onValueChange = { viewModel.oldPassword.value = it },
-                    label = { Text("Password") },
+                    label = { Text("Old Password") },
                     visualTransformation = if (viewPassword) VisualTransformation.None else PasswordVisualTransformation(),
                     trailingIcon = {
                         val image = if (viewPassword) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
@@ -277,7 +277,7 @@ fun ProfileView(
                 OutlinedTextField(
                     value = viewModel.newPassword.value,
                     onValueChange = { viewModel.newPassword.value = it },
-                    label = { Text("Password") },
+                    label = { Text("New Password") },
                     visualTransformation = if (viewPassword2) VisualTransformation.None else PasswordVisualTransformation(),
                     trailingIcon = {
                         val image = if (viewPassword2) Icons.Filled.Visibility else Icons.Filled.VisibilityOff

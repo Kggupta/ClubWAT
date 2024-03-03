@@ -65,7 +65,7 @@ class MainActivity : ComponentActivity() {
                             .padding(innerPadding),
                         color = Color.White
                     ) {
-                        NavHost(navController = navController, startDestination = "login") {
+                        NavHost(navController = navController, startDestination = "profile") {
                             composable("signup") {
                                 SignUpView(viewModel = signUpViewModel, navController = navController)
                             }
