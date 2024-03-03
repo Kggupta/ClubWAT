@@ -117,7 +117,7 @@ fun ClubDiscussionView(
                     val formattedDateTime = apiDateTime.format(formatter)
                     MessageBubble(
                         isMe = post.isMe,
-                        name = if (post.isMe.not()) name + " (${formattedDateTime})" else name,
+                        name = if (post.isMe.not()) name + " (${formattedDateTime})" else formattedDateTime,
                         message = post.messageData.message
                     )
                 }
