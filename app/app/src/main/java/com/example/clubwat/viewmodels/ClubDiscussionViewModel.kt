@@ -49,7 +49,7 @@ class ClubDiscussionViewModel(
     private fun startPolling(clubId: String) {
         viewModelScope.launch {
             while (true) { // ONLY IN VM SCOPE
-                delay(15000) // delay 15 seconds then refetch
+                delay(60000) // delay 60s then refetch
                 fetchUpdatedPosts(clubId)
             }
         }

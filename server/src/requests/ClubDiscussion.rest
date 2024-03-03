@@ -9,9 +9,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzksImVtYWlsI
 content-type: application/json
 
 {
-    "user_id": 39,
-    "club_id": 13,
-    "message": "This club is awesome"
+    "club_id": 33,
+    "message": "This club is very nice!"
 }
 
 ### 

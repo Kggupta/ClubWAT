@@ -5,7 +5,9 @@ import LoginViewModel
 import SearchViewModel
 import SignUpViewModel
 import android.annotation.SuppressLint
+import android.app.PendingIntent.getActivity
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -42,6 +44,11 @@ import com.example.clubwat.views.NavigationBar.NavBar
 class MainActivity : ComponentActivity() {
     private val userRepository by lazy { UserRepository() }
     private val discussionRepository by lazy { DiscussionRepositoryImpl() }
+
+    override fun onResume() {
+        super.onResume()
+        this.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+    }
 
     @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
