@@ -1,6 +1,8 @@
 package com.example.clubwat.views
 
 import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -47,7 +49,10 @@ import com.example.clubwat.R
 import com.example.clubwat.ui.theme.LightOrange
 import com.example.clubwat.ui.theme.PurpleGrey80
 import com.example.clubwat.viewmodels.ClubDiscussionViewModel
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
+@RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "SimpleDateFormat")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -107,9 +112,12 @@ fun ClubDiscussionView(
                         if (uiState.value.posts.getOrNull(index - 1)?.messageData?.user?.email == post.messageData.user.email || post.isMe)
                             null
                         else post.messageData.user.firstName
+                    val apiDateTime = LocalDateTime.parse(post.messageData.createDate, DateTimeFormatter.ISO_DATE_TIME)
+                    val formatter = DateTimeFormatter.ofPattern("MMM dd, hh:mm")
+                    val formattedDateTime = apiDateTime.format(formatter)
                     MessageBubble(
                         isMe = post.isMe,
-                        name = if (post.isMe.not()) name + " (${post.messageData.createDate})" else name,
+                        name = if (post.isMe.not()) name + " (${formattedDateTime})" else name,
                         message = post.messageData.message
                     )
                 }
@@ -185,6 +193,7 @@ fun MessageBubble(isMe: Boolean, name: String?, message: String) {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
 fun ClubDiscussionViewPreview() {
