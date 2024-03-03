@@ -37,4 +37,25 @@ class HomeViewModel(private val userRepository: UserRepository) : ViewModel() {
             }
         }
     }
+
+    fun getAllEvents() {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val obj = URL(BuildConfig.GET_ALL_EVENTS_FOR_USER)
+                val con = obj.openConnection() as HttpURLConnection
+                con.requestMethod = "GET"
+                con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+                val responseCode = con.responseCode
+                println("Response Code :: $responseCode")
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    val response = con.inputStream.bufferedReader().use { it.readText() }
+                    val eventResponse: EventResponse = Gson().fromJson(response, EventResponse::class.java)
+                    val eventWrappersList: List<EventWrapper> = eventResponse.data
+                    allEvents.value = eventWrappersList
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
 }

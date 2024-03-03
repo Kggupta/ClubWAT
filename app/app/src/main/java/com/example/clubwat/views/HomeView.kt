@@ -146,7 +146,7 @@ fun YourClubsContent(viewModel: HomeViewModel, navController: NavController) {
 @Composable
 fun YourEventsContent(viewModel: HomeViewModel, navController: NavController) {
     LaunchedEffect(key1 = true) {
-        viewModel.getAllClubs()
+        viewModel.getAllEvents()
     }
     val eventWrappers = viewModel.allEvents.collectAsState().value
     LazyColumn {
