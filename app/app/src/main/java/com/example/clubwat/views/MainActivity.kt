@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.clubwat.model.UserRepository
 import com.example.clubwat.ui.theme.ClubWATTheme
@@ -43,6 +44,8 @@ class MainActivity : ComponentActivity() {
             ClubWATTheme {
                 val navController = rememberNavController()
                 val currentUser by userRepository.currentUser
+                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                val currentRoute = navBackStackEntry?.destination?.route
 
                 val signUpViewModel: SignUpViewModel by viewModels { SignUpViewModelFactory(userRepository) }
                 val loginViewModel: LoginViewModel by viewModels { LoginViewModelFactory(userRepository) }
@@ -53,9 +56,14 @@ class MainActivity : ComponentActivity() {
                 val searchViewModel: SearchViewModel by viewModels { SearchViewModelFactory(userRepository) }
                 val clubDetailsViewModel: ClubDetailsViewModel by viewModels { ClubDetailsViewModelFactory(userRepository) }
 
+                fun shouldShowNavBar(currentRoute: String?): Boolean {
+                    val routesWithoutNavBar = listOf("signup", "login", "verification")
+                    return currentRoute !in routesWithoutNavBar
+                }
+
                 Scaffold(
                     bottomBar = {
-                        if (currentUser?.userId != null) {
+                        if (currentUser?.userId != null && shouldShowNavBar(currentRoute)) {
                             NavBar(navController)
                         }
                     }

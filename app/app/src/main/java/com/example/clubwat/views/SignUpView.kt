@@ -84,6 +84,13 @@ fun SignUpView(
             onValueChange = { viewModel.email.value = it },
             label = { Text("Waterloo Email") }
         )
+        if (viewModel.emailError.value != null) {
+            Text(
+                text = viewModel.emailError.value!!,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
         Spacer(modifier = Modifier.height(8.dp))
         OutlinedTextField(
             value = viewModel.password.value,
@@ -108,6 +115,7 @@ fun SignUpView(
         Spacer(modifier = Modifier.height(16.dp))
         Button(
             onClick = {
+                viewModel.validateEmail(viewModel.email.value)
                 viewModel.validatePasswordAndSignUp(viewModel.password.value)
                 viewModel.areAllValuesFilled(
                     viewModel.firstName.value,
@@ -116,7 +124,7 @@ fun SignUpView(
                     viewModel.password.value
                 )
                 if (viewModel.allValuesError.value == null &&
-                    viewModel.passwordError.value == null) {
+                    viewModel.passwordError.value == null && viewModel.emailError.value == null) {
                     viewModel.createUser()
                     viewModel.sendVerificationEmail { emailSent ->
                         if (!emailSent) return@sendVerificationEmail

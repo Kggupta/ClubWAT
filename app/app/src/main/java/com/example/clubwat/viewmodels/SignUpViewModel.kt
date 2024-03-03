@@ -17,9 +17,23 @@ class SignUpViewModel(private val userRepository: UserRepository) : ViewModel() 
     var password = mutableStateOf("")
     var passwordError = mutableStateOf<String?>(null)
     var allValuesError = mutableStateOf<String?>(null)
+    var emailError = mutableStateOf<String?>(null)
 
     fun createUser() {
         userRepository.createUser(firstName, lastName, email, password)
+    }
+
+    fun isWaterlooEmail(email: String): Boolean {
+        val emailPattern =  "^[a-zA-Z0-9._%+-]+@uwaterloo\\.ca$"
+        return email.matches(emailPattern.toRegex())
+    }
+
+    fun validateEmail(email: String) {
+        if (!isWaterlooEmail(email)) {
+            emailError.value = "Please use a Waterloo email"
+        } else {
+            emailError.value = null
+        }
     }
 
     fun validatePasswordAndSignUp(password: String) {
