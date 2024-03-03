@@ -6,11 +6,9 @@ import com.example.clubwat.model.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.json.JSONObject
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
-import javax.security.auth.callback.Callback
 
 class SignUpViewModel(private val userRepository: UserRepository) : ViewModel() {
     var firstName = mutableStateOf("")
