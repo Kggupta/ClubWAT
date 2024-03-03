@@ -1,10 +1,10 @@
 package com.example.clubwat.viewmodels
 
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.example.clubwat.model.User
 import com.example.clubwat.model.UserRepository
 
 class ProfileViewModel(private val userRepository: UserRepository) : ViewModel() {
@@ -17,10 +17,38 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
     var ethnicity = mutableStateOf("")
     var religion = mutableStateOf("")
     var currentInput = mutableStateOf("")
+    var oldPassword = mutableStateOf("")
+    var newPassword = mutableStateOf("")
+    var addFriend = mutableStateOf("")
+    var passwordError = mutableStateOf<String?>(null)
+    var passwordSuccess = mutableStateOf<String?>(null)
+    var emailError = mutableStateOf<String?>(null)
+
+
+    private var oldPasswordStored = userRepository.currentUser.value?.password
 
     var faculties = mutableStateOf<List<String>>(listOf())
     var religions = mutableStateOf<List<String>>(listOf())
-    var ethnicities = mutableStateOf<List<String>>(listOf())
+
+    // this is an example of how it will look
+    val friends = listOf(
+        User(
+            userId = "1",
+            firstName = mutableStateOf("John"),
+            lastName = mutableStateOf("Doe"),
+            email = mutableStateOf("john.doe@example.com"),
+            password = mutableStateOf("password123")
+        ),
+        User(
+            userId = "2",
+            firstName = mutableStateOf("Jane"),
+            lastName = mutableStateOf("Doe"),
+            email = mutableStateOf("jane.doe@example.com"),
+            password = mutableStateOf("password456")
+        )
+        // Add more users as needed
+    )
+
 
     // send to api as: (id, name, type)
     //    where 'type' would be the categories you've got already (program, hobbies, ethnicity, religion).
@@ -37,7 +65,16 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
     }
 
     fun removeHobby(program: String) {
-        hobbies.value = hobbies.value.filter { it != program }
+        val index = hobbies.value.indexOf(program)
+        if (index != -1) {
+            hobbies.value = hobbies.value.toMutableList().apply {
+                removeAt(index)
+            }
+        }
+    }
+
+    fun addFriend(email: String) {
+        // api to add friend
     }
 
     fun editInterests(facultyInput: String, ethnicityInput: String, religionInput: String) {
@@ -54,6 +91,45 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
     }
 
     fun editFriends() {
+
+    }
+
+    fun getHobbies() {
+
+    }
+
+    private fun isValidPassword(password: String): Boolean {
+        val passwordPattern = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=])(?=\\S+$).{8,}$"
+        return password.matches(passwordPattern.toRegex())
+    }
+
+    fun validatePasswordAndSignUp(password: String): Boolean {
+        if (!isValidPassword(password)) {
+            passwordError.value = "Please ensure password is 8 characters long, contains one symbol, and has both uppercase and lowercase letters."
+            return false
+        } else {
+            passwordError.value = null
+            return true
+        }
+
+    }
+
+    fun editPassword() {
+        if (oldPasswordStored != oldPassword) {
+            passwordError.value += "  The old password is incorrect, unable to make change"
+        }
+        if (validatePasswordAndSignUp(newPassword.value)) {
+            passwordSuccess.value = "Password has been updated"
+            // call api to update password
+        }
+
+
+    }
+
+
+
+    // Handling edit action
+    fun deleteFriend(userID: String) {
 
     }
 

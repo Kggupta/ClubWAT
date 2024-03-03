@@ -7,6 +7,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,20 +18,29 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.PersonAddAlt1
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.InputChip
 import androidx.compose.material3.InputChipDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -44,17 +55,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import androidx.navigation.NavController
 import com.example.clubwat.R
+import com.example.clubwat.model.User
 import com.example.clubwat.viewmodels.ProfileViewModel
 
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ProfileView(
     viewModel: ProfileViewModel,
@@ -63,6 +79,7 @@ fun ProfileView(
     var showEditInterests by remember { mutableStateOf(false) }
     var showEditProfile by remember { mutableStateOf(false) }
     var showEditFriends by remember { mutableStateOf(false) }
+
 
     Box(modifier = Modifier.fillMaxSize()) {
         Text(
@@ -193,15 +210,21 @@ fun ProfileView(
                     label = { Text("Program") }
                 )
                 Spacer(modifier = Modifier.height(16.dp))
+                Text("Enter hobby and press the add button to add hobby")
                 OutlinedTextField(
                     value = viewModel.currentInput.value,
                     onValueChange = { viewModel.currentInput.value = it },
                     label = { Text("Hobbies") },
                     singleLine = true,
                     keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
-                    keyboardActions = KeyboardActions(onDone = { viewModel.addHobbies() })
+                    keyboardActions = KeyboardActions(onDone = { viewModel.addHobbies() }),
+                    trailingIcon = {
+                        IconButton(onClick = { viewModel.addHobbies() }) {
+                            Icon(Icons.Default.Add, contentDescription = "Add Hobby")
+                        }
+                    }
                 )
-                Row(
+                FlowRow (
                     modifier = Modifier.padding(8.dp),
                 ) {
                     viewModel.hobbies.value.forEach { hobby ->
@@ -228,13 +251,65 @@ fun ProfileView(
             onDismissRequest = { showEditProfile = false },
             onConfirmation = {
                 showEditProfile = false
-                viewModel.editProfile()
             },
             dialogTitle = "Edit Password",
-            dialogText = "Here you can edit your profile",
+            dialogText = "",
             icon = Icons.Default.Edit,
             content = {
                 Text("Edit Password")
+                var viewPassword by remember { mutableStateOf(false) }
+                var viewPassword2 by remember { mutableStateOf(false) }
+
+                OutlinedTextField(
+                    value = viewModel.oldPassword.value,
+                    onValueChange = { viewModel.oldPassword.value = it },
+                    label = { Text("Password") },
+                    visualTransformation = if (viewPassword) VisualTransformation.None else PasswordVisualTransformation(),
+                    trailingIcon = {
+                        val image = if (viewPassword) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+                        val description = if (viewPassword) "Hide password" else "Show password"
+                        IconButton(onClick = { viewPassword = !viewPassword }) {
+                            Icon(imageVector = image, contentDescription = description)
+                        }
+                    },
+                )
+
+                OutlinedTextField(
+                    value = viewModel.newPassword.value,
+                    onValueChange = { viewModel.newPassword.value = it },
+                    label = { Text("Password") },
+                    visualTransformation = if (viewPassword2) VisualTransformation.None else PasswordVisualTransformation(),
+                    trailingIcon = {
+                        val image = if (viewPassword2) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+                        val description = if (viewPassword2) "Hide password" else "Show password"
+                        IconButton(onClick = { viewPassword2 = !viewPassword2 }) {
+                            Icon(imageVector = image, contentDescription = description)
+                        }
+                    },
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Button(onClick = {
+                    viewModel.validatePasswordAndSignUp(viewModel.newPassword.value)
+                    viewModel.editPassword()
+                }) {
+                    Text("Update")
+                }
+
+                if (viewModel.passwordError.value != null) {
+                    Text(
+                        text = viewModel.passwordError.value!!,
+                        color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
+                if (viewModel.passwordSuccess.value != null) {
+                    Text(
+                        text = viewModel.passwordSuccess.value!!,
+                        color = Color.Green,
+                        style = MaterialTheme.typography.bodySmall
+                    )
+
+                }
 
             }
         )
@@ -248,21 +323,49 @@ fun ProfileView(
                 viewModel.editFriends()
             },
             dialogTitle = "Edit Friends",
-            dialogText = "Here you can add, delete and view all friends.",
+            dialogText = "",
             icon = Icons.Default.Edit,
             content = {
-                Text("Edit")
-                Text("Delete")
-                Text("Add")
+                Text("Add a friend")
+                OutlinedTextField(
+                    value = viewModel.addFriend.value,
+                    onValueChange = { viewModel.addFriend.value = it },
+                    label = { Text("Email") }
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Button(onClick = { viewModel.addFriend((viewModel.addFriend.value)) }) {
+                    Text("Request")
+                }
+                Spacer(modifier = Modifier.height(24.dp))
+                Divider()
+                Spacer(modifier = Modifier.height(24.dp))
+                Text(
+                    text = "View all your friends",
+                    style = TextStyle(fontSize = 20.sp) // Adjust the fontSize as needed
+                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text("Name")
+                    Text("Email")
+                    Text("Remove Friend")
+
+                }
+                for (user in viewModel.friends) {
+                    UserComponent(
+                        user = user,
+                        onEditClicked = { user.userId?.let { viewModel.deleteFriend(it) } })
+                }
             }
         )
     }
 
-
-
-
-
 }
+
 
 
 @Composable
@@ -281,6 +384,23 @@ fun TextWithIcon(
     }
 }
 
+@Composable
+fun UserComponent(user: User, onEditClicked: () -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(text = user.firstName.value)
+        Text(text = user.email.value)
+
+        IconButton(onClick = { onEditClicked() }) {
+            Icon(Icons.Default.Delete, contentDescription = "Delete")
+        }
+    }
+}
 
 @Composable
 fun AlertDialogExample(
@@ -291,6 +411,8 @@ fun AlertDialogExample(
     icon: ImageVector,
     content: @Composable () -> Unit
 ) {
+    val scrollState = rememberScrollState()
+
     AlertDialog(
         icon = {
             Icon(icon, contentDescription = "Example Icon")
@@ -300,7 +422,11 @@ fun AlertDialogExample(
 
         },
         text = {
-            Column {
+            Column(
+                modifier = Modifier
+                    .verticalScroll(state = scrollState)
+            ) {
+                Text(text = dialogText)
                 content()
             }
         },
@@ -426,4 +552,6 @@ fun Chips(
         },
     )
 }
+
+
 
