@@ -55,4 +55,6 @@
 | 02/25/2024 | 1.2    |        |        |         |         |         | Get my clubs endpoint                                    |
 | 02/28/2024 |        |        |        |         |         | 5       | Completed most of the frontend work for browsing events  |
 | 02/29/2024 |        |        |        |         |         | 1       | Full stack work to complete all of event browsing        |
-| 02/29/2024 | 1      |        |        |         |         |         | Handle user already exists and tries to register error   |
+| 02/29/2024 | 1.1    |        |        |         |         |         | Handle user already exists and tries to register error   |
+| 03/01/2024 | 3      |        |        |         |         |         | Endpoint to get the users 'my events' for the homepage   |
+| 03/03/2024 |        |        | 5      |         |         |         | Added Events to the Home Page                            |

@@ -7,7 +7,7 @@ import {
   CREATED_CODE,
 } from "../lib/StatusCodes";
 import { authenticateToken, verifyIsClubAdmin } from "../middlewares";
-import { Events } from "@prisma/client";
+import { Event } from "@prisma/client";
 const clubEventRoutes = express.Router({ mergeParams: true });
 
 type EventsQuery = {
@@ -16,7 +16,7 @@ type EventsQuery = {
 };
 
 export type EventsResponse = {
-  data: Events[];
+  data: Event[];
 };
 
 clubEventRoutes.get<EventsQuery, EventsResponse>(
@@ -28,7 +28,7 @@ clubEventRoutes.get<EventsQuery, EventsResponse>(
       if (req.params.id && req.params.eventId) {
         const clubId = Number(req.params.id);
         const eventId = Number(req.params.eventId);
-        const events = await prisma.events.findMany({
+        const events = await prisma.event.findMany({
           where: {
             id: eventId,
             club_id: clubId,
@@ -37,7 +37,7 @@ clubEventRoutes.get<EventsQuery, EventsResponse>(
         res.status(OK_CODE).json({ data: events });
       } else if (req.params.id) {
         const clubId = Number(req.params.id);
-        const events = await prisma.events.findMany({
+        const events = await prisma.event.findMany({
           where: {
             club_id: clubId,
           },
@@ -52,7 +52,7 @@ clubEventRoutes.get<EventsQuery, EventsResponse>(
   }
 );
 
-clubEventRoutes.post<EventsQuery, Events>(
+clubEventRoutes.post<EventsQuery, Event>(
   "/",
   authenticateToken,
   verifyIsClubAdmin,
@@ -63,7 +63,7 @@ clubEventRoutes.post<EventsQuery, Events>(
       if (!title || !description || !start_date || !end_date || !club_Id) {
         return res.sendStatus(INVALID_REQUEST_CODE);
       }
-      const event = await prisma.events.create({
+      const event = await prisma.event.create({
         data: {
           title,
           description,
@@ -79,7 +79,7 @@ clubEventRoutes.post<EventsQuery, Events>(
   }
 );
 
-clubEventRoutes.put<EventsQuery, Events>(
+clubEventRoutes.put<EventsQuery, Event>(
   "/:eventId",
   authenticateToken,
   verifyIsClubAdmin,
@@ -87,7 +87,7 @@ clubEventRoutes.put<EventsQuery, Events>(
     try {
       const eventId = Number(req.params.eventId);
       const { title, description, start_date, end_date } = req.body;
-      const updatedEvent = await prisma.events.update({
+      const updatedEvent = await prisma.event.update({
         where: { id: eventId },
         data: { title, description, start_date, end_date },
       });
@@ -105,7 +105,7 @@ clubEventRoutes.delete<EventsQuery, void>(
   async (req, res) => {
     try {
       const eventId = Number(req.params.eventId);
-      await prisma.events.delete({
+      await prisma.event.delete({
         where: { id: eventId },
       });
       res.sendStatus(OK_CODE);

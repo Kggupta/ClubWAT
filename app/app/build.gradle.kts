@@ -54,6 +54,11 @@ android {
         if (getAllClubs != null) {
             buildConfigField("String", "GET_ALL_CLUBS_FOR_USER", getAllClubs)
         }
+
+        val getAllEvents = properties["GET_ALL_EVENTS_FOR_USER"]?.toString()
+        if (getAllEvents != null) {
+            buildConfigField("String", "GET_ALL_EVENTS_FOR_USER", getAllEvents)
+        }
     }
 
     buildTypes {

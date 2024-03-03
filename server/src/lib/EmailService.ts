@@ -21,5 +21,5 @@ export default async function sendEmail(email: string, code: number) {
     subject: "Email Verification Code",
     text: `Your verification code is: ${code.toString()}`,
   });
-  console.log(code);
+  console.log(`CODE SENT TO ${email}: ${code}`);
 }

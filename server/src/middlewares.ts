@@ -61,17 +61,19 @@ export async function verifyIsClubAdmin(
   res: Response,
   next: NextFunction
 ) {
-  const clubId = Number(req.params.id);
-  if (!clubId) return res.sendStatus(INVALID_REQUEST_CODE);
+  if (process.env.ENVIRONMENT === "PRODUCTION") {
+    const clubId = Number(req.params.id);
+    if (!clubId) return res.sendStatus(INVALID_REQUEST_CODE);
 
-  const isAdmin: ClubAdmin | null = await prisma.clubAdmin.findFirst({
-    where: {
-      user_id: req.body.user.id,
-      club_id: clubId,
-    },
-  });
+    const isAdmin: ClubAdmin | null = await prisma.clubAdmin.findFirst({
+      where: {
+        user_id: req.body.user.id,
+        club_id: clubId,
+      },
+    });
 
-  if (!isAdmin) return res.sendStatus(UNAUTHORIZED_CODE);
+    if (!isAdmin) return res.sendStatus(UNAUTHORIZED_CODE);
+  }
 
   next();
 }

@@ -6,7 +6,6 @@ import com.example.clubwat.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.json.JSONObject
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
@@ -59,21 +58,16 @@ class SignUpViewModel(private val userRepository: UserRepository) : ViewModel() 
 
                     OutputStreamWriter(outputStream).use { it.write(body) }
                     emailSent = responseCode == HttpURLConnection.HTTP_OK
-                    if (emailSent) {
-                        val response = inputStream.bufferedReader().use { it.readText() }
-                        val jsonResponse = JSONObject(response)
-                        val token = jsonResponse.optString("data", null.toString())
-                        userRepository.setUserId(token)
-
-                        println("Response: $response")
-                    } else {
-                        val response = errorStream.bufferedReader().use { it.readText() }
+                    if (responseCode == HttpURLConnection.HTTP_BAD_REQUEST) {
+                        allValuesError.value = "Please enter an @uwaterloo.ca email"
+                    } else if (responseCode == HttpURLConnection.HTTP_CONFLICT) {
                         allValuesError.value = "This account already exists"
-                        println("Error Response: $response")
+                    } else if (!emailSent) {
+                        allValuesError.value = "The account could not be created"
                     }
                 }
             } catch (e: Exception) {
-                allValuesError.value = "This account already exists"
+                allValuesError.value = "An unexpected error occurred"
                 e.printStackTrace()
             }
             withContext(Dispatchers.Main) {
