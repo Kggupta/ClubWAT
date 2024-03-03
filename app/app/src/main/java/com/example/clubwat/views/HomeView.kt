@@ -151,7 +151,7 @@ fun YourEventsContent(viewModel: HomeViewModel, navController: NavController) {
     val eventWrappers = viewModel.allEvents.collectAsState().value
     LazyColumn {
         items(eventWrappers) { eventWrapper ->
-            EventItem(eventWrapper, navController, true)
+            EventItem(eventWrapper, navController)
         }
     }
 }

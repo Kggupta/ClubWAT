@@ -23,7 +23,7 @@ import com.example.clubwat.model.EventType
 import com.example.clubwat.model.EventWrapper
 
 @Composable
-fun EventItem(eventWrapper: EventWrapper, navController: NavController, showIcon: Boolean = false) {
+fun EventItem(eventWrapper: EventWrapper, navController: NavController) {
     val event = eventWrapper.event
     val type = eventWrapper.type
     Card(
@@ -39,7 +39,7 @@ fun EventItem(eventWrapper: EventWrapper, navController: NavController, showIcon
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(text = event.title, fontWeight = FontWeight.Bold)
-                if (showIcon) {
+                if (type != null) {
                     Icon(
                         imageVector = getIcon(type),
                         contentDescription = "Icon"
