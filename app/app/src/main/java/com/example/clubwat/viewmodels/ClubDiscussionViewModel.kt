@@ -3,7 +3,7 @@ package com.example.clubwat.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.clubwat.model.ClubDetails
-import com.example.clubwat.model.Data
+import com.example.clubwat.model.MessageData
 import com.example.clubwat.model.NetworkResult
 import com.example.clubwat.model.ProcessedData
 import com.example.clubwat.model.SendDiscusionMessageRequest
@@ -99,7 +99,7 @@ class ClubDiscussionViewModel(
         }
     }
 
-    private fun processData(posts: List<Data>): List<ProcessedData> {
+    private fun processData(posts: List<MessageData>): List<ProcessedData> {
         val mutablePostList = mutableListOf<ProcessedData>()
         posts.forEach { post ->
             if (post.user.email == userRepository.currentUser.value?.email?.value) { // me identifier

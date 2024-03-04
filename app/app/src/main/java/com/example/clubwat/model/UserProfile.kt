@@ -2,7 +2,7 @@ package com.example.clubwat.model
 
 import com.google.gson.annotations.SerializedName
 
-data class UserX(
+data class UserProfile(
     @SerializedName("admin_flag")
     val adminFlag: Boolean,
     val email: String,
