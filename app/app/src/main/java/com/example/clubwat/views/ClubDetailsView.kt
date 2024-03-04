@@ -1,8 +1,11 @@
 package com.example.clubwat.views
+
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -42,9 +45,13 @@ fun ClubDetailsView(
 
     val club by viewModel.club.collectAsState()
 
-    Box(modifier = Modifier
-        .fillMaxSize()) {
-        IconButton(modifier=Modifier.align(Alignment.TopStart), onClick= {navController.popBackStack()}) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        IconButton(
+            modifier = Modifier.align(Alignment.TopStart),
+            onClick = { navController.popBackStack() }) {
             Icon(
                 painterResource(id = R.drawable.baseline_arrow_back_24),
                 contentDescription = "Back"
@@ -62,26 +69,51 @@ fun ClubDetailsView(
             fontWeight = FontWeight.Bold,
             fontSize = 30.sp
         )
-        Text(modifier = Modifier.padding(16.dp), text = viewModel.getClubTitle(), fontSize = 20.sp, fontWeight = FontWeight.Bold)
+        Text(
+            modifier = Modifier.padding(16.dp),
+            text = viewModel.getClubTitle(),
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold
+        )
         if (club != null && club!!.isJoined) {
-            Button(
-                onClick = {
-                    viewModel.updateClubMembership()
-                },
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Red
-                ),
-                modifier = Modifier
-                    .width(300.dp)
-                    .height(40.dp)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
             ) {
-                Text("Leave Club")
+                Button(
+                    onClick = {
+                        viewModel.updateClubMembership()
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Red
+                    ),
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(40.dp)
+                        .padding(end = 8.dp)
+                ) {
+                    Text("Leave Club")
+                }
+                Button(
+                    onClick = {
+                        navController.navigate("discussion/${clubId}")
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Gray
+                    ),
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(40.dp)
+                ) {
+                    Text("Discussion")
+                }
             }
         } else if (club != null && club!!.isJoinPending) {
             Button(
                 onClick = {
                     viewModel.updateClubMembership()
                 },
-                colors = ButtonDefaults.buttonColors(containerColor = Color.LightGray
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.LightGray
                 ),
                 modifier = Modifier
                     .width(300.dp)
@@ -94,7 +126,8 @@ fun ClubDetailsView(
                 onClick = {
                     viewModel.updateClubMembership()
                 },
-                colors = ButtonDefaults.buttonColors(containerColor = LightOrange
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = LightOrange
                 ),
                 modifier = Modifier
                     .width(300.dp)
