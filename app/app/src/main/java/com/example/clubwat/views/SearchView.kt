@@ -37,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.clubwat.model.EventWrapper
 import com.example.clubwat.ui.theme.LightYellow
@@ -70,7 +71,8 @@ fun SearchView(
                     Text(
                         text = "Search",
                         modifier = Modifier.fillMaxWidth(),
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp
                     )
                 },
                 actions = {

@@ -21,6 +21,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,6 +45,11 @@ fun LoginView(
     viewModel: LoginViewModel,
     navController: NavController
 ) {
+    LaunchedEffect(Unit) {
+        viewModel.password.value = ""
+        viewModel.email.value = ""
+    }
+
     val allValuesError by viewModel.allValuesError
     val loginError by viewModel.loginError
     var viewPassword by remember { mutableStateOf(false) }

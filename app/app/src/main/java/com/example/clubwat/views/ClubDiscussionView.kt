@@ -17,6 +17,8 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+//noinspection UsingMaterialAndMaterial3Libraries
+import androidx.compose.material.TopAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -47,6 +49,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.clubwat.R
 import com.example.clubwat.ui.theme.LightOrange
+import com.example.clubwat.ui.theme.LightYellow
 import com.example.clubwat.ui.theme.PurpleGrey80
 import com.example.clubwat.viewmodels.ClubDiscussionViewModel
 import java.time.LocalDateTime
@@ -73,7 +76,7 @@ fun ClubDiscussionView(
 
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(
+            TopAppBar(
                 navigationIcon =
                 {
                     IconButton(
@@ -88,40 +91,48 @@ fun ClubDiscussionView(
                     Text(
                         text = uiState.value.clubDetails?.title ?: "",
                         fontWeight = FontWeight.Bold,
-                        fontSize = 30.sp
+                        fontSize = 20.sp
                     )
                 },
-                scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(canScroll = { false })
+                backgroundColor = LightYellow,
+                contentColor = Color.Black
             )
-        }
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(enabled = false, state = rememberScrollState())
-        ) {
-            LazyColumn(
+        },
+        content = {
+            Column(
                 modifier = Modifier
-                    .weight(1f),
-                verticalArrangement = Arrangement.Bottom,
-                userScrollEnabled = true,
-                state = state
+                    .fillMaxSize()
+                    .padding(it)
+                    .verticalScroll(enabled = false, state = rememberScrollState())
             ) {
-                itemsIndexed(uiState.value.posts) { index, post ->
-                    val name =
-                        if (uiState.value.posts.getOrNull(index - 1)?.messageData?.user?.email == post.messageData.user.email || post.isMe)
-                            null
-                        else post.messageData.user.firstName
-                    val apiDateTime = LocalDateTime.parse(post.messageData.createDate, DateTimeFormatter.ISO_DATE_TIME)
-                    val formatter = DateTimeFormatter.ofPattern("MMM dd, hh:mm")
-                    val formattedDateTime = apiDateTime.format(formatter)
-                    MessageBubble(
-                        isMe = post.isMe,
-                        name = if (post.isMe.not()) name + " (${formattedDateTime})" else formattedDateTime,
-                        message = post.messageData.message
-                    )
+                LazyColumn(
+                    modifier = Modifier
+                        .weight(1f),
+                    verticalArrangement = Arrangement.Bottom,
+                    userScrollEnabled = true,
+                    state = state
+                ) {
+                    itemsIndexed(uiState.value.posts) { index, post ->
+                        val name =
+                            if (uiState.value.posts.getOrNull(index - 1)?.messageData?.user?.email == post.messageData.user.email || post.isMe)
+                                null
+                            else post.messageData.user.firstName
+                        val apiDateTime = LocalDateTime.parse(
+                            post.messageData.createDate,
+                            DateTimeFormatter.ISO_DATE_TIME
+                        )
+                        val formatter = DateTimeFormatter.ofPattern("MMM dd, hh:mm")
+                        val formattedDateTime = apiDateTime.format(formatter)
+                        MessageBubble(
+                            isMe = post.isMe,
+                            name = if (post.isMe.not()) name + " (${formattedDateTime})" else formattedDateTime,
+                            message = post.messageData.message
+                        )
+                    }
                 }
             }
+        },
+        bottomBar = {
             var text by remember { mutableStateOf("") }
             Row(
                 modifier = Modifier.fillMaxWidth()
@@ -149,7 +160,7 @@ fun ClubDiscussionView(
                 }
             }
         }
-    }
+    )
 }
 
 @Composable
