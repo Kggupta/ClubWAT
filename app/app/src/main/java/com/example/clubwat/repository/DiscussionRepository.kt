@@ -2,7 +2,7 @@ package com.example.clubwat.repository
 
 import com.example.clubwat.BuildConfig
 import com.example.clubwat.model.ClubDetails
-import com.example.clubwat.model.DiscussionData
+import com.example.clubwat.model.ClubDiscussion
 import com.example.clubwat.model.NetworkResult
 import com.example.clubwat.model.SendDiscusionMessageRequest
 import com.google.gson.Gson
@@ -14,7 +14,7 @@ import java.net.URL
 interface DiscussionRepository {
     suspend fun getClub(clubId: String, userId: String): NetworkResult<ClubDetails>
 
-    suspend fun getMessages(clubId: String, userId: String): NetworkResult<DiscussionData>
+    suspend fun getMessages(clubId: String, userId: String): NetworkResult<ClubDiscussion>
 
     suspend fun sendMessage(request: SendDiscusionMessageRequest, bearer: String): NetworkResult<Any>
 }
@@ -46,7 +46,7 @@ class DiscussionRepositoryImpl : DiscussionRepository {
         )
     }
 
-    override suspend fun getMessages(clubId: String, userId: String): NetworkResult<DiscussionData> {
+    override suspend fun getMessages(clubId: String, userId: String): NetworkResult<ClubDiscussion> {
         try {
             val obj = URL(BuildConfig.CLUB_DISCUSSION_URL + clubId)
             val con = obj.openConnection() as HttpURLConnection
@@ -57,7 +57,7 @@ class DiscussionRepositoryImpl : DiscussionRepository {
             return if (responseCode == HttpURLConnection.HTTP_OK) {
                 val response = con.inputStream.bufferedReader().use { it.readText() }
                 NetworkResult.Success(
-                    Gson().fromJson(response, DiscussionData::class.java)
+                    Gson().fromJson(response, ClubDiscussion::class.java)
                 )
             } else {
                 NetworkResult.Error(
