@@ -34,6 +34,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,11 +53,14 @@ import com.example.clubwat.ui.theme.LightOrange
 import com.example.clubwat.ui.theme.LightYellow
 import com.example.clubwat.ui.theme.PurpleGrey80
 import com.example.clubwat.viewmodels.ClubDiscussionViewModel
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "SimpleDateFormat")
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "SimpleDateFormat",
+    "CoroutineCreationDuringComposition"
+)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ClubDiscussionView(
@@ -65,6 +69,7 @@ fun ClubDiscussionView(
     clubId: String?
 ) {
     val uiState = viewModel.uiState.collectAsState()
+    val coroutineScope = rememberCoroutineScope()
     val state = rememberLazyListState()
 
     LaunchedEffect(Unit) {
@@ -128,6 +133,9 @@ fun ClubDiscussionView(
                             name = if (post.isMe.not()) name + " (${formattedDateTime})" else formattedDateTime,
                             message = post.messageData.message
                         )
+                        coroutineScope.launch {
+                            state.animateScrollToItem(uiState.value.posts.size -1)
+                        }
                     }
                 }
             }
