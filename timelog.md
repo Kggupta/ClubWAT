@@ -52,10 +52,14 @@
 | 02/21/2024 | 2      |        |        |         |         |         | Club join/leave/request to join logic fe + backend       |
 | 02/22/2024 | 0.5    |        |        |         |         |         | Sorting club browsing, update club details look/feel     |
 | 02/25/2024 |        |        | 6      |         |         |         | Added all of the user's clubs on the home screen         |
+| 02/26/2024 |        |        |        |         | 4       |         | Continued work on events backend endpoints               |
+| 02/26/2024 |        |        |        |         | 1       |         | Brainstormed and planed scope for Friendship backend     |
+| 02/27/2024 |        |        |        |         | 2       |         | Finished events endpoint work                            |
 | 02/25/2024 | 1.2    |        |        |         |         |         | Get my clubs endpoint                                    |
 | 02/28/2024 |        |        |        |         |         | 5       | Completed most of the frontend work for browsing events  |
 | 02/29/2024 |        |        |        |         |         | 1       | Full stack work to complete all of event browsing        |
 | 02/29/2024 | 1.1    |        |        |         |         |         | Handle user already exists and tries to register error   |
 | 03/01/2024 | 3      |        |        |         |         |         | Endpoint to get the users 'my events' for the homepage   |
 | 03/03/2024 |        |        | 5      |         |         |         | Added Events to the Home Page                            |
+| 03/03/2024 |        |        |        |         | 3       |         | Completed component diagram and reviewed D3 submission   |
 | 03/04/2024 | 2      |        |        |         |         |         | Cleanup UI nav bars and flows in time for prototype demo |
