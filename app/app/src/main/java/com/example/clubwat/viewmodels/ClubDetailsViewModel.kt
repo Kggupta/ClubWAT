@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.clubwat.BuildConfig
 import com.example.clubwat.model.ClubDetails
-import com.example.clubwat.model.UserRepository
+import com.example.clubwat.repository.UserRepository
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

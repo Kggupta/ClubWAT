@@ -3,7 +3,7 @@ package com.example.clubwat.viewmodels.factories
 import HomeViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.clubwat.model.UserRepository
+import com.example.clubwat.repository.UserRepository
 
 class HomeViewModelFactory(private val userRepository: UserRepository) : ViewModelProvider.Factory {
 

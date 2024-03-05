@@ -3,7 +3,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.auth0.jwt.JWT
 import com.example.clubwat.BuildConfig
-import com.example.clubwat.model.UserRepository
+import com.example.clubwat.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

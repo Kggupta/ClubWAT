@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.clubwat.BuildConfig
 import com.example.clubwat.model.Club
 import com.example.clubwat.model.Event
-import com.example.clubwat.model.UserRepository
+import com.example.clubwat.repository.UserRepository
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
