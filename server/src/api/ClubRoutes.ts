@@ -47,6 +47,13 @@ type ClubParam = {
   param: string;
 };
 
+type ClubForYouItem = {
+  id: number;
+  title: string;
+  description: string;
+  common_interest_count: number;
+};
+
 type includeQuery = {
   categories: {
     select: {
@@ -319,13 +326,16 @@ router.put("/:id/manage-membership", authenticateToken, async (req, res) => {
   res.sendStatus(OK_CODE);
 });
 
-router.get("/for-you", authenticateToken, async (req, res) => {
-  const userId = req.body.user.id;
+router.get<void, ClubForYouItem[]>(
+  "/for-you",
+  authenticateToken,
+  async (req, res) => {
+    const userId = req.body.user.id;
 
-  // This query performs significantly better when using raw sql
-  // Prisma has query cleaning by default
-  const data = (await prisma.$queryRaw(
-    Prisma.sql`SELECT c.id, c.title, c.description
+    // This query performs significantly better when using raw sql
+    // Prisma has query cleaning by default
+    const data = (await prisma.$queryRaw(
+      Prisma.sql`SELECT c.id, c.title, c.description, COUNT(cc.category_id) AS common_interest_count
     FROM "public"."Club" c 
     JOIN "public"."ClubCategory" cc ON c.id = cc.club_id 
     JOIN "public"."UserInterest" ui ON cc.category_id = ui.category_id 
@@ -333,10 +343,15 @@ router.get("/for-you", authenticateToken, async (req, res) => {
     GROUP BY c.id, c.title 
     ORDER BY COUNT(cc.category_id) DESC
     LIMIT 15;`
-  )) as { id: number; title: string; description: string }[];
+    )) as ClubForYouItem[];
 
-  res.status(OK_CODE).json(data);
-});
+    data.map((entry) => {
+      entry.common_interest_count = Number(entry.common_interest_count);
+    });
+
+    res.status(OK_CODE).json(data);
+  }
+);
 
 router.get("/:id", authenticateToken, async (req, res) => {
   const clubId = parseInt(req.params.id, 10);
