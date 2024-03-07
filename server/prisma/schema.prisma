@@ -57,6 +57,7 @@ model Category {
   type  String
   name  String
   clubs ClubCategory[]
+  user_interests UserInterest[]
 }
 
 model ClubCategory {
@@ -136,4 +137,11 @@ model ClubMember {
   user User @relation(fields: [user_id], references: [id])
   club Club @relation(fields: [club_id], references: [id])
   is_approved Boolean
+}
+
+model UserInterest {
+  id Int @id @default(autoincrement())
+  user_id Int
+  category_id Int
+  category Category @relation(fields: [category_id], references: [id])
 }
