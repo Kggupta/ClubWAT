@@ -323,6 +323,7 @@ router.get("/for-you", authenticateToken, async (req, res) => {
   const userId = req.body.user.id;
 
   // This query performs significantly better when using raw sql
+  // Prisma has query cleaning by default
   const data = (await prisma.$queryRaw(
     Prisma.sql`SELECT c.id, c.title, c.description
     FROM "public"."Club" c 
@@ -334,7 +335,7 @@ router.get("/for-you", authenticateToken, async (req, res) => {
     LIMIT 15;`
   )) as { id: number; title: string; description: string }[];
 
-  res.status(200).json(data);
+  res.status(OK_CODE).json(data);
 });
 
 router.get("/:id", authenticateToken, async (req, res) => {
