@@ -41,6 +41,7 @@ Table Category {
   type String [not null]
   name String [not null]
   clubs ClubCategory [not null]
+  user_interests UserInterest [not null]
 }
 
 Table ClubCategory {
@@ -118,6 +119,13 @@ Table ClubMember {
   is_approved Boolean [not null]
 }
 
+Table UserInterest {
+  id Int [pk, increment]
+  user_id Int [not null]
+  category_id Int [not null]
+  category Category [not null]
+}
+
 Ref: ClubCategory.club_id > Club.id
 
 Ref: ClubCategory.category_id > Category.id
@@ -147,3 +155,5 @@ Ref: EventFeedback.event_id > Event.id
 Ref: ClubMember.user_id > User.id
 
 Ref: ClubMember.club_id > Club.id
+
+Ref: UserInterest.category_id > Category.id
