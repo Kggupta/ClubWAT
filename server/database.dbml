@@ -9,6 +9,8 @@ Table User {
   first_name String [not null]
   last_name String [not null]
   admin_flag Boolean [not null]
+  source_friend Friend [not null]
+  destination_friend Friend [not null]
   source_notifications Notification [not null]
   notifications Notification [not null]
   admins ClubAdmin [not null]
@@ -146,6 +148,14 @@ Table Notification {
   event Event
 }
 
+Table Friend {
+  id Int [pk, increment]
+  source_friend_id Int [not null]
+  destination_friend_id Int [not null]
+  source_friend User [not null]
+  destination_friend User [not null]
+}
+
 Ref: ClubCategory.club_id > Club.id
 
 Ref: ClubCategory.category_id > Category.id
@@ -185,3 +195,7 @@ Ref: Notification.destination_user_id > User.id
 Ref: Notification.club_id > Club.id
 
 Ref: Notification.event_id > Event.id
+
+Ref: Friend.source_friend_id > User.id
+
+Ref: Friend.destination_friend_id > User.id

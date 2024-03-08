@@ -62,7 +62,7 @@ fun HomeView(
                     )
                 },
                 actions = {
-                    IconButton(onClick = {/* Do Something*/ }) {
+                    IconButton(onClick = { navController.navigate("inbox") }) {
                         Icon(Icons.Filled.Inbox, null)
                     }
                 },
