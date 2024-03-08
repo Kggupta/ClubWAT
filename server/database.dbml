@@ -9,6 +9,8 @@ Table User {
   first_name String [not null]
   last_name String [not null]
   admin_flag Boolean [not null]
+  source_notifications Notification [not null]
+  notifications Notification [not null]
   admins ClubAdmin [not null]
   event_attendance EventAttendance [not null]
   event_bookmarks EventBookmark [not null]
@@ -29,6 +31,7 @@ Table Club {
   description String [not null]
   membership_fee Float [not null]
   is_approved Boolean [not null, default: false]
+  notifications Notification [not null]
   categories ClubCategory [not null]
   admins ClubAdmin [not null]
   events Event [not null]
@@ -77,9 +80,12 @@ Table Event {
   description String [not null]
   start_date DateTime [not null]
   end_date DateTime [not null]
+  location String [not null, default: 'Remote']
+  private_flag Boolean [not null, default: false]
   club_id Int [not null]
   club Club [not null]
-  event_feedbacl EventFeedback [not null]
+  notifications Notification [not null]
+  event_feedback EventFeedback [not null]
   event_attendance EventAttendance [not null]
   event_bookmark EventBookmark [not null]
 }
@@ -126,6 +132,20 @@ Table UserInterest {
   category Category [not null]
 }
 
+Table Notification {
+  id Int [pk, increment]
+  destination_user_id Int [not null]
+  source_user_id Int [not null]
+  club_id Int
+  event_id Int
+  content String [not null]
+  create_date DateTime [not null]
+  source_user User [not null]
+  destination_user User [not null]
+  club Club
+  event Event
+}
+
 Ref: ClubCategory.club_id > Club.id
 
 Ref: ClubCategory.category_id > Category.id
@@ -157,3 +177,11 @@ Ref: ClubMember.user_id > User.id
 Ref: ClubMember.club_id > Club.id
 
 Ref: UserInterest.category_id > Category.id
+
+Ref: Notification.source_user_id > User.id
+
+Ref: Notification.destination_user_id > User.id
+
+Ref: Notification.club_id > Club.id
+
+Ref: Notification.event_id > Event.id

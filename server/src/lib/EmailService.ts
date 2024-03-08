@@ -1,3 +1,4 @@
+import { Club, User } from "@prisma/client";
 import nodemailer from "nodemailer";
 
 const transporter = nodemailer.createTransport({
@@ -11,15 +12,38 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export default async function sendEmail(email: string, code: number) {
-  await transporter.sendMail({
-    from: {
-      name: "ClubWAT",
-      address: process.env.EMAIL as string,
-    },
-    to: email,
-    subject: "Email Verification Code",
-    text: `Your verification code is: ${code.toString()}`,
-  });
-  console.log(`CODE SENT TO ${email}: ${code}`);
+export default class EmailService {
+  private static async sendEmail(
+    email: string,
+    content: string,
+    title: string
+  ) {
+    await transporter.sendMail({
+      from: {
+        name: "ClubWAT",
+        address: process.env.EMAIL as string,
+      },
+      to: email,
+      subject: title,
+      text: content,
+    });
+  }
+
+  static async sendVerificationEmail(email: string, code: number) {
+    await this.sendEmail(
+      email,
+      `Your verification code is: ${code.toString()}`,
+      "Email Verification Code"
+    );
+    console.log(`CODE SENT TO ${email}: ${code}`);
+  }
+
+  static async sendClubShareEmail(email: string, club: Club, source: User) {
+    await this.sendEmail(
+      email,
+      `${source.first_name} ${source.last_name} shared ${club.title}, with you!\n\nCheck out your inbox on ClubWAT to learn more!`,
+      "Club Shared With You"
+    );
+    console.log(`CLUB SENT TO ${email} : ${club.title}`);
+  }
 }

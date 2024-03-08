@@ -360,6 +360,7 @@ router.get("/:id", authenticateToken, async (req, res) => {
     include: {
       admins: true,
       club_members: true,
+      events: true,
       categories: {
         select: {
           category: {
@@ -394,6 +395,9 @@ router.get("/:id", authenticateToken, async (req, res) => {
     title: club.title,
     description: club.description,
     membershipFee: club.membership_fee,
+    events: club.events.filter((x) => {
+      return isJoined || !x.private_flag;
+    }),
     members: club.club_members.map((x) => {
       return { userId: x.user_id, isApproved: x.is_approved };
     }),

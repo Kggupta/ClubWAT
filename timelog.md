@@ -64,3 +64,5 @@
 | 03/03/2024 |        |        |        |         | 3       |         | Completed component diagram and reviewed D3 submission      |
 | 03/04/2024 | 2      |        |        |         |         |         | Cleanup UI nav bars and flows in time for prototype demo    |
 | 03/07/2024 | 3      |        |        |         |         |         | For you backend, database modifications, sql query building |
+| 03/08/2024 | 4      |        |        |         |         |         | Add event list to club details, update club detail actions  |
+| 03/08/2024 | 3      |        |        |         |         |         | Share backend + notifications, emails                       |
