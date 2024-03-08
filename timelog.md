@@ -66,3 +66,4 @@
 | 03/07/2024 | 3      |        |        |         |         |         | For you backend, database modifications, sql query building |
 | 03/08/2024 | 4      |        |        |         |         |         | Add event list to club details, update club detail actions  |
 | 03/08/2024 | 3      |        |        |         |         |         | Share backend + notifications, emails                       |
+| 03/08/2024 |        |        | 1      |         |         |         | Reviewed Frontend PRs                                       |
