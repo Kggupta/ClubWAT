@@ -185,6 +185,13 @@ router.post<ClubDetails, void>("/", authenticateToken, async (req, res) => {
         },
       }),
       addClubCategories(club.id, req.body.categories),
+      prisma.clubMember.create({
+        data: {
+          user_id: req.body.user.id,
+          club_id: club.id,
+          is_approved: true,
+        },
+      }),
     ]);
 
     res.sendStatus(OK_CODE);
