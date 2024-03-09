@@ -64,6 +64,11 @@ android {
         if (clubDiscussion != null) {
             buildConfigField("String", "CLUB_DISCUSSION_URL", clubDiscussion)
         }
+
+        val getNotifications = properties["GET_NOTIFICATIONS_URL"]?.toString()
+        if (getNotifications != null) {
+            buildConfigField("String", "GET_NOTIFICATIONS_URL", getNotifications)
+        }
     }
 
     buildTypes {

@@ -61,7 +61,7 @@ fun SearchView(
     var selectedTabIndex by remember { mutableIntStateOf(0) }
 
     Scaffold {
-        Column(){
+        Column {
             TopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = LightYellow,
@@ -76,7 +76,7 @@ fun SearchView(
                     )
                 },
                 actions = {
-                    IconButton(onClick = {/* Do Something*/ }) {
+                    IconButton(onClick = { navController.navigate("inbox") }) {
                         Icon(Icons.Filled.Inbox, null)
                     }
                 }

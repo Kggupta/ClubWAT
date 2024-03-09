@@ -21,6 +21,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -29,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
@@ -64,6 +66,7 @@ fun CodeVerificationView(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         TopAppBar(
+            colors = TopAppBarColors(Color.Transparent, Color.Transparent, Color.Transparent, Color.Transparent, Color.Black),
             title = { },
             navigationIcon = {
                 IconButton(onClick = { navController.navigateUp() }) {

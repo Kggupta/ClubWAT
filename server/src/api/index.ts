@@ -9,6 +9,7 @@ import categoryRoutes from "./CategoryRoutes";
 import clubAdminRoutes from "./ClubAdminRoutes";
 import clubDiscussion from "./ClubDiscussionRoutes";
 import shareRoutes from "./ShareRoutes";
+import friendRoutes from "./FriendRoutes";
 
 const router = express.Router();
 
@@ -26,5 +27,6 @@ router.use("/category", categoryRoutes);
 router.use("/club/discussion", clubDiscussion);
 router.use("/event", eventRoutes);
 router.use("/share", shareRoutes);
+router.use("/friend", friendRoutes);
 
 export default router;

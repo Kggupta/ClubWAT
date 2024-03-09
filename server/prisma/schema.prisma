@@ -24,6 +24,8 @@ model User {
   last_name  String
   admin_flag Boolean
 
+  source_friend Friend[] @relation("source_friend_id")
+  destination_friend Friend[] @relation("destination_friend_id")
   source_notifications Notification[]    @relation("source_user")
   notifications        Notification[]    @relation("destination_user")
   admins               ClubAdmin[]
@@ -164,4 +166,13 @@ model Notification {
   destination_user    User   @relation(name: "destination_user", fields: [destination_user_id], references: [id])
   club                Club?  @relation(fields: [club_id], references: [id])
   event               Event? @relation(fields: [event_id], references: [id])
+}
+
+model Friend {
+  id Int @id @default(autoincrement())
+  source_friend_id Int
+  destination_friend_id Int
+  source_friend         User   @relation(name: "source_friend_id", fields: [source_friend_id], references: [id])
+  destination_friend   User   @relation(name: "destination_friend_id", fields: [destination_friend_id], references: [id])
+  
 }
