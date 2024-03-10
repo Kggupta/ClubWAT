@@ -141,7 +141,6 @@ eventRoutes.get<void, MyEventResponse>(
   "/my-events",
   authenticateToken,
   async (req, res) => {
-    console.log("SDf");
     const userId = req.body.user.id;
     try {
       let myEvents: MyEvent[] = [];
