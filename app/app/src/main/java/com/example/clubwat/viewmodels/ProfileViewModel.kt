@@ -24,11 +24,15 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
     var passwordSuccess = mutableStateOf<String?>(null)
     var emailError = mutableStateOf<String?>(null)
 
+    var addFriendMessage = mutableStateOf<String?>(null)
+
 
     private var oldPasswordStored = userRepository.currentUser.value?.password
 
     var faculties = mutableStateOf<List<String>>(listOf())
     var religions = mutableStateOf<List<String>>(listOf())
+
+    // friends and friendRequest list
 
     // this is an example of how it will look
     val friends = listOf(
@@ -71,10 +75,6 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
                 removeAt(index)
             }
         }
-    }
-
-    fun addFriend(email: String) {
-        // api to add friend
     }
 
     fun editInterests(facultyInput: String, ethnicityInput: String, religionInput: String) {
@@ -130,6 +130,17 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
 
     // Handling edit action
     fun deleteFriend(userID: String) {
+
+    }
+
+    fun addFriend(email: String) {
+        // api to add friend
+        addFriendMessage.value = "Friend request sent!"
+
+        addFriendMessage.value = "Error could not send request."
+    }
+
+    fun acceptFriend(userID: String) {
 
     }
 

@@ -25,7 +25,9 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
@@ -36,6 +38,7 @@ import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.InputChip
@@ -44,7 +47,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -67,10 +72,11 @@ import androidx.compose.ui.window.PopupProperties
 import androidx.navigation.NavController
 import com.example.clubwat.R
 import com.example.clubwat.model.User
+import com.example.clubwat.ui.theme.LightYellow
 import com.example.clubwat.viewmodels.ProfileViewModel
 
 
-@OptIn(ExperimentalLayoutApi::class)
+@OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileView(
     viewModel: ProfileViewModel,
@@ -96,15 +102,28 @@ fun ProfileView(
     }
     Column(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
+            .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = "Profile",
-            fontWeight = FontWeight.Bold,
-            fontSize = 30.sp
+        TopAppBar(
+            title = {
+                Text(
+                    text = "Profile",
+                    modifier = Modifier.fillMaxWidth(),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp
+                )
+            },
+            actions = {
+                IconButton(onClick = {
+                    viewModel.logout()
+                    navController.navigate("login")
+                }) {
+                    Icon(Icons.AutoMirrored.Filled.Logout, null)
+                }
+            },
         )
+
 
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -143,7 +162,7 @@ fun ProfileView(
 
         })
         Spacer(modifier = Modifier.height(20.dp))
-        TextWithIcon("Edit Profile", Icons.Default.Person,  onClick = {
+        TextWithIcon("Edit Password", Icons.Default.Person,  onClick = {
             showEditProfile = true
         })
         Spacer(modifier = Modifier.height(20.dp))
@@ -201,16 +220,28 @@ fun ProfileView(
             dialogText = "Here you can edit your interests.",
             icon = Icons.Default.Edit,
             content = {
-                Text("Select Faculty")
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Text("Select Faculty", style = MaterialTheme.typography.titleSmall)
                 DropdownList(itemList = facultyList, selectedIndex = faculty, modifier = buttonModifier, onItemClick = {faculty = it})
                 Spacer(modifier = Modifier.height(16.dp))
+
+                Text("Select Ethnicity", style = MaterialTheme.typography.titleSmall)
+                DropdownList(itemList = ethnicityList, selectedIndex = ethnicity, modifier = buttonModifier, onItemClick = {ethnicity = it})
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Text("Select Religion", style = MaterialTheme.typography.titleSmall)
+                DropdownList(itemList = religionList, selectedIndex = religion, modifier = buttonModifier, onItemClick = {religion = it})
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Text("Select Program", style = MaterialTheme.typography.titleSmall)
                 OutlinedTextField(
                     value = viewModel.program.value,
                     onValueChange = { viewModel.program.value = it },
                     label = { Text("Program") }
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                Text("Enter hobby and press the add button to add hobby")
+                Text("Enter Hobbies", style = MaterialTheme.typography.titleSmall)
                 OutlinedTextField(
                     value = viewModel.currentInput.value,
                     onValueChange = { viewModel.currentInput.value = it },
@@ -235,13 +266,7 @@ fun ProfileView(
                         )
                     }
                 }
-                Spacer(modifier = Modifier.height(16.dp))
-                Text("Select Ethnicity")
-                DropdownList(itemList = ethnicityList, selectedIndex = ethnicity, modifier = buttonModifier, onItemClick = {ethnicity = it})
-                Spacer(modifier = Modifier.height(16.dp))
-                Text("Select Religion")
-                DropdownList(itemList = religionList, selectedIndex = religion, modifier = buttonModifier, onItemClick = {religion = it})
-                Spacer(modifier = Modifier.height(16.dp))
+
             }
         )
     }
@@ -322,44 +347,82 @@ fun ProfileView(
                 showEditFriends = false
                 viewModel.editFriends()
             },
-            dialogTitle = "Edit Friends",
+            dialogTitle = "Friends",
             dialogText = "",
             icon = Icons.Default.Edit,
             content = {
-                Text("Add a friend")
+                Text(
+                    "Add a friend",
+                    style = MaterialTheme.typography.headlineSmall
+                )
+                Spacer(modifier = Modifier.height(8.dp))
                 OutlinedTextField(
                     value = viewModel.addFriend.value,
                     onValueChange = { viewModel.addFriend.value = it },
-                    label = { Text("Email") }
+                    label = { Text("Email") },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth()
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                Button(onClick = { viewModel.addFriend((viewModel.addFriend.value)) }) {
+                Button(
+                    onClick = { viewModel.addFriend(viewModel.addFriend.value) },
+
+                ) {
                     Text("Request")
                 }
                 Spacer(modifier = Modifier.height(24.dp))
                 Divider()
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(
-                    text = "View all your friends",
-                    style = TextStyle(fontSize = 20.sp) // Adjust the fontSize as needed
+                    "View all friend requests",
+                    style = MaterialTheme.typography.headlineSmall
                 )
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(8.dp),
+                        .padding(vertical = 8.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text("Name")
-                    Text("Email")
-                    Text("Remove Friend")
-
+                    Text("Name", style = MaterialTheme.typography.bodySmall)
+                    Text("Email", style = MaterialTheme.typography.bodySmall)
+                    Text("Accept Friend", style = MaterialTheme.typography.bodySmall)
                 }
-                for (user in viewModel.friends) {
+                viewModel.friends.forEach { user ->
                     UserComponent(
                         user = user,
-                        onEditClicked = { user.userId?.let { viewModel.deleteFriend(it) } })
+                        onEditClicked = { user.userId?.let { viewModel.acceptFriend(it) } },
+                        icon = Icons.Default.Check
+                    )
                 }
+                Spacer(modifier = Modifier.height(24.dp))
+                Divider()
+                Spacer(modifier = Modifier.height(24.dp))
+                Text(
+                    "View all your friends",
+                    style = MaterialTheme.typography.headlineSmall
+                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text("Name", style = MaterialTheme.typography.bodySmall)
+                    Text("Email", style = MaterialTheme.typography.bodySmall)
+                    Text("Remove Friend", style = MaterialTheme.typography.bodySmall)
+                }
+
+                viewModel.friends.forEach { user ->
+                    UserComponent(
+                        user = user,
+                        onEditClicked = { user.userId?.let { viewModel.deleteFriend(it) } },
+                        icon = Icons.Default.Delete
+                    )
+                }
+                Divider()
+
             }
         )
     }
@@ -385,7 +448,7 @@ fun TextWithIcon(
 }
 
 @Composable
-fun UserComponent(user: User, onEditClicked: () -> Unit) {
+fun UserComponent(user: User, onEditClicked: () -> Unit, icon: ImageVector) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -397,7 +460,7 @@ fun UserComponent(user: User, onEditClicked: () -> Unit) {
         Text(text = user.email.value)
 
         IconButton(onClick = { onEditClicked() }) {
-            Icon(Icons.Default.Delete, contentDescription = "Delete")
+            Icon(icon, contentDescription = "icon")
         }
     }
 }
@@ -426,7 +489,7 @@ fun AlertDialogExample(
                 modifier = Modifier
                     .verticalScroll(state = scrollState)
             ) {
-                Text(text = dialogText)
+                Text(text = dialogText, style = MaterialTheme.typography.headlineSmall)
                 content()
             }
         },
@@ -469,7 +532,7 @@ fun DropdownList(itemList: List<String>, selectedIndex: Int, modifier: Modifier,
         // button
         Box(
             modifier = modifier
-                .background(Color.LightGray)
+                .background(Color.White)
                 .clickable { showDropdown = true },
 //            .clickable { showDropdown = !showDropdown },
             contentAlignment = Alignment.Center
