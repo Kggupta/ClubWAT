@@ -1,6 +1,7 @@
 import express from "express";
 import { prisma } from "../lib/prisma";
 import {
+  AdminType,
   Club,
   ClubAdmin,
   ClubCategory,
@@ -8,6 +9,7 @@ import {
   Prisma,
 } from "@prisma/client";
 import {
+  CONFLICT_CODE,
   INTERNAL_ERROR_CODE,
   INVALID_REQUEST_CODE,
   NOT_FOUND_CODE,
@@ -181,7 +183,7 @@ router.post<ClubDetails, void>("/", authenticateToken, async (req, res) => {
         data: {
           club_id: club.id,
           user_id: req.body.user.id,
-          position: req.body.position,
+          position: AdminType.Owner,
         },
       }),
       addClubCategories(club.id, req.body.categories),
@@ -328,6 +330,9 @@ router.put("/:id/manage-membership", authenticateToken, async (req, res) => {
     await prisma.clubMember.deleteMany({
       where: { user_id: userId, club_id: clubId },
     });
+    await prisma.clubAdmin.deleteMany({
+      where: { user_id: userId, club_id: clubId },
+    });
   }
 
   res.sendStatus(OK_CODE);
@@ -408,10 +413,17 @@ router.get("/:id", authenticateToken, async (req, res) => {
     members: club.club_members.map((x) => {
       return { userId: x.user_id, isApproved: x.is_approved };
     }),
+    isClubAdmin: club.admins.some((x) => x.user_id === req.body.user.id),
     adminIds: club.admins.map((x) => x.user_id),
     categories: categories,
     isJoined,
     isJoinPending,
+    isCreator: club.admins.some(
+      (x) =>
+        x.club_id === clubId &&
+        x.user_id === req.body.user.id &&
+        x.position === AdminType.Owner
+    ),
   });
 });
 
