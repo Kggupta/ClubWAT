@@ -1,19 +1,10 @@
 package com.example.clubwat.viewmodels
 
-import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Build
-import android.provider.CalendarContract
-import android.provider.CalendarContract.Events
 import androidx.annotation.RequiresApi
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
-import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.clubwat.BuildConfig
-import com.example.clubwat.model.Club
-import com.example.clubwat.model.ClubDetails
 import com.example.clubwat.model.Event
 import com.example.clubwat.model.UserProfile
 import com.example.clubwat.repository.UserRepository
@@ -24,7 +15,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.json.JSONObject
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL

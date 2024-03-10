@@ -1,7 +1,6 @@
 package com.example.clubwat.model
 
 import com.google.gson.annotations.SerializedName
-import java.util.Date
 
 data class EventResponse(
     val data: List<EventWrapper>

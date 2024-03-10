@@ -40,11 +40,8 @@ import com.example.clubwat.R
 import com.example.clubwat.model.Notification
 import com.example.clubwat.ui.theme.LightYellow
 import com.example.clubwat.viewmodels.InboxViewModel
-import java.text.SimpleDateFormat
 import java.time.Duration
-import java.time.LocalDateTime
 import java.time.OffsetDateTime
-import java.time.format.DateTimeFormatter
 import kotlin.math.abs
 
 @RequiresApi(Build.VERSION_CODES.O)

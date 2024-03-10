@@ -5,8 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.clubwat.BuildConfig
 import com.example.clubwat.model.Club
 import com.example.clubwat.model.Event
-import com.example.clubwat.model.EventResponse
-import com.example.clubwat.model.EventWrapper
 import com.example.clubwat.repository.UserRepository
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -14,11 +12,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
-import java.time.Instant
-import java.util.Date
 
 class SearchViewModel(private val userRepository: UserRepository) : ViewModel() {
     private val _searchQuery = MutableStateFlow("")

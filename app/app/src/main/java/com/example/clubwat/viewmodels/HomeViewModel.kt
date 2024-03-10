@@ -51,7 +51,6 @@ class HomeViewModel(private val userRepository: UserRepository) : ViewModel() {
                     val response = con.inputStream.bufferedReader().use { it.readText() }
                     val eventResponse: EventResponse = Gson().fromJson(response, EventResponse::class.java)
                     val eventWrappersList: List<EventWrapper> = eventResponse.data
-                    println(eventWrappersList)
                     allEvents.value = eventWrappersList
                 }
             } catch (e: Exception) {
