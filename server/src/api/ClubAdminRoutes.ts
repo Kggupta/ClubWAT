@@ -7,6 +7,7 @@ import {
   OK_CODE,
 } from "../lib/StatusCodes";
 import { AdminType } from "@prisma/client";
+import EmailService from "../lib/EmailService";
 
 const router = express.Router();
 
@@ -72,6 +73,7 @@ router.put(
 
     const member = await prisma.clubMember.findFirst({
       where: { club_id: clubId, user_id: targetUserId },
+      include: { user: true, club: true },
     });
 
     if (!member) return res.sendStatus(NOT_FOUND_CODE);
@@ -80,6 +82,20 @@ router.put(
       where: { id: member.id },
       data: {
         is_approved: true,
+      },
+    });
+
+    await EmailService.sendClubJoinRequestApprovedEmail(
+      member.user.email,
+      member.club
+    );
+
+    await prisma.notification.create({
+      data: {
+        destination_user_id: targetUserId,
+        club_id: clubId,
+        content: `Membership approved for ${member.club.title}`,
+        source_user_id: req.body.user.id,
       },
     });
 
