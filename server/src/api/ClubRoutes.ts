@@ -1,11 +1,11 @@
 import express from "express";
 import { prisma } from "../lib/prisma";
 import {
-  Category,
   Club,
   ClubAdmin,
   ClubCategory,
   ClubMember,
+  Prisma,
 } from "@prisma/client";
 import {
   INTERNAL_ERROR_CODE,
@@ -39,16 +39,19 @@ type ChosenClub = {
   id: string;
 };
 
-type ClubSearch = {
-  searchQuery?: string;
-};
-
 type ClubAdminResponse = {
   data: ClubAdmin[];
 };
 
 type ClubParam = {
   param: string;
+};
+
+type ClubForYouItem = {
+  id: number;
+  title: string;
+  description: string;
+  common_interest_count: number;
 };
 
 type includeQuery = {
@@ -102,7 +105,6 @@ router.get<ClubParam, ClubResponse>(
           },
         };
       }
-
       if (param === "approved" || param === "not-approved") {
         query.where = { is_approved: param === "approved" };
         let clubs: ClubWithCategories[] = await prisma.club.findMany(query);
@@ -158,7 +160,7 @@ router.post<ClubDetails, void>("/", authenticateToken, async (req, res) => {
     if (
       !req.body.title ||
       !req.body.description ||
-      !req.body.membership_fee ||
+      (!req.body.membership_fee && req.body.membership_fee !== 0) ||
       !req.body.categories ||
       !req.body.position
     ) {
@@ -183,6 +185,13 @@ router.post<ClubDetails, void>("/", authenticateToken, async (req, res) => {
         },
       }),
       addClubCategories(club.id, req.body.categories),
+      prisma.clubMember.create({
+        data: {
+          user_id: req.body.user.id,
+          club_id: club.id,
+          is_approved: true,
+        },
+      }),
     ]);
 
     res.sendStatus(OK_CODE);
@@ -200,7 +209,7 @@ router.put<ClubDetails, void>(
       if (
         !req.body.title ||
         !req.body.description ||
-        !req.body.membership_fee ||
+        (!req.body.membership_fee && req.body.membership_fee !== 0) ||
         !req.body.categories ||
         !req.body.is_approved
       ) {
@@ -208,7 +217,6 @@ router.put<ClubDetails, void>(
       }
 
       const clubId = Number(req.params.id);
-
       Promise.all([
         prisma.club.update({
           where: {
@@ -292,6 +300,7 @@ router.get("/my-clubs", authenticateToken, async (req, res) => {
         user_id: userId,
       },
       include: { club: true },
+      orderBy: { club: { title: "asc" } },
     })
   ).map((x) => x.club);
 
@@ -324,6 +333,33 @@ router.put("/:id/manage-membership", authenticateToken, async (req, res) => {
   res.sendStatus(OK_CODE);
 });
 
+router.get<void, ClubForYouItem[]>(
+  "/for-you",
+  authenticateToken,
+  async (req, res) => {
+    const userId = req.body.user.id;
+
+    // This query performs significantly better when using raw sql
+    // Prisma has query cleaning by default
+    const data = (await prisma.$queryRaw(
+      Prisma.sql`SELECT c.id, c.title, c.description, COUNT(cc.category_id) AS common_interest_count
+    FROM "public"."Club" c 
+    JOIN "public"."ClubCategory" cc ON c.id = cc.club_id 
+    JOIN "public"."UserInterest" ui ON cc.category_id = ui.category_id 
+    WHERE ui.user_id = ${userId} 
+    GROUP BY c.id, c.title 
+    ORDER BY COUNT(cc.category_id) DESC
+    LIMIT 15;`
+    )) as ClubForYouItem[];
+
+    data.map((entry) => {
+      entry.common_interest_count = Number(entry.common_interest_count);
+    });
+
+    res.status(OK_CODE).json(data);
+  }
+);
+
 router.get("/:id", authenticateToken, async (req, res) => {
   const clubId = parseInt(req.params.id, 10);
   const club = await prisma.club.findUnique({
@@ -331,6 +367,7 @@ router.get("/:id", authenticateToken, async (req, res) => {
     include: {
       admins: true,
       club_members: true,
+      events: true,
       categories: {
         select: {
           category: {
@@ -365,6 +402,9 @@ router.get("/:id", authenticateToken, async (req, res) => {
     title: club.title,
     description: club.description,
     membershipFee: club.membership_fee,
+    events: club.events.filter((x) => {
+      return isJoined || !x.private_flag;
+    }),
     members: club.club_members.map((x) => {
       return { userId: x.user_id, isApproved: x.is_approved };
     }),

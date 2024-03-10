@@ -1,8 +1,9 @@
-package com.example.clubwat.model
+package com.example.clubwat.repository
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import com.example.clubwat.model.User
 
 
 class UserRepository {
@@ -10,7 +11,7 @@ class UserRepository {
     val currentUser: State<User?> get() = _currentUser
 
     fun createUser(firstName: MutableState<String>, lastName: MutableState<String>, email: MutableState<String>, password: MutableState<String>) {
-        _currentUser.value = User("", firstName = firstName, lastName = lastName, email = email, password = password)
+        _currentUser.value = User(null, firstName = firstName, lastName = lastName, email = email, password = password)
     }
 
     fun resetUser() {

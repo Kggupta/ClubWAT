@@ -4,7 +4,9 @@ import HomeViewModel
 import LoginViewModel
 import SearchViewModel
 import SignUpViewModel
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -18,16 +20,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.clubwat.model.UserRepository
+import com.example.clubwat.repository.DiscussionRepositoryImpl
+import com.example.clubwat.repository.UserRepository
 import com.example.clubwat.ui.theme.ClubWATTheme
 import com.example.clubwat.viewmodels.ClubDetailsViewModel
+import com.example.clubwat.viewmodels.ClubDiscussionViewModel
 import com.example.clubwat.viewmodels.CodeVerificationViewModel
+import com.example.clubwat.viewmodels.EventDetailsViewModel
 import com.example.clubwat.viewmodels.ForYouViewModel
+import com.example.clubwat.viewmodels.InboxViewModel
 import com.example.clubwat.viewmodels.ProfileViewModel
 import com.example.clubwat.viewmodels.factories.ClubDetailsViewModelFactory
+import com.example.clubwat.viewmodels.factories.ClubDiscussionViewModelFactory
 import com.example.clubwat.viewmodels.factories.CodeVerificationViewModelFactory
+import com.example.clubwat.viewmodels.factories.EventDetailsViewModelFactory
 import com.example.clubwat.viewmodels.factories.ForYouViewModelFactory
 import com.example.clubwat.viewmodels.factories.HomeViewModelFactory
+import com.example.clubwat.viewmodels.factories.InboxViewModelFactory
 import com.example.clubwat.viewmodels.factories.LoginViewModelFactory
 import com.example.clubwat.viewmodels.factories.ProfileViewModelFactory
 import com.example.clubwat.viewmodels.factories.SearchViewModelFactory
@@ -36,13 +45,21 @@ import com.example.clubwat.views.NavigationBar.NavBar
 
 class MainActivity : ComponentActivity() {
     private val userRepository by lazy { UserRepository() }
+    private val discussionRepository by lazy { DiscussionRepositoryImpl() }
 
+    override fun onResume() {
+        super.onResume()
+        this.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+    }
+
+    @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             ClubWATTheme {
                 val navController = rememberNavController()
                 val currentUser by userRepository.currentUser
+
                 val signUpViewModel: SignUpViewModel by viewModels { SignUpViewModelFactory(userRepository) }
                 val loginViewModel: LoginViewModel by viewModels { LoginViewModelFactory(userRepository) }
                 val codeVerificationViewModel: CodeVerificationViewModel by viewModels { CodeVerificationViewModelFactory(userRepository) }
@@ -51,6 +68,9 @@ class MainActivity : ComponentActivity() {
                 val profileViewModel: ProfileViewModel by viewModels { ProfileViewModelFactory(userRepository) }
                 val searchViewModel: SearchViewModel by viewModels { SearchViewModelFactory(userRepository) }
                 val clubDetailsViewModel: ClubDetailsViewModel by viewModels { ClubDetailsViewModelFactory(userRepository) }
+                val clubDiscussionViewModel: ClubDiscussionViewModel by viewModels { ClubDiscussionViewModelFactory(userRepository, discussionRepository) }
+                val inboxViewModel: InboxViewModel by viewModels { InboxViewModelFactory(userRepository) }
+                val eventDetailsViewModel: EventDetailsViewModel by viewModels { EventDetailsViewModelFactory(userRepository) }
 
                 Scaffold(
                     bottomBar = {
@@ -93,6 +113,21 @@ class MainActivity : ComponentActivity() {
                                     navController = navController,
                                     clubId = backStackEntry.arguments?.getString("clubId")
                                 )
+                            }
+                            composable("discussion/{clubId}") { backStackEntry ->
+                                ClubDiscussionView(
+                                    viewModel = clubDiscussionViewModel,
+                                    navController = navController,
+                                    clubId = backStackEntry.arguments?.getString("clubId")
+                                )
+                            }
+                            composable("inbox") {
+                                InboxView(viewModel = inboxViewModel, navController = navController)
+                            }
+                            composable("event/{eventId}") {backStackEntry ->
+                                EventDetailsView(viewModel = eventDetailsViewModel,
+                                    navController = navController,
+                                    eventId = backStackEntry.arguments?.getString("eventId"))
                             }
                         }
                     }

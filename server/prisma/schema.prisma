@@ -17,15 +17,23 @@ datasource db {
 }
 
 model User {
-  id         Int         @id @default(autoincrement())
-  email      String      @unique
+  id         Int     @id @default(autoincrement())
+  email      String  @unique
   password   String
   first_name String
   last_name  String
   admin_flag Boolean
-  admins     ClubAdmin[]
-  club_discussions ClubDiscussion[]
-  club_members ClubMember[]
+
+  source_friend Friend[] @relation("source_friend_id")
+  destination_friend Friend[] @relation("destination_friend_id")
+  source_notifications Notification[]    @relation("source_user")
+  notifications        Notification[]    @relation("destination_user")
+  admins               ClubAdmin[]
+  event_attendance     EventAttendance[]
+  event_bookmarks      EventBookmark[]
+  event_feedback       EventFeedback[]
+  club_discussions     ClubDiscussion[]
+  club_members         ClubMember[]
 }
 
 model UserEmailVerification {
@@ -35,22 +43,26 @@ model UserEmailVerification {
 }
 
 model Club {
-  id             Int            @id @default(autoincrement())
+  id             Int     @id @default(autoincrement())
   title          String
   description    String
   membership_fee Float
-  is_approved    Boolean        @default(false)
-  categories     ClubCategory[]
-  admins         ClubAdmin[]
-  discussions     ClubDiscussion[]
-  club_members ClubMember[]
+  is_approved    Boolean @default(false)
+
+  notifications Notification[]
+  categories    ClubCategory[]
+  admins        ClubAdmin[]
+  events        Event[]
+  discussions   ClubDiscussion[]
+  club_members  ClubMember[]
 }
 
 model Category {
-  id    Int            @id @default(autoincrement())
-  type  String
-  name  String
-  clubs ClubCategory[]
+  id             Int            @id @default(autoincrement())
+  type           String
+  name           String
+  clubs          ClubCategory[]
+  user_interests UserInterest[]
 }
 
 model ClubCategory {
@@ -71,20 +83,96 @@ model ClubAdmin {
 }
 
 model ClubDiscussion {
-  id          Int       @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   user_id     Int
   club_id     Int
-  message String
+  message     String
   create_date DateTime
-  user        User      @relation(fields: [user_id], references: [id])
-  club        Club      @relation(fields: [club_id], references: [id])
+  user        User     @relation(fields: [user_id], references: [id])
+  club        Club     @relation(fields: [club_id], references: [id])
+}
+
+model Event {
+  id           Int      @id @default(autoincrement())
+  title        String
+  description  String
+  start_date   DateTime
+  end_date     DateTime
+  location     String   @default("Remote")
+  private_flag Boolean  @default(false)
+  club_id      Int
+  club         Club     @relation(fields: [club_id], references: [id])
+
+  notifications    Notification[]
+  event_feedback   EventFeedback[]
+  event_attendance EventAttendance[]
+  event_bookmark   EventBookmark[]
+}
+
+model EventAttendance {
+  id       Int @id @default(autoincrement())
+  user_id  Int
+  event_id Int
+
+  user  User  @relation(fields: [user_id], references: [id])
+  event Event @relation(fields: [event_id], references: [id])
+}
+
+model EventBookmark {
+  id       Int @id @default(autoincrement())
+  user_id  Int
+  event_id Int
+
+  user  User  @relation(fields: [user_id], references: [id])
+  event Event @relation(fields: [event_id], references: [id])
+}
+
+model EventFeedback {
+  id         Int      @id @default(autoincrement())
+  event_id   Int
+  feedback   String
+  created    DateTime
+  user_email String
+
+  user  User  @relation(fields: [user_email], references: [email])
+  event Event @relation(fields: [event_id], references: [id])
 }
 
 model ClubMember {
-  id Int @id @default(autoincrement())
-  user_id Int
-  club_id Int
-  user User @relation(fields: [user_id], references: [id])
-  club Club @relation(fields: [club_id], references: [id])
+  id          Int     @id @default(autoincrement())
+  user_id     Int
+  club_id     Int
+  user        User    @relation(fields: [user_id], references: [id])
+  club        Club    @relation(fields: [club_id], references: [id])
   is_approved Boolean
+}
+
+model UserInterest {
+  id          Int      @id @default(autoincrement())
+  user_id     Int
+  category_id Int
+  category    Category @relation(fields: [category_id], references: [id])
+}
+
+model Notification {
+  id                  Int    @id @default(autoincrement())
+  destination_user_id Int
+  source_user_id      Int
+  club_id             Int?
+  event_id            Int?
+  content             String
+  create_date         DateTime @default(dbgenerated("NOW()"))
+  source_user         User   @relation(name: "source_user", fields: [source_user_id], references: [id])
+  destination_user    User   @relation(name: "destination_user", fields: [destination_user_id], references: [id])
+  club                Club?  @relation(fields: [club_id], references: [id])
+  event               Event? @relation(fields: [event_id], references: [id])
+}
+
+model Friend {
+  id Int @id @default(autoincrement())
+  source_friend_id Int
+  destination_friend_id Int
+  source_friend         User   @relation(name: "source_friend_id", fields: [source_friend_id], references: [id])
+  destination_friend   User   @relation(name: "destination_friend_id", fields: [destination_friend_id], references: [id])
+  
 }

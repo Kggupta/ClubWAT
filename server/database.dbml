@@ -9,7 +9,14 @@ Table User {
   first_name String [not null]
   last_name String [not null]
   admin_flag Boolean [not null]
+  source_friend Friend [not null]
+  destination_friend Friend [not null]
+  source_notifications Notification [not null]
+  notifications Notification [not null]
   admins ClubAdmin [not null]
+  event_attendance EventAttendance [not null]
+  event_bookmarks EventBookmark [not null]
+  event_feedback EventFeedback [not null]
   club_discussions ClubDiscussion [not null]
   club_members ClubMember [not null]
 }
@@ -26,8 +33,10 @@ Table Club {
   description String [not null]
   membership_fee Float [not null]
   is_approved Boolean [not null, default: false]
+  notifications Notification [not null]
   categories ClubCategory [not null]
   admins ClubAdmin [not null]
+  events Event [not null]
   discussions ClubDiscussion [not null]
   club_members ClubMember [not null]
 }
@@ -37,6 +46,7 @@ Table Category {
   type String [not null]
   name String [not null]
   clubs ClubCategory [not null]
+  user_interests UserInterest [not null]
 }
 
 Table ClubCategory {
@@ -66,6 +76,48 @@ Table ClubDiscussion {
   club Club [not null]
 }
 
+Table Event {
+  id Int [pk, increment]
+  title String [not null]
+  description String [not null]
+  start_date DateTime [not null]
+  end_date DateTime [not null]
+  location String [not null, default: 'Remote']
+  private_flag Boolean [not null, default: false]
+  club_id Int [not null]
+  club Club [not null]
+  notifications Notification [not null]
+  event_feedback EventFeedback [not null]
+  event_attendance EventAttendance [not null]
+  event_bookmark EventBookmark [not null]
+}
+
+Table EventAttendance {
+  id Int [pk, increment]
+  user_id Int [not null]
+  event_id Int [not null]
+  user User [not null]
+  event Event [not null]
+}
+
+Table EventBookmark {
+  id Int [pk, increment]
+  user_id Int [not null]
+  event_id Int [not null]
+  user User [not null]
+  event Event [not null]
+}
+
+Table EventFeedback {
+  id Int [pk, increment]
+  event_id Int [not null]
+  feedback String [not null]
+  created DateTime [not null]
+  user_email String [not null]
+  user User [not null]
+  event Event [not null]
+}
+
 Table ClubMember {
   id Int [pk, increment]
   user_id Int [not null]
@@ -73,6 +125,35 @@ Table ClubMember {
   user User [not null]
   club Club [not null]
   is_approved Boolean [not null]
+}
+
+Table UserInterest {
+  id Int [pk, increment]
+  user_id Int [not null]
+  category_id Int [not null]
+  category Category [not null]
+}
+
+Table Notification {
+  id Int [pk, increment]
+  destination_user_id Int [not null]
+  source_user_id Int [not null]
+  club_id Int
+  event_id Int
+  content String [not null]
+  create_date DateTime [not null]
+  source_user User [not null]
+  destination_user User [not null]
+  club Club
+  event Event
+}
+
+Table Friend {
+  id Int [pk, increment]
+  source_friend_id Int [not null]
+  destination_friend_id Int [not null]
+  source_friend User [not null]
+  destination_friend User [not null]
 }
 
 Ref: ClubCategory.club_id > Club.id
@@ -87,6 +168,34 @@ Ref: ClubDiscussion.user_id > User.id
 
 Ref: ClubDiscussion.club_id > Club.id
 
+Ref: Event.club_id > Club.id
+
+Ref: EventAttendance.user_id > User.id
+
+Ref: EventAttendance.event_id > Event.id
+
+Ref: EventBookmark.user_id > User.id
+
+Ref: EventBookmark.event_id > Event.id
+
+Ref: EventFeedback.user_email > User.email
+
+Ref: EventFeedback.event_id > Event.id
+
 Ref: ClubMember.user_id > User.id
 
 Ref: ClubMember.club_id > Club.id
+
+Ref: UserInterest.category_id > Category.id
+
+Ref: Notification.source_user_id > User.id
+
+Ref: Notification.destination_user_id > User.id
+
+Ref: Notification.club_id > Club.id
+
+Ref: Notification.event_id > Event.id
+
+Ref: Friend.source_friend_id > User.id
+
+Ref: Friend.destination_friend_id > User.id

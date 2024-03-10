@@ -118,8 +118,10 @@ fun SignUpView(
                 if (viewModel.allValuesError.value == null &&
                     viewModel.passwordError.value == null) {
                     viewModel.createUser()
-                    viewModel.sendVerificationEmail()
-                    navController.navigate("verification")
+                    viewModel.sendVerificationEmail { emailSent ->
+                        if (!emailSent) return@sendVerificationEmail
+                        navController.navigate("verification")
+                    }
                 }
             },
             colors = ButtonDefaults.buttonColors(containerColor = LightOrange

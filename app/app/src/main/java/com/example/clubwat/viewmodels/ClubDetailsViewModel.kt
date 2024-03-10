@@ -4,19 +4,25 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.clubwat.BuildConfig
 import com.example.clubwat.model.ClubDetails
-import com.example.clubwat.model.UserRepository
+import com.example.clubwat.model.UserProfile
+import com.example.clubwat.repository.UserRepository
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
 
 class ClubDetailsViewModel(private val userRepository: UserRepository) : ViewModel() {
     private var _club = MutableStateFlow<ClubDetails?>(null)
     var club = _club.asStateFlow()
+
+    private val _friends: MutableStateFlow<MutableList<UserProfile>> = MutableStateFlow(arrayListOf())
+    var friends = _friends.asStateFlow()
 
     fun getClubTitle():String {
         if (_club.value == null) return ""
@@ -56,6 +62,48 @@ class ClubDetailsViewModel(private val userRepository: UserRepository) : ViewMod
                         }
                     }
                 }
+            }
+        }
+    }
+
+    fun getFriends() {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val obj = URL(BuildConfig.GET_FRIEND_URL)
+                val con = obj.openConnection() as HttpURLConnection
+                con.requestMethod = "GET"
+                con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+                val responseCode = con.responseCode
+                println("Response Code :: $responseCode")
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    val response = con.inputStream.bufferedReader().use { it.readText() }
+                    val friends: MutableList<UserProfile> = Gson().fromJson(response, object : TypeToken<List<UserProfile>>() {}.type)
+                    _friends.value = friends
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun shareClub(userId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val url = URL(BuildConfig.GET_NOTIFICATIONS_URL + "club")
+                (url.openConnection() as HttpURLConnection).apply {
+                    requestMethod = "PUT"
+                    doOutput = true
+                    setRequestProperty("Content-Type", "application/json")
+                    setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+
+                    val body = """{"destinationUserId": $userId, "clubId": ${club.value!!.id}}"""
+
+                    OutputStreamWriter(outputStream).use { it.write(body) }
+                    val responseCode = responseCode
+                    println("Response: $responseCode")
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
     }

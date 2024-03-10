@@ -2,10 +2,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.clubwat.BuildConfig
-import com.example.clubwat.model.UserRepository
+import com.example.clubwat.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.json.JSONObject
+import kotlinx.coroutines.withContext
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
@@ -43,8 +43,9 @@ class SignUpViewModel(private val userRepository: UserRepository) : ViewModel() 
         return password.matches(passwordPattern.toRegex())
     }
 
-    fun sendVerificationEmail() {
+    fun sendVerificationEmail(callback: (Boolean) -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {
+            var emailSent = false
             try {
                 println(email.value)
                 val url = URL(BuildConfig.EMAIL_VERIFICATION_URL)
@@ -56,20 +57,21 @@ class SignUpViewModel(private val userRepository: UserRepository) : ViewModel() 
                     val body = """{"email": "${email.value}"}"""
 
                     OutputStreamWriter(outputStream).use { it.write(body) }
-                    val responseCode = responseCode
-                    if (responseCode == HttpURLConnection.HTTP_OK) {
-                        val response = inputStream.bufferedReader().use { it.readText() }
-                        val jsonResponse = JSONObject(response)
-                        val token = jsonResponse.optString("data", null.toString())
-                        userRepository.setUserId(token)
-                        println("Response: $response")
-                    } else {
-                        val response = errorStream.bufferedReader().use { it.readText() }
-                        println("Error Response: $response")
+                    emailSent = responseCode == HttpURLConnection.HTTP_OK
+                    if (responseCode == HttpURLConnection.HTTP_BAD_REQUEST) {
+                        allValuesError.value = "Please enter an @uwaterloo.ca email"
+                    } else if (responseCode == HttpURLConnection.HTTP_CONFLICT) {
+                        allValuesError.value = "This account already exists"
+                    } else if (!emailSent) {
+                        allValuesError.value = "The account could not be created"
                     }
                 }
             } catch (e: Exception) {
+                allValuesError.value = "An unexpected error occurred"
                 e.printStackTrace()
+            }
+            withContext(Dispatchers.Main) {
+                callback(emailSent)
             }
         }
     }

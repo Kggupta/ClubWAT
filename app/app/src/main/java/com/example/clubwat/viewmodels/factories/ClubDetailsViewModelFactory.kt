@@ -2,7 +2,7 @@ package com.example.clubwat.viewmodels.factories
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.clubwat.model.UserRepository
+import com.example.clubwat.repository.UserRepository
 import com.example.clubwat.viewmodels.ClubDetailsViewModel
 
 class ClubDetailsViewModelFactory(private val userRepository: UserRepository) : ViewModelProvider.Factory {

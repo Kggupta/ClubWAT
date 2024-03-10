@@ -4,11 +4,13 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.NavigationBarItemColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
+import com.example.clubwat.ui.theme.LightYellow
 
 @Composable
 fun NavBar(navController: NavController) {
@@ -19,7 +21,8 @@ fun NavBar(navController: NavController) {
         NavBarItem.Profile
     )
 
-    NavigationBar {
+    NavigationBar (
+        containerColor = LightYellow){
         items.forEach { item ->
             AddItem(
                 screen = item,
@@ -54,6 +57,6 @@ fun RowScope.AddItem(
             if (name == "Search") { navController.navigate("search") }
             if (name == "Profile") { navController.navigate("profile") }
         },
-        colors = NavigationBarItemDefaults.colors()
+        colors = NavigationBarItemColors(Color.Black, Color.Black, LightYellow, Color.Transparent, Color.Transparent, Color.Transparent, Color.Transparent)
     )
 }

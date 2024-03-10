@@ -1,17 +1,16 @@
-GET http://localhost:3000/api/v1/club/discussion/:clubId
-Authorization: Bearer [token]
+GET http://localhost:3000/api/v1/club/discussion/13
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzksImVtYWlsIjoiaW1vaGFuYWtAdXdhdGVybG9vLmNhIiwicGFzc3dvcmQiOiIkMmIkMTAkb1NQdXJCNTJaRHZvbm5TbXZoeDBnZWE2WFVYaWlBbWdsVXJXTWxkc3NRN3E1S1JHV21LamUiLCJmaXJzdF9uYW1lIjoiSXNzaGFuYSIsImxhc3RfbmFtZSI6Ik1vaGFuYWt1bWFyIiwiYWRtaW5fZmxhZyI6ZmFsc2UsImlhdCI6MTcwOTMxNjE4MH0.KmPEEoDRA86-ZQt6TyFph1MUCbxa32ybqXRWZa2YQeM
 content-type: application/json
 
 ###
 
-POST http://localhost:3000/api/v1/club/discussion/:clubId
-Authorization: Bearer [token]
+POST http://localhost:3000/api/v1/club/discussion/13
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzksImVtYWlsIjoiaW1vaGFuYWtAdXdhdGVybG9vLmNhIiwicGFzc3dvcmQiOiIkMmIkMTAkb1NQdXJCNTJaRHZvbm5TbXZoeDBnZWE2WFVYaWlBbWdsVXJXTWxkc3NRN3E1S1JHV21LamUiLCJmaXJzdF9uYW1lIjoiSXNzaGFuYSIsImxhc3RfbmFtZSI6Ik1vaGFuYWt1bWFyIiwiYWRtaW5fZmxhZyI6ZmFsc2UsImlhdCI6MTcwOTMxNjE4MH0.KmPEEoDRA86-ZQt6TyFph1MUCbxa32ybqXRWZa2YQeM
 content-type: application/json
 
 {
-    "user_id": 1,
-    "club_id": 1,
-    "message": "This club is awesome"
+    "club_id": 33,
+    "message": "This club is very nice!"
 }
 
 ### 

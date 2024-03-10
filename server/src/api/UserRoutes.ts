@@ -12,7 +12,7 @@ import {
   OK_CODE,
   UNAUTHORIZED_CODE,
 } from "../lib/StatusCodes";
-import sendEmail from "../lib/EmailService";
+import EmailService from "../lib/EmailService";
 import { passwordStrength } from "check-password-strength";
 import PasswordHashingService from "../lib/PasswordHashingService";
 
@@ -75,7 +75,10 @@ router.post<EmailVerificationRequest, void>(
     const verificationCode = Math.floor(100000 + Math.random() * 900000);
 
     try {
-      await sendEmail(verificationRequest.email, verificationCode);
+      await EmailService.sendVerificationEmail(
+        verificationRequest.email,
+        verificationCode
+      );
 
       await prisma.userEmailVerification.deleteMany({
         where: { email: verificationRequest.email },

@@ -5,7 +5,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.clubwat.model.User
-import com.example.clubwat.model.UserRepository
+import com.example.clubwat.repository.UserRepository
 
 class ProfileViewModel(private val userRepository: UserRepository) : ViewModel() {
 
