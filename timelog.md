@@ -70,3 +70,4 @@
 | 03/08/2024 | 3      |        |        |         |         |         | Notifications/Inbox FE                                      |
 | 03/08/2024 | 0.5    |        |        |         |         |         | User friendship initial db setup + get endpoint backend     |
 | 03/09/2024 | 9      |        |        |         |         |         | Event details UI, share club UI, share event UI/API         |
+| 03/10/2024 |        | 1      |        |         |         |         | 30 sec wait time for resend button                          |
