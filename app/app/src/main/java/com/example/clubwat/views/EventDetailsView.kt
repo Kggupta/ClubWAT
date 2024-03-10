@@ -1,10 +1,12 @@
 package com.example.clubwat.views
-
-import android.annotation.SuppressLint
+import android.content.Intent
+import android.os.Build
+import android.provider.CalendarContract
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -22,11 +24,19 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.automirrored.filled.Send
+import androidx.compose.material.icons.filled.AccessTime
+import androidx.compose.material.icons.filled.AccessTimeFilled
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.ChatBubble
+import androidx.compose.material.icons.filled.Group
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.People
+import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -42,6 +52,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
@@ -50,31 +62,37 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import com.example.clubwat.R
+import com.example.clubwat.model.Event
 import com.example.clubwat.model.EventWrapper
 import com.example.clubwat.ui.theme.LightOrange
 import com.example.clubwat.ui.theme.LightYellow
-import com.example.clubwat.viewmodels.ClubDetailsViewModel
+import com.example.clubwat.viewmodels.EventDetailsViewModel
+import com.example.clubwat.viewmodels.ForYouViewModel
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
-@OptIn(ExperimentalLayoutApi::class)
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ClubDetailsView(
-    viewModel: ClubDetailsViewModel,
+fun EventDetailsView(
+    viewModel: EventDetailsViewModel,
     navController: NavController,
-    clubId: String?
+    eventId: String?
 ) {
     LaunchedEffect(Unit) {
         viewModel.getFriends()
-        if (clubId != null) {
-            viewModel.getClub(clubId)
+        if (eventId != null) {
+            viewModel.getEvent(eventId)
         }
     }
 
     val friends by viewModel.friends.collectAsState()
-    val club by viewModel.club.collectAsState()
-    var showClubDetailsView by remember { mutableStateOf(false) }
+    val event by viewModel.event.collectAsState()
+    var showDetailsView by remember { mutableStateOf(false) }
+    var showCalendarEvent by remember { mutableStateOf(false) }
     var showShareView by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -92,7 +110,7 @@ fun ClubDetailsView(
                 },
                 title = {
                     Text(
-                        text = viewModel.getClubTitle(),
+                        text = viewModel.getEventTitle(),
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp
                     )
@@ -113,36 +131,46 @@ fun ClubDetailsView(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    if (club != null) {
-                        Button(onClick = { viewModel.updateClubMembership() }, colors = ButtonDefaults.buttonColors(
-                            containerColor = if (!club!!.isJoinPending && !club!!.isJoined) LightOrange else Color.LightGray,
-                            contentColor = if (!club!!.isJoinPending && !club!!.isJoined) Color.White else Color.Black
-                        )) {
-                            Icon(if (club!!.isJoined) {
+                    if (event != null) {
+                        Button(onClick = {
+                                if (event?.isAttending == false) {
+                                    showCalendarEvent = true
+                                }
+                                viewModel.attendEvent()
+                            }, colors = ButtonDefaults.buttonColors(
+                            containerColor = if (!event!!.isAttending) LightOrange else Color.LightGray,
+                            contentColor = if (!event!!.isAttending) Color.White else Color.Black)) {
+                            Icon(if (event!!.isAttending) {
                                 Icons.AutoMirrored.Filled.ExitToApp
-                            } else if (club!!.isJoinPending) {
-                                Icons.Filled.Cancel
                             } else {
                                 Icons.Filled.Add
-                            }, contentDescription = "Leave Club")
+                            }, contentDescription = "Attend Event")
                         }
                         Spacer(modifier = Modifier.width(16.dp))
-                        if (club!!.isJoined) {
+                        Button(onClick = {
+                            viewModel.bookmarkEvent()
+                        }, colors = ButtonDefaults.buttonColors(
+                            containerColor = if (!event!!.isBookmarked) LightOrange else Color.LightGray,
+                            contentColor = if (!event!!.isBookmarked) Color.White else Color.Black)) {
+                            Icon(Icons.Filled.Bookmark, contentDescription = "Bookmark")
+                        }
+                        Spacer(modifier = Modifier.width(16.dp))
+                        if (event?.privateFlag == false) {
                             Button(onClick = {
-                                navController.navigate("discussion/${clubId}")
+                                showShareView = true
                             }, colors = ButtonDefaults.buttonColors(
                                 containerColor = LightOrange
                             )) {
-                                Icon(Icons.Filled.ChatBubble, contentDescription = "Discussion")
+                                Icon(Icons.AutoMirrored.Filled.Send, contentDescription = "Send")
                             }
                             Spacer(modifier = Modifier.width(16.dp))
                         }
                         Button(onClick = {
-                            showShareView = true
+                            navController.navigate("club/${event!!.clubId}")
                         }, colors = ButtonDefaults.buttonColors(
                             containerColor = LightOrange
                         )) {
-                            Icon(Icons.AutoMirrored.Filled.Send, contentDescription = "Share")
+                            Icon(Icons.Filled.Group, contentDescription = "Club")
                         }
                     }
                 }
@@ -153,28 +181,19 @@ fun ClubDetailsView(
                         shape = RoundedCornerShape(16.dp)
                     )
                     .padding(16.dp),
-                    text = AnnotatedString(viewModel.getClubDescription().take(75) + "..."),
+                    text = AnnotatedString(viewModel.getEventDescription().take(75) + "..."),
                     style= TextStyle(textAlign = TextAlign.Center),
                     onClick = {
-                        showClubDetailsView = true
-                })
+                        showDetailsView = true
+                    })
                 Spacer(modifier = Modifier.height(16.dp))
-                Column(modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp,
-                        text = "Club Events"
-                    )
-                    if (club != null) {
-                        LazyColumn {
-                            items(club!!.events) { event ->
-                                Row {
-                                    val eventWrapper = EventWrapper(event)
-                                    EventItem(eventWrapper = eventWrapper, navController = navController)
-                                }
-                            }
-                        }
-                    }
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    DetailItem(text = viewModel.getLocation(), icon = Icons.Filled.LocationOn)
+                    DetailItem(text = viewModel.getStartDate(), icon = Icons.Filled.AccessTime)
+                    DetailItem(text = viewModel.getEndDate(), icon = Icons.Filled.AccessTime)
                 }
             }
         }
@@ -183,49 +202,36 @@ fun ClubDetailsView(
     if (showShareView) {
         ShareDialog(friends = friends, dismissCallback = { showShareView = false }, chooseFriendCallback = {
             showShareView = false
-            viewModel.shareClub(it)
+            viewModel.shareEvent(it)
         })
     }
 
-    if (showClubDetailsView) {
+    if (showCalendarEvent) {
+        event?.let { it1 ->
+            Calendar(event = it1)
+            showCalendarEvent = false
+        }
+    }
+
+    if (showDetailsView) {
         AlertDialog(
             title = {
-                Text(text = viewModel.getClubTitle(), textAlign = TextAlign.Center)
+                Text(text = viewModel.getEventTitle(), textAlign = TextAlign.Center)
             },
             text = {
                 Column {
-                    Text(text = viewModel.getClubDescription())
+                    Text(text = viewModel.getEventDescription())
                     Spacer(modifier = Modifier.padding(8.dp))
-                    FlowRow(modifier = Modifier.fillMaxWidth(),
-                        verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)) {
-                        if (club != null) {
-                            club!!.categories.forEach { category ->
-                                Text(
-                                    text = category.name,
-                                    modifier = Modifier
-                                        .background(
-                                            color = LightOrange,
-                                            shape = RoundedCornerShape(4.dp)
-                                        )
-                                        .padding(8.dp),
-                                    color = Color.White,
-                                    overflow = TextOverflow.Ellipsis,
-                                    maxLines = 1
-                                )
-                            }
-                        }
-                    }
                 }
             },
             onDismissRequest = {
-                showClubDetailsView = false
+                showDetailsView = false
             },
             confirmButton = {},
             dismissButton = {
                 TextButton(
                     onClick = {
-                        showClubDetailsView = false
+                        showDetailsView = false
                     }
                 ) {
                     Text("Dismiss")
@@ -233,4 +239,49 @@ fun ClubDetailsView(
             }
         )
     }
+}
+
+@Composable
+fun DetailItem(text: String?, icon: ImageVector) {
+    Column(modifier = Modifier.padding(16.dp)) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = "location"
+            )
+            Spacer(modifier = Modifier.padding(8.dp))
+            Text(
+                text = text ?: "",
+                fontWeight = FontWeight.Bold
+            )
+        }
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun Calendar(event: Event) {
+    val intent = Intent(Intent.ACTION_EDIT);
+
+    intent.setType("vnd.android.cursor.item/event");
+    intent.putExtra(CalendarContract.Events.TITLE, event.title)
+    intent.putExtra(CalendarContract.Events.EVENT_LOCATION, event.location)
+    intent.putExtra(
+        CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+        LocalDateTime.parse(
+            event.startDate,
+            DateTimeFormatter.ISO_DATE_TIME
+        ).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())
+    intent.putExtra(
+        CalendarContract.EXTRA_EVENT_END_TIME,
+        LocalDateTime.parse(
+            event.endDate,
+            DateTimeFormatter.ISO_DATE_TIME
+        ).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())
+    intent.putExtra(CalendarContract.Events.ALL_DAY, false)
+    intent.putExtra(CalendarContract.Events.DESCRIPTION, event.description)
+    ContextCompat.startActivity(LocalContext.current, intent, null)
 }

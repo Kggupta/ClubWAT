@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.clubwat.BuildConfig
 import com.example.clubwat.model.Club
 import com.example.clubwat.model.Event
+import com.example.clubwat.model.EventResponse
+import com.example.clubwat.model.EventWrapper
 import com.example.clubwat.repository.UserRepository
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -84,21 +86,8 @@ class SearchViewModel(private val userRepository: UserRepository) : ViewModel() 
                 con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
                 val responseCode = con.responseCode
                 if (responseCode == HttpURLConnection.HTTP_OK) {
-                    val response = JSONObject(con.inputStream.bufferedReader().use { it.readText() })
-                    val jsonResponse = response.getJSONArray("data")
-                    val events = emptyList<Event>().toMutableList()
-
-                    for (i in 0 until jsonResponse.length()) {
-                        val jsonObject: JSONObject = jsonResponse.get(i) as JSONObject
-                        val id = jsonObject.optString("id", null.toString())
-                        val title = jsonObject.optString("title", "No Name")
-                        val description = jsonObject.optString("description", "None")
-                        val clubId = jsonObject.optInt("club_id", 0)
-                        val startDate = Date.from(Instant.parse(jsonObject.optString("start_date", "None")))
-                        val endDate = Date.from(Instant.parse(jsonObject.optString("end_date", "None")))
-
-                        events.add(Event(id, title, description, startDate, endDate, clubId))
-                    }
+                    val response = con.inputStream.bufferedReader().use { it.readText() }
+                    val events: MutableList<Event> = Gson().fromJson(response, object : TypeToken<List<Event>>() {}.type)
 
                     _events.value = events
                 }
