@@ -204,25 +204,25 @@ fun EventDetailsView(
     if (showCalendarConfirmation) {
         AlertDialog(title = {Text("Add To Phone Calendar?")},
             onDismissRequest = {showCalendarConfirmation = false},
-            buttons = {
-                Row {
-                    TextButton(
-                        onClick = {
-                            showCalendarConfirmation = false
-                        }
-                    ) {
-                        Text("Dismiss")
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        showCalendarConfirmation = false
                     }
-                    TextButton(
-                        onClick = {
-                            showCalendarEvent = true
-                            showCalendarConfirmation = false
-                        }
-                    ) {
-                        Text("Yes")
-                    }
+                ) {
+                    Text("Dismiss")
                 }
-        })
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showCalendarEvent = true
+                        showCalendarConfirmation = false
+                    }
+                ) {
+                    Text("Yes")
+                }
+            })
     }
 
     if (showDetailsView) {

@@ -153,6 +153,17 @@ eventRoutes.get<void, MyEventResponse>(
         return { event: x.event, type: MyEventType.Attend };
       });
 
+      const bookmarkedEvents = (
+        await prisma.eventBookmark.findMany({
+          where: { user_id: userId },
+          include: { event: true },
+        })
+      ).map((x) => {
+        return { event: x.event, type: MyEventType.Bookmark };
+      });
+
+      myEvents = myEvents.concat(bookmarkedEvents);
+
       const joinedClubs = (
         await prisma.clubMember.findMany({
           where: { user_id: userId, is_approved: true },
@@ -169,16 +180,6 @@ eventRoutes.get<void, MyEventResponse>(
 
       myEvents = myEvents.concat(eventsForJoinedClubs);
 
-      const bookmarkedEvents = (
-        await prisma.eventBookmark.findMany({
-          where: { user_id: userId },
-          include: { event: true },
-        })
-      ).map((x) => {
-        return { event: x.event, type: MyEventType.Bookmark };
-      });
-
-      myEvents = myEvents.concat(bookmarkedEvents);
       myEvents = myEvents.filter(
         (event, index) =>
           index ===
