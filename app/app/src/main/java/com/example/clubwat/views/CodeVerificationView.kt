@@ -1,5 +1,6 @@
 package com.example.clubwat.views
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,7 +26,10 @@ import androidx.compose.material3.TopAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -45,8 +49,10 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.clubwat.R
 import com.example.clubwat.viewmodels.CodeVerificationViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CodeVerificationView(
@@ -58,6 +64,23 @@ fun CodeVerificationView(
     val verificationCode = remember { mutableStateListOf(*Array(codeLength) { "" }) }
     val focusRequesters = List(codeLength) { FocusRequester() } // move focus to a specific composable
     val verificationError by viewModel.verificationError
+    var isButtonEnabled by remember { mutableStateOf(false) }
+    var timeLeft by remember { mutableStateOf(30) }
+    val coroutineScope = rememberCoroutineScope()
+    var countdownStarted by remember { mutableStateOf(false) }
+
+
+    if (!countdownStarted) {
+        coroutineScope.launch {
+            countdownStarted = true
+            while (timeLeft > 0) {
+                delay(1000)
+                timeLeft--
+            }
+            isButtonEnabled = true
+        }
+    }
+
 
     Column(
         modifier = Modifier
@@ -141,10 +164,48 @@ fun CodeVerificationView(
         ) {
             Text("Done")
         }
-        TextButton(onClick = {
-            viewModel.sendVerificationEmail()
-        }) {
+//        Button(
+//            onClick = {
+//                if (isButtonEnabled) {
+//                    viewModel.sendVerificationEmail()
+//                    isButtonEnabled = false
+//                    timeLeft = 30 // Initialize the countdown
+//
+//                    coroutineScope.launch {
+//                        while (timeLeft > 0) {
+//                            delay(1000)
+//                            timeLeft--
+//                        }
+//                        isButtonEnabled = true
+//                    }
+//                }
+//            },
+//            enabled = isButtonEnabled
+//        ) {
+//            Text("Resend code")
+//        }
+        Button(
+            onClick = {
+                viewModel.sendVerificationEmail()
+                isButtonEnabled = false
+                timeLeft = 30
+                coroutineScope.launch {
+                    while (timeLeft > 0) {
+                        delay(1000)
+                        timeLeft--
+                    }
+                    isButtonEnabled = true
+                }
+
+
+            },
+            enabled = isButtonEnabled
+        ) {
             Text("Resend code")
+        }
+        if (!isButtonEnabled) {
+            // Display the countdown
+            Text("Resend code in $timeLeft seconds")
         }
         if (verificationError != null) {
             Text(
