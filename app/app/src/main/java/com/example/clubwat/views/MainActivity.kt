@@ -26,12 +26,14 @@ import com.example.clubwat.ui.theme.ClubWATTheme
 import com.example.clubwat.viewmodels.ClubDetailsViewModel
 import com.example.clubwat.viewmodels.ClubDiscussionViewModel
 import com.example.clubwat.viewmodels.CodeVerificationViewModel
+import com.example.clubwat.viewmodels.EventDetailsViewModel
 import com.example.clubwat.viewmodels.ForYouViewModel
 import com.example.clubwat.viewmodels.InboxViewModel
 import com.example.clubwat.viewmodels.ProfileViewModel
 import com.example.clubwat.viewmodels.factories.ClubDetailsViewModelFactory
 import com.example.clubwat.viewmodels.factories.ClubDiscussionViewModelFactory
 import com.example.clubwat.viewmodels.factories.CodeVerificationViewModelFactory
+import com.example.clubwat.viewmodels.factories.EventDetailsViewModelFactory
 import com.example.clubwat.viewmodels.factories.ForYouViewModelFactory
 import com.example.clubwat.viewmodels.factories.HomeViewModelFactory
 import com.example.clubwat.viewmodels.factories.InboxViewModelFactory
@@ -68,6 +70,8 @@ class MainActivity : ComponentActivity() {
                 val clubDetailsViewModel: ClubDetailsViewModel by viewModels { ClubDetailsViewModelFactory(userRepository) }
                 val clubDiscussionViewModel: ClubDiscussionViewModel by viewModels { ClubDiscussionViewModelFactory(userRepository, discussionRepository) }
                 val inboxViewModel: InboxViewModel by viewModels { InboxViewModelFactory(userRepository) }
+                val eventDetailsViewModel: EventDetailsViewModel by viewModels { EventDetailsViewModelFactory(userRepository) }
+
                 Scaffold(
                     bottomBar = {
                         if (currentUser?.userId != null) {
@@ -119,6 +123,11 @@ class MainActivity : ComponentActivity() {
                             }
                             composable("inbox") {
                                 InboxView(viewModel = inboxViewModel, navController = navController)
+                            }
+                            composable("event/{eventId}") {backStackEntry ->
+                                EventDetailsView(viewModel = eventDetailsViewModel,
+                                    navController = navController,
+                                    eventId = backStackEntry.arguments?.getString("eventId"))
                             }
                         }
                     }

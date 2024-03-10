@@ -48,6 +48,42 @@ router.put("/club", authenticateToken, async (req, res) => {
   res.sendStatus(OK_CODE);
 });
 
+router.put("/event", authenticateToken, async (req, res) => {
+  const sourceUser = req.body.user as User;
+  const destinationUserId = req.body.destinationUserId;
+  const eventId = req.body.eventId;
+
+  if (!destinationUserId || !eventId)
+    return res.sendStatus(INVALID_REQUEST_CODE);
+
+  if (sourceUser === destinationUserId) return res.sendStatus(CONFLICT_CODE);
+
+  const destinationUser = await prisma.user.findFirst({
+    where: { id: destinationUserId },
+  });
+  if (!destinationUser) return res.sendStatus(NOT_FOUND_CODE);
+
+  const sharedEvent = await prisma.event.findFirst({ where: { id: eventId } });
+  if (!sharedEvent) return res.sendStatus(NOT_FOUND_CODE);
+
+  await EmailService.sendEventShareEmail(
+    destinationUser.email,
+    sharedEvent,
+    sourceUser
+  );
+
+  await prisma.notification.create({
+    data: {
+      source_user_id: sourceUser.id,
+      destination_user_id: destinationUserId,
+      event_id: eventId,
+      content: `${sharedEvent.title} was shared with you!`,
+    },
+  });
+
+  res.sendStatus(OK_CODE);
+});
+
 router.delete("/:id", authenticateToken, async (req, res) => {
   const notificationId = parseInt(req.params.id, 10);
   if (!notificationId) return res.sendStatus(INVALID_REQUEST_CODE);

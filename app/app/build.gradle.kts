@@ -69,6 +69,16 @@ android {
         if (getNotifications != null) {
             buildConfigField("String", "GET_NOTIFICATIONS_URL", getNotifications)
         }
+
+        val getEvent = properties["GET_EVENT_URL"]?.toString()
+        if (getEvent != null) {
+            buildConfigField("String", "GET_EVENT_URL", getEvent)
+        }
+
+        val getFriend = properties["GET_FRIEND_URL"]?.toString()
+        if (getFriend != null) {
+            buildConfigField("String", "GET_FRIEND_URL", getFriend)
+        }
     }
 
     buildTypes {

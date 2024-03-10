@@ -1,4 +1,4 @@
-import { Club, User } from "@prisma/client";
+import { Club, Event, User } from "@prisma/client";
 import nodemailer from "nodemailer";
 
 const transporter = nodemailer.createTransport({
@@ -36,6 +36,15 @@ export default class EmailService {
       "Email Verification Code"
     );
     console.log(`CODE SENT TO ${email}: ${code}`);
+  }
+
+  static async sendEventShareEmail(email: string, event: Event, source: User) {
+    await this.sendEmail(
+      email,
+      `${source.first_name} ${source.last_name} shared ${event.title}, with you!\n\nCheck out your inbox on ClubWAT to learn more!`,
+      "Event Shared With You"
+    );
+    console.log(`EVENT SENT TO ${email} : ${event.title}`);
   }
 
   static async sendClubShareEmail(email: string, club: Club, source: User) {

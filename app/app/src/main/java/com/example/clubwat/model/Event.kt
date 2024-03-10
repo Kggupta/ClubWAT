@@ -1,7 +1,6 @@
 package com.example.clubwat.model
 
 import com.google.gson.annotations.SerializedName
-import java.util.Date
 
 data class EventResponse(
     val data: List<EventWrapper>
@@ -17,11 +16,16 @@ data class Event(
     val title: String,
     val description: String,
     @SerializedName("start_date")
-    val startDate: Date,
+    val startDate: String,
     @SerializedName("end_date")
-    var endDate: Date,
+    var endDate: String,
     @SerializedName("club_id")
-    var clubId: Int
+    var clubId: Int,
+    var location: String,
+    @SerializedName("private_flag")
+    var privateFlag: Boolean,
+    var isAttending: Boolean = false,
+    var isBookmarked: Boolean = false
 )
 
 enum class EventType(val value: Int) {

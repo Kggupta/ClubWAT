@@ -1,4 +1,5 @@
 package com.example.clubwat.views
+import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
@@ -40,8 +41,8 @@ import com.example.clubwat.model.Notification
 import com.example.clubwat.ui.theme.LightYellow
 import com.example.clubwat.viewmodels.InboxViewModel
 import java.time.Duration
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
+import java.time.OffsetDateTime
+import kotlin.math.abs
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterialApi::class)
@@ -122,6 +123,7 @@ fun InboxView(
     )
 }
 
+@SuppressLint("SimpleDateFormat")
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NotificationItem(
@@ -130,23 +132,19 @@ fun NotificationItem(
 ) {
     Card(
         onClick = {
-                  if (notification.clubId != null) {
-                      navController.navigate("club/${notification.clubId}")
-                  } else if (notification.eventId != null) {
-                      navController.navigate("event/${notification.eventId}")
-                  }
+            if (notification.clubId != null) {
+              navController.navigate("club/${notification.clubId}")
+            } else if (notification.eventId != null) {
+              navController.navigate("event/${notification.eventId}")
+            }
         },
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
     ) {
         Row(modifier = Modifier.padding(16.dp)) {
-            val apiDateTime = LocalDateTime.parse(
-                notification.createDate,
-                DateTimeFormatter.ISO_DATE_TIME
-            )
-            val now = LocalDateTime.now()
-            val duration = Duration.between(now, apiDateTime)
+            val apiDateTime = OffsetDateTime.parse(notification.createDate)
+            val duration = Duration.between(apiDateTime, OffsetDateTime.now())
 
             val days = duration.toDays()
             val hours = duration.toHours() % 24
@@ -160,9 +158,10 @@ fun NotificationItem(
                         Text(text = "${notification.sourceUser.firstName} ${notification.sourceUser.lastName}".take(50),
                             fontWeight = FontWeight.Bold)
                         Text(text = when {
-                            days > 0 -> "${days}d ago"
-                            hours > 0 -> "${hours}h ago"
-                            else -> "${minutes}m ago"
+                            abs(days) > 0 -> "${abs(days)}d ago"
+                            abs(hours) > 0 -> "${abs(hours)}h ago"
+                            abs(minutes) >= 0 -> "${abs(minutes)}m ago"
+                            else -> "just now"
                         }, fontWeight = FontWeight.Light,
                             modifier=Modifier.align(Alignment.CenterEnd)
                         )

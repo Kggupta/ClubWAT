@@ -30,7 +30,7 @@ fun EventItem(eventWrapper: EventWrapper, navController: NavController) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .clickable { navController.navigate("club/${event.clubId}") }
+            .clickable { navController.navigate("event/${event.id}") }
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(

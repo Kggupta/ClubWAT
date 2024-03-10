@@ -66,13 +66,16 @@ fun ClubDetailsView(
     clubId: String?
 ) {
     LaunchedEffect(Unit) {
+        viewModel.getFriends()
         if (clubId != null) {
             viewModel.getClub(clubId)
         }
     }
 
+    val friends by viewModel.friends.collectAsState()
     val club by viewModel.club.collectAsState()
     var showClubDetailsView by remember { mutableStateOf(false) }
+    var showShareView by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -135,7 +138,7 @@ fun ClubDetailsView(
                             Spacer(modifier = Modifier.width(16.dp))
                         }
                         Button(onClick = {
-                            // To DO
+                            showShareView = true
                         }, colors = ButtonDefaults.buttonColors(
                             containerColor = LightOrange
                         )) {
@@ -176,6 +179,13 @@ fun ClubDetailsView(
             }
         }
     )
+
+    if (showShareView) {
+        ShareDialog(friends = friends, dismissCallback = { showShareView = false }, chooseFriendCallback = {
+            showShareView = false
+            viewModel.shareClub(it)
+        })
+    }
 
     if (showClubDetailsView) {
         AlertDialog(
