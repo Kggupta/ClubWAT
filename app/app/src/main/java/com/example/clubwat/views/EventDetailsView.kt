@@ -82,7 +82,7 @@ fun EventDetailsView(
     var showDetailsView by remember { mutableStateOf(false) }
     var showCalendarEvent by remember { mutableStateOf(false) }
     var showShareView by remember { mutableStateOf(false) }
-
+    var showCalendarConfirmation by remember { mutableStateOf(false) }
     Scaffold(
         topBar = {
             TopAppBar(
@@ -122,7 +122,7 @@ fun EventDetailsView(
                     if (event != null) {
                         Button(onClick = {
                                 if (event?.isAttending == false) {
-                                    showCalendarEvent = true
+                                    showCalendarConfirmation = true
                                 }
                                 viewModel.attendEvent()
                             }, colors = ButtonDefaults.buttonColors(
@@ -199,6 +199,30 @@ fun EventDetailsView(
             Calendar(event = it1)
             showCalendarEvent = false
         }
+    }
+
+    if (showCalendarConfirmation) {
+        AlertDialog(title = {Text("Add To Phone Calendar?")},
+            onDismissRequest = {showCalendarConfirmation = false},
+            buttons = {
+                Row {
+                    TextButton(
+                        onClick = {
+                            showCalendarConfirmation = false
+                        }
+                    ) {
+                        Text("Dismiss")
+                    }
+                    TextButton(
+                        onClick = {
+                            showCalendarEvent = true
+                            showCalendarConfirmation = false
+                        }
+                    ) {
+                        Text("Yes")
+                    }
+                }
+        })
     }
 
     if (showDetailsView) {
