@@ -189,6 +189,14 @@ fun CodeVerificationView(
                 viewModel.sendVerificationEmail()
                 isButtonEnabled = false
                 timeLeft = 30
+                coroutineScope.launch {
+                    while (timeLeft > 0) {
+                        delay(1000)
+                        timeLeft--
+                    }
+                    isButtonEnabled = true
+                }
+
 
             },
             enabled = isButtonEnabled
