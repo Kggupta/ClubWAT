@@ -1,4 +1,5 @@
 package com.example.clubwat.views
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -7,12 +8,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.TextButton
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.MoveDown
 import androidx.compose.material.icons.filled.WorkspacePremium
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -31,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.clubwat.R
+import com.example.clubwat.ui.theme.LightOrange
 import com.example.clubwat.ui.theme.LightYellow
 import com.example.clubwat.viewmodels.ClubUserManagementViewModel
 
@@ -100,28 +104,22 @@ fun ClubUserManagementView(
 
                                 Row (modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End){
                                     if (!member.isApproved) {
-                                        IconButton(onClick = {
+                                        TextButton(onClick = {
                                             viewModel.approveUser(
                                                 member.userId,
                                                 clubId
                                             )
                                         }) {
-                                            Icon(
-                                                imageVector = Icons.Filled.CheckCircle,
-                                                contentDescription = "Approve"
-                                            )
+                                            Text("Approve")
                                         }
                                     } else {
-                                        IconButton(onClick = {
+                                        TextButton(onClick = {
                                             viewModel.removeUser(
                                                 member.userId,
                                                 clubId
                                             )
                                         }) {
-                                            Icon(
-                                                imageVector = Icons.Filled.Cancel,
-                                                contentDescription = "Remove"
-                                            )
+                                            Text("Remove")
                                         }
                                     }
 
@@ -129,28 +127,22 @@ fun ClubUserManagementView(
                                     if (!isClientClubCreator) return@Column
 
                                     if (!member.isClubAdmin) {
-                                        IconButton(onClick = {
+                                        TextButton(onClick = {
                                             viewModel.promoteUser(
                                                 member.userId,
                                                 clubId
                                             )
                                         }) {
-                                            Icon(
-                                                imageVector = Icons.Filled.WorkspacePremium,
-                                                contentDescription = "Promote"
-                                            )
+                                            Text("Promote")
                                         }
                                     } else {
-                                        IconButton(onClick = {
+                                        TextButton(onClick = {
                                             viewModel.demoteUser(
                                                 member.userId,
                                                 clubId
                                             )
                                         }) {
-                                            Icon(
-                                                imageVector = Icons.Filled.MoveDown,
-                                                contentDescription = "Demote"
-                                            )
+                                            Text("Demote")
                                         }
                                     }
                                 }

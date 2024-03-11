@@ -36,20 +36,27 @@ router.get(
 
     if (!club) return res.sendStatus(NOT_FOUND_CODE);
 
-    const memberList = members.map((x) => {
-      return {
-        userId: x.user_id,
-        isApproved: x.is_approved,
-        isClubAdmin: clubAdmins.some((admin) => admin.user_id === x.user_id),
-        isClubCreator: clubAdmins.some(
-          (admin) =>
-            admin.user_id === x.user_id && admin.position === AdminType.Owner
-        ),
-        firstName: x.user.first_name,
-        lastName: x.user.last_name,
-        email: x.user.email,
-      };
-    });
+    const memberList = members
+      .map((x) => {
+        return {
+          userId: x.user_id,
+          isApproved: x.is_approved,
+          isClubAdmin: clubAdmins.some((admin) => admin.user_id === x.user_id),
+          isClubCreator: clubAdmins.some(
+            (admin) =>
+              admin.user_id === x.user_id && admin.position === AdminType.Owner
+          ),
+          firstName: x.user.first_name,
+          lastName: x.user.last_name,
+          email: x.user.email,
+        };
+      })
+      .sort((a, b) => {
+        return (
+          (a.isApproved ? 1 : 0) - (b.isApproved ? 1 : 0) ||
+          b.firstName.localeCompare(a.firstName)
+        );
+      });
 
     res.status(OK_CODE).json({
       memberList,
