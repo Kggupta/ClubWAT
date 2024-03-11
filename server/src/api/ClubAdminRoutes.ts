@@ -101,6 +101,7 @@ router.put(
       data: {
         destination_user_id: targetUserId,
         club_id: clubId,
+        create_date: new Date(),
         content: `Membership approved for ${member.club.title}`,
         source_user_id: req.body.user.id,
       },
