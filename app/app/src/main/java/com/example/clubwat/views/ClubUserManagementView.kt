@@ -95,8 +95,8 @@ fun ClubUserManagementView(
                         Column (Modifier.padding(8.dp)) {
                             Row {
                                 Column {
-                                    Text("${member.firstName} ${member.lastName}", fontWeight = FontWeight.SemiBold)
-                                    Text(member.email)
+                                    Text("${member.firstName} ${member.lastName}".take(50), fontWeight = FontWeight.SemiBold)
+                                    Text(member.email.substringBefore("@"))
                                 }
                                 if (!isClientClubAdmin) return@Row
                                 if (member.isClubCreator) return@Row
@@ -110,7 +110,7 @@ fun ClubUserManagementView(
                                                 clubId
                                             )
                                         }) {
-                                            Text("Approve")
+                                            Text(color = LightOrange, text = "Approve")
                                         }
                                     } else {
                                         TextButton(onClick = {
@@ -119,7 +119,7 @@ fun ClubUserManagementView(
                                                 clubId
                                             )
                                         }) {
-                                            Text("Remove")
+                                            Text(color = LightOrange, text = "Remove")
                                         }
                                     }
 
@@ -133,7 +133,7 @@ fun ClubUserManagementView(
                                                 clubId
                                             )
                                         }) {
-                                            Text("Promote")
+                                            Text(color = LightOrange, text = "Promote")
                                         }
                                     } else {
                                         TextButton(onClick = {
@@ -142,7 +142,7 @@ fun ClubUserManagementView(
                                                 clubId
                                             )
                                         }) {
-                                            Text("Demote")
+                                            Text(color = LightOrange, text = "Demote")
                                         }
                                     }
                                 }
