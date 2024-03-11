@@ -61,7 +61,7 @@ Table ClubAdmin {
   id Int [pk, increment]
   user_id Int [not null]
   club_id Int [not null]
-  position String [not null]
+  position AdminType [not null, default: 'Owner']
   user User [not null]
   club Club [not null]
 }
@@ -159,6 +159,11 @@ Table Friend {
   indexes {
     (source_friend_id, destination_friend_id) [unique]
   }
+}
+
+Enum AdminType {
+  Owner
+  Admin
 }
 
 Ref: ClubCategory.club_id > Club.id

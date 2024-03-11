@@ -70,3 +70,7 @@
 | 03/08/2024 | 3      |        |        |         |         |         | Notifications/Inbox FE                                      |
 | 03/08/2024 | 0.5    |        |        |         |         |         | User friendship initial db setup + get endpoint backend     |
 | 03/09/2024 | 9      |        |        |         |         |         | Event details UI, share club UI, share event UI/API         |
+| 03/10/2024 | 1      |        |        |         |         |         | Club Settings page for club admins                          |
+| 03/10/2024 | 1      |        |        |         |         |         | Rework club admin positions to include admin + owner        |
+| 03/10/2024 | 6      |        |        |         |         |         | Club User management flow for club admins (be, fe, design)  |
+| 03/10/2024 |        | 1      |        |         |         |         | 30 sec wait time for resend button                          |

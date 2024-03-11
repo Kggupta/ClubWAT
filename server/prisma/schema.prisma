@@ -77,9 +77,15 @@ model ClubAdmin {
   id       Int    @id @default(autoincrement())
   user_id  Int
   club_id  Int
-  position String
+
+  position AdminType @default(Owner)
   user     User   @relation(fields: [user_id], references: [id])
   club     Club   @relation(fields: [club_id], references: [id])
+}
+
+enum AdminType {
+  Owner
+  Admin
 }
 
 model ClubDiscussion {
