@@ -1,12 +1,12 @@
 
-GET http://localhost:3000/api/v1/friend/1
-Authorization: Bearer [token]
+GET http://localhost:3000/api/v1/friend
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZW1haWwiOiJhMzNwYXRpbEB1d2F0ZXJsb28uY2EiLCJwYXNzd29yZCI6IiQyYiQxMCR0Q2cvd2x3WTBqRlhZdU02ZXJwMEZPUGt0dnFkemRDZ21CQWhQcjJNNXl1RU8zbVh3bVhoSyIsImZpcnN0X25hbWUiOiJBYmhpbml0IiwibGFzdF9uYW1lIjoiUGF0aWwiLCJhZG1pbl9mbGFnIjpmYWxzZSwiaWF0IjoxNzEwMTc1NzczfQ.d2GCKco2h0HyO5ZCAw3N6klbkLNbkFOx1jF_zb48SSQ
 content-type: application/json
 
 ###
 
-GET http://localhost:3000/api/v1/friend/3/requests
-Authorization: Bearer [token]
+GET http://localhost:3000/api/v1/friend/requests
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZW1haWwiOiJhMzNwYXRpbEB1d2F0ZXJsb28uY2EiLCJwYXNzd29yZCI6IiQyYiQxMCR0Q2cvd2x3WTBqRlhZdU02ZXJwMEZPUGt0dnFkemRDZ21CQWhQcjJNNXl1RU8zbVh3bVhoSyIsImZpcnN0X25hbWUiOiJBYmhpbml0IiwibGFzdF9uYW1lIjoiUGF0aWwiLCJhZG1pbl9mbGFnIjpmYWxzZSwiaWF0IjoxNzEwMTc1NzczfQ.d2GCKco2h0HyO5ZCAw3N6klbkLNbkFOx1jF_zb48SSQ
 content-type: application/json
 
 ###
@@ -16,7 +16,6 @@ Authorization: Bearer [token]
 content-type: application/json
 
 {
-    "source_friend_id": 1,
     "destination_friend_id": 3,
     "is_accepted": false
 }
@@ -28,7 +27,6 @@ Authorization: Bearer [token]
 content-type: application/json
 
 {
-    "source_friend_id": 1,
     "destination_friend_id": 3,
     "is_accepeted": true
 }

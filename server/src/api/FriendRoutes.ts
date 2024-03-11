@@ -10,8 +10,8 @@ import {
 
 const router = express.Router();
 
-router.get("/:id", authenticateToken, async (req, res) => {
-  const userId = Number(req.params.id);
+router.get("/", authenticateToken, async (req, res) => {
+  const userId = req.body.user.id;
 
   if (!userId) {
     return res.sendStatus(INVALID_REQUEST_CODE);
@@ -37,8 +37,8 @@ router.get("/:id", authenticateToken, async (req, res) => {
   }
 });
 
-router.get("/:id/requests", authenticateToken, async (req, res) => {
-  const userId = Number(req.params.id);
+router.get("/requests", authenticateToken, async (req, res) => {
+  const userId = req.body.user.id;
 
   if (!userId) {
     return res.sendStatus(INVALID_REQUEST_CODE);
@@ -65,7 +65,7 @@ router.get("/:id/requests", authenticateToken, async (req, res) => {
 });
 
 router.post("/", authenticateToken, async (req, res) => {
-  const userId = req.body.source_friend_id;
+  const userId = req.body.user.id;
   const friendId = req.body.destination_friend_id;
 
   try {
@@ -82,8 +82,8 @@ router.post("/", authenticateToken, async (req, res) => {
   }
 });
 
-router.put("/", authenticateToken, async (req, res) => {
-  const userId = req.body.source_friend_id;
+router.put("/approve-request", authenticateToken, async (req, res) => {
+  const userId = req.body.user.id;
   const friendId = req.body.destination_friend_id;
 
   if (userId === friendId || !userId || !friendId) {
@@ -115,18 +115,13 @@ router.delete("/:id", authenticateToken, async (req, res) => {
   if (!friendId) {
     return res.sendStatus(INVALID_REQUEST_CODE);
   }
+  await prisma.friend.delete({
+    where: {
+      id: friendId,
+    },
+  });
 
-  try {
-    await prisma.friend.delete({
-      where: {
-        id: friendId,
-      },
-    });
-
-    return res.sendStatus(OK_CODE);
-  } catch (error) {
-    return res.sendStatus(NOT_FOUND_CODE);
-  }
+  return res.sendStatus(OK_CODE);
 });
 
 export default router;
