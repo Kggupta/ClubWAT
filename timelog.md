@@ -80,3 +80,4 @@
 | 03/11/2024 |        |        |        |         | 2       |         | User Friendship Endpoints review + fixes according to UI    |
 | 03/10/2024 |        |        | 0.5    |         |         |         | Reviewed Frontend PRs                                       |
 | 03/10/2024 |        |        | 5.5    |         |         |         | Worked on For You Page                                      |
+| 03/10/2024 | 1      |        |        |         |         |         | Bug fix for notifications, membership fee in club details   |
