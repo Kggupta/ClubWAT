@@ -77,9 +77,15 @@ model ClubAdmin {
   id       Int    @id @default(autoincrement())
   user_id  Int
   club_id  Int
-  position String
+
+  position AdminType @default(Owner)
   user     User   @relation(fields: [user_id], references: [id])
   club     Club   @relation(fields: [club_id], references: [id])
+}
+
+enum AdminType {
+  Owner
+  Admin
 }
 
 model ClubDiscussion {
@@ -161,7 +167,7 @@ model Notification {
   club_id             Int?
   event_id            Int?
   content             String
-  create_date         DateTime @default(dbgenerated("NOW()"))
+  create_date         DateTime
   source_user         User   @relation(name: "source_user", fields: [source_user_id], references: [id])
   destination_user    User   @relation(name: "destination_user", fields: [destination_user_id], references: [id])
   club                Club?  @relation(fields: [club_id], references: [id])
@@ -170,9 +176,12 @@ model Notification {
 
 model Friend {
   id Int @id @default(autoincrement())
-  source_friend_id Int
+  source_friend_id      Int
   destination_friend_id Int
+  is_accepted           Boolean @default(false)
+
   source_friend         User   @relation(name: "source_friend_id", fields: [source_friend_id], references: [id])
-  destination_friend   User   @relation(name: "destination_friend_id", fields: [destination_friend_id], references: [id])
-  
+  destination_friend    User   @relation(name: "destination_friend_id", fields: [destination_friend_id], references: [id]) 
+
+  @@unique([source_friend_id, destination_friend_id])
 }

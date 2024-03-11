@@ -25,7 +25,7 @@
 | 02/06/2024 |        |        |        |         |         | 5       | Setup dev environments locally & built Club APIs            |
 | 02/10/2024 |        |        |        |         |         | 2       | Added ClubAdmin and Club APIs                               |
 | 02/11/2024 |        |        |        |         |         | 4       | Connected Auth to APIs; added some more APIs                |
-| 02/12/2024 |        |        | 4      |         |         |         | Modified Signup & Login page. Created Verification Page.    |
+| 02/12/2024 |        |        | 6      |         |         |         | Modified Signup & Login page. Created Verification Page.    |
 | 02/13/2024 |        |        | 5.5    |         |         |         | Added Navigation, Password Checks, & Factory Classes.       |
 | 02/13/2024 |        | 3      |        |         |         |         | Added login, register & Auth code API                       |
 | 03/13/2024 |        | 5      |        |         |         |         | Created the UI for Login and Register                       |
@@ -67,6 +67,17 @@
 | 03/08/2024 | 4      |        |        |         |         |         | Add event list to club details, update club detail actions  |
 | 03/08/2024 | 3      |        |        |         |         |         | Share backend + notifications, emails                       |
 | 03/08/2024 |        |        | 1      |         |         |         | Reviewed Frontend PRs                                       |
+| 03/08/2024 |        |        | 1      |         |         |         | Organized all tickets for the team in the backlog           |
 | 03/08/2024 | 3      |        |        |         |         |         | Notifications/Inbox FE                                      |
 | 03/08/2024 | 0.5    |        |        |         |         |         | User friendship initial db setup + get endpoint backend     |
 | 03/09/2024 | 9      |        |        |         |         |         | Event details UI, share club UI, share event UI/API         |
+| 03/10/2024 | 1      |        |        |         |         |         | Club Settings page for club admins                          |
+| 03/10/2024 | 1      |        |        |         |         |         | Rework club admin positions to include admin + owner        |
+| 03/10/2024 | 6      |        |        |         |         |         | Club User management flow for club admins (be, fe, design)  |
+| 03/10/2024 |        | 1      |        |         |         |         | 30 sec wait time for resend button                          |
+| 03/06/2024 |        |        |        |         | 5       |         | Component Diagram + D3 Review                               |
+| 03/10/2024 |        |        |        |         | 5       |         | User Friendship Endpoints setup                             |
+| 03/11/2024 |        |        |        |         | 2       |         | User Friendship Endpoints review + fixes according to UI    |
+| 03/10/2024 |        |        | 0.5    |         |         |         | Reviewed Frontend PRs                                       |
+| 03/10/2024 |        |        | 5.5    |         |         |         | Worked on For You Page                                      |
+| 03/10/2024 | 1      |        |        |         |         |         | Bug fix for notifications, membership fee in club details   |

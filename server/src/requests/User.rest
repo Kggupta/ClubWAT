@@ -1,5 +1,5 @@
-GET http://localhost:3000/api/v1/user/12
-Authorization: Bearer [token]
+GET http://localhost:3000/api/v1/user/41
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDEsImVtYWlsIjoiY2x1YndhdC5hZG1pbkB1d2F0ZXJsb28uY2EiLCJwYXNzd29yZCI6IiQyYiQxMiRSY1VxMmtWemZHRDIzTFdCWFlGSFFPeVQuaWZUS0dFSVRXUmpvZ3ZwMUdwTGxrRVVSWUhWMiIsImZpcnN0X25hbWUiOiJBcHBsaWNhdGlvbiIsImxhc3RfbmFtZSI6IkFkbWluIiwiYWRtaW5fZmxhZyI6ZmFsc2UsImlhdCI6MTcxMDEwMjkxMX0.u0FJlBcXtSBo77S3r9hEyAa_Ge0cQzh7nkoNIP0Zoqg
 
 ###
 

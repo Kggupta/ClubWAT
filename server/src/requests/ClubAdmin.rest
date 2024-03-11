@@ -1,21 +1,10 @@
-GET http://localhost:3000/api/v1/club/admin/:id
-Authorization: Bearer [token]
+GET http://localhost:3000/api/v1/club/admin/33/members
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDEsImVtYWlsIjoiY2x1YndhdC5hZG1pbkB1d2F0ZXJsb28uY2EiLCJwYXNzd29yZCI6IiQyYiQxMiRSY1VxMmtWemZHRDIzTFdCWFlGSFFPeVQuaWZUS0dFSVRXUmpvZ3ZwMUdwTGxrRVVSWUhWMiIsImZpcnN0X25hbWUiOiJBcHBsaWNhdGlvbiIsImxhc3RfbmFtZSI6IkFkbWluIiwiYWRtaW5fZmxhZyI6ZmFsc2UsImlhdCI6MTcxMDEwNDMxOH0.RP3t2OnS9Pxdp93VSynS4cWEPR0m4EQu3et5AsHaBrw
 content-type: application/json
 
 ###
 
-POST http://localhost:3000/api/v1/club/admin
-Authorization: Bearer [token]
+DELETE http://localhost:3000/api/v1/club/admin/31/members/48
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDEsImVtYWlsIjoiY2x1YndhdC5hZG1pbkB1d2F0ZXJsb28uY2EiLCJwYXNzd29yZCI6IiQyYiQxMiRSY1VxMmtWemZHRDIzTFdCWFlGSFFPeVQuaWZUS0dFSVRXUmpvZ3ZwMUdwTGxrRVVSWUhWMiIsImZpcnN0X25hbWUiOiJBcHBsaWNhdGlvbiIsImxhc3RfbmFtZSI6IkFkbWluIiwiYWRtaW5fZmxhZyI6ZmFsc2UsImlhdCI6MTcxMDEwNDMxOH0.RP3t2OnS9Pxdp93VSynS4cWEPR0m4EQu3et5AsHaBrw
 content-type: application/json
 
-{
-    "user_id": 2,
-    "club_id": 5,
-    "position": "VP of Technology"
-}
-
-###
-
-DELETE http://localhost:3000/api/v1/club/admin/:clubId/:userId
-Authorization: Bearer [token]
-content-type: application/json

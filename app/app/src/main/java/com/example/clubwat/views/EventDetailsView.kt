@@ -1,4 +1,5 @@
 package com.example.clubwat.views
+import DetailItem
 import android.content.Intent
 import android.os.Build
 import android.provider.CalendarContract
@@ -43,7 +44,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
@@ -250,26 +250,6 @@ fun EventDetailsView(
                 }
             }
         )
-    }
-}
-
-@Composable
-fun DetailItem(text: String?, icon: ImageVector) {
-    Column(modifier = Modifier.padding(16.dp)) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-        ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = "location"
-            )
-            Spacer(modifier = Modifier.padding(8.dp))
-            Text(
-                text = text ?: "",
-                fontWeight = FontWeight.Bold
-            )
-        }
     }
 }
 

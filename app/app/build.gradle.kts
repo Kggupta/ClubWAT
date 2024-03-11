@@ -79,6 +79,15 @@ android {
         if (getFriend != null) {
             buildConfigField("String", "GET_FRIEND_URL", getFriend)
         }
+
+        val clubAdmin = properties["CLUB_ADMIN_URL"]?.toString()
+        if (clubAdmin != null) {
+            buildConfigField("String", "CLUB_ADMIN_URL", clubAdmin)
+        }
+        val getForYouReccs = properties["FOR_YOU_URL"]?.toString()
+        if (getForYouReccs != null) {
+            buildConfigField("String", "FOR_YOU_URL", getForYouReccs)
+        }
     }
 
     buildTypes {
