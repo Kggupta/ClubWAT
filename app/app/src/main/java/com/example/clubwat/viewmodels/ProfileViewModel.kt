@@ -1,12 +1,10 @@
 package com.example.clubwat.viewmodels
 
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.auth0.jwt.JWT
 import com.example.clubwat.BuildConfig
-import com.example.clubwat.model.ClubDetails
 import com.example.clubwat.model.User
 import com.example.clubwat.model.UserProfile
 import com.example.clubwat.repository.UserRepository
@@ -16,7 +14,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
@@ -26,7 +23,7 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
 
     var firstName = userRepository.currentUser.value?.firstName
     var lastName = userRepository.currentUser.value?.lastName
-    var userId = userRepository.currentUser.value?.userId
+    var userId = 0
     var faculty = mutableStateOf("")
     var program = mutableStateOf("")
     var hobbies = mutableStateOf<List<String>>(listOf())
@@ -39,6 +36,21 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
     var passwordError = mutableStateOf<String?>(null)
     var passwordSuccess = mutableStateOf<String?>(null)
     var emailError = mutableStateOf<String?>(null)
+
+    init {
+        getID(userRepository.currentUser.value?.userId.toString())
+    }
+
+    private fun getID(userToken: String) {
+        try {
+            val decodedJWT = JWT.decode(userToken)
+            decodedJWT?.let { jwt ->
+                userId = jwt.getClaim("id").asInt()
+            }
+        } catch (e: Exception) {
+            println(e.printStackTrace())
+        }
+    }
 
     var addFriendMessage = mutableStateOf<String?>(null)
 
@@ -153,13 +165,14 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
     // FRIENDS PROFILE FUNCTIONS
     fun getFriends() {
         viewModelScope.launch(Dispatchers.IO) {
+            println("GET FRIENDS")
             try {
-                val obj = URL(BuildConfig.GET_FRIEND_URL + "/$userId")
+                val obj = URL(BuildConfig.GET_FRIEND_URL + "?id=" + "$userId")
                 val con = obj.openConnection() as HttpURLConnection
                 con.requestMethod = "GET"
                 con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
                 val responseCode = con.responseCode
-                println("Response Code :: $responseCode")
+                println("GET FRIENDS Response Code :: $responseCode")
                 if (responseCode == HttpURLConnection.HTTP_OK) {
                     val response = con.inputStream.bufferedReader().use { it.readText() }
                     val friends: MutableList<UserProfile> = Gson().fromJson(response, object : TypeToken<List<UserProfile>>() {}.type)
@@ -174,8 +187,8 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
     fun getFriendsReq() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-
-                val obj = URL(BuildConfig.GET_FRIEND_URL + "/$userId" + "/request")
+                println("GET FRIEND REQUEST")
+                val obj = URL(BuildConfig.GET_FRIEND_URL + "?requests?id=" + "$userId")
                 val con = obj.openConnection() as HttpURLConnection
                 con.requestMethod = "GET"
                 con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
@@ -191,7 +204,7 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
         }
     }
 
-    fun deleteFriend(id: String) {
+    fun deleteFriend(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val obj = URL(BuildConfig.GET_FRIEND_URL + "/$id")
@@ -212,33 +225,39 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
 
     fun addFriend(email: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            var registered = false
+            println("INSIDE ADD FRIEND")
+            println(email)
+            println("IDDDD")
+            println(userId)
+            var created = false
             try {
                 val url = URL(BuildConfig.GET_FRIEND_URL)
                 (url.openConnection() as HttpURLConnection).apply {
                     requestMethod = "POST"
                     doOutput = true
                     setRequestProperty("Content-Type", "application/json")
+                    setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+
 
                     val requestBody = """
                         {
-                            "id": "$userId",
-                            "email": "$email",
+                            "user": {
+                                "id": $userId
+                            },
+                            "email": "$email"
                         }
                     """.trimIndent()
+
 
                     OutputStreamWriter(outputStream).use { it.write(requestBody) }
 
                     val responseCode = responseCode
-                    registered = responseCode == HttpURLConnection.HTTP_CREATED
+                    created = responseCode == HttpURLConnection.HTTP_OK
                     println(responseCode)
-                    if (registered) {
+                    if (created) {
                         // Handle the response
                         val response = inputStream.bufferedReader().use { it.readText() }
-                        val jsonResponse = JSONObject(response)
-                        val token = jsonResponse.optString("data", null.toString())
-                        println(token)
-                        userRepository.setUserId(token)
+
                         addFriendMessage.value = "Friend request sent!"
                         println("Friend req Successful: $response")
                     } else {
@@ -254,7 +273,7 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
         }
     }
 
-    fun acceptFriend(id: String) {
+    fun acceptFriend(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val url = URL(BuildConfig.GET_NOTIFICATIONS_URL + "club")

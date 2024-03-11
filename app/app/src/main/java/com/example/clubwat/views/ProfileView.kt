@@ -18,8 +18,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -31,6 +29,7 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Inbox
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.PersonAddAlt1
 import androidx.compose.material.icons.filled.Visibility
@@ -60,7 +59,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -71,7 +69,7 @@ import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import androidx.navigation.NavController
 import com.example.clubwat.R
-import com.example.clubwat.model.User
+import com.example.clubwat.model.UserProfile
 import com.example.clubwat.ui.theme.LightYellow
 import com.example.clubwat.viewmodels.ProfileViewModel
 
@@ -105,24 +103,27 @@ fun ProfileView(
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        TopAppBar(
-            title = {
-                Text(
-                    text = "Profile",
-                    modifier = Modifier.fillMaxWidth(),
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp
-                )
-            },
-            actions = {
-                IconButton(onClick = {
-                    viewModel.logout()
-                    navController.navigate("login")
-                }) {
-                    Icon(Icons.AutoMirrored.Filled.Logout, null)
-                }
-            },
-        )
+            androidx.compose.material.TopAppBar(
+                title = {
+                    Text(
+                        text = "Profile",
+                        modifier = Modifier.fillMaxWidth(),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp
+                    )
+                },
+                actions = {
+                    IconButton(onClick = {
+                        viewModel.logout()
+                        navController.navigate("login")
+                    }) {
+                        Icon(Icons.AutoMirrored.Filled.Logout, null)
+                    }
+                },
+                backgroundColor = LightYellow,
+                contentColor = Color.Black
+            )
+
 
 
 
@@ -341,6 +342,11 @@ fun ProfileView(
     }
 
     if (showEditFriends) {
+        viewModel.getFriends()
+        viewModel.getFriendsReq()
+        val friends by viewModel.friends.collectAsState()
+        val reqFriends by viewModel.req_friends.collectAsState()
+
         AlertDialogExample(
             onDismissRequest = { showEditFriends = false },
             onConfirmation = {
@@ -370,6 +376,14 @@ fun ProfileView(
                 ) {
                     Text("Request")
                 }
+
+                if (viewModel.addFriendMessage.value != null) {
+                    Text(
+                        text = viewModel.addFriendMessage.value!!,
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
+
                 Spacer(modifier = Modifier.height(24.dp))
                 Divider()
                 Spacer(modifier = Modifier.height(24.dp))
@@ -388,10 +402,10 @@ fun ProfileView(
                     Text("Email", style = MaterialTheme.typography.bodySmall)
                     Text("Accept Friend", style = MaterialTheme.typography.bodySmall)
                 }
-                viewModel.friends1.forEach { user ->
+                reqFriends.forEach { user ->
                     UserComponent(
                         user = user,
-                        onEditClicked = { user.userId?.let { viewModel.acceptFriend(it) } },
+                        onEditClicked = { user.id.let { viewModel.acceptFriend(it) } },
                         icon = Icons.Default.Check
                     )
                 }
@@ -414,10 +428,10 @@ fun ProfileView(
                     Text("Remove Friend", style = MaterialTheme.typography.bodySmall)
                 }
 
-                viewModel.friends1.forEach { user ->
+                friends.forEach { user ->
                     UserComponent(
                         user = user,
-                        onEditClicked = { user.userId?.let { viewModel.deleteFriend(it) } },
+                        onEditClicked = { user.id.let { viewModel.deleteFriend(it) } },
                         icon = Icons.Default.Delete
                     )
                 }
@@ -446,7 +460,7 @@ fun TextWithIcon(
 }
 
 @Composable
-fun UserComponent(user: User, onEditClicked: () -> Unit, icon: ImageVector) {
+fun UserComponent(user: UserProfile, onEditClicked: () -> Unit, icon: ImageVector) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -454,8 +468,8 @@ fun UserComponent(user: User, onEditClicked: () -> Unit, icon: ImageVector) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(text = user.firstName.value)
-        Text(text = user.email.value)
+        Text(text = user.firstName)
+        Text(text = user.email)
 
         IconButton(onClick = { onEditClicked() }) {
             Icon(icon, contentDescription = "icon")
