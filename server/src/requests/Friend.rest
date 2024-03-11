@@ -1,0 +1,36 @@
+
+GET http://localhost:3000/api/v1/friend
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhMzNwYXRpbEB1d2F0ZXJsb28uY2EiLCJwYXNzd29yZCI6IiQyYiQxMCRKZk9iWGYwZHVsMXVRR1NJUUpHQkZPNkZUaGswVXU4Nlg0bHhQUzFza1FPTlBwR0NyNGN0SyIsImZpcnN0X25hbWUiOiJBYmhpbml0IiwibGFzdF9uYW1lIjoiUGF0aWwiLCJhZG1pbl9mbGFnIjpmYWxzZSwiaWF0IjoxNzEwMTc4MTU2fQ.INkcvMKE04ZbnZf4QAE6K_N9Eju-X1ljg2zqaiCX1M8
+content-type: application/json
+
+###
+
+GET http://localhost:3000/api/v1/friend/requests
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhMzNwYXRpbEB1d2F0ZXJsb28uY2EiLCJwYXNzd29yZCI6IiQyYiQxMCRKZk9iWGYwZHVsMXVRR1NJUUpHQkZPNkZUaGswVXU4Nlg0bHhQUzFza1FPTlBwR0NyNGN0SyIsImZpcnN0X25hbWUiOiJBYmhpbml0IiwibGFzdF9uYW1lIjoiUGF0aWwiLCJhZG1pbl9mbGFnIjpmYWxzZSwiaWF0IjoxNzEwMTc4MTU2fQ.INkcvMKE04ZbnZf4QAE6K_N9Eju-X1ljg2zqaiCX1M8
+content-type: application/json
+
+###
+
+POST http://localhost:3000/api/v1/friend
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhMzNwYXRpbEB1d2F0ZXJsb28uY2EiLCJwYXNzd29yZCI6IiQyYiQxMCRKZk9iWGYwZHVsMXVRR1NJUUpHQkZPNkZUaGswVXU4Nlg0bHhQUzFza1FPTlBwR0NyNGN0SyIsImZpcnN0X25hbWUiOiJBYmhpbml0IiwibGFzdF9uYW1lIjoiUGF0aWwiLCJhZG1pbl9mbGFnIjpmYWxzZSwiaWF0IjoxNzEwMTc4MTU2fQ.INkcvMKE04ZbnZf4QAE6K_N9Eju-X1ljg2zqaiCX1M8
+content-type: application/json
+
+{
+    "email": "abhineet0309@gmail.com"
+}
+
+###
+
+PUT http://localhost:3000/api/v1/friend/approve-request
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhMzNwYXRpbEB1d2F0ZXJsb28uY2EiLCJwYXNzd29yZCI6IiQyYiQxMCRKZk9iWGYwZHVsMXVRR1NJUUpHQkZPNkZUaGswVXU4Nlg0bHhQUzFza1FPTlBwR0NyNGN0SyIsImZpcnN0X25hbWUiOiJBYmhpbml0IiwibGFzdF9uYW1lIjoiUGF0aWwiLCJhZG1pbl9mbGFnIjpmYWxzZSwiaWF0IjoxNzEwMTc4MTU2fQ.INkcvMKE04ZbnZf4QAE6K_N9Eju-X1ljg2zqaiCX1M8
+content-type: application/json
+
+{
+    "friend_id": 2
+}
+
+###
+
+DELETE http://localhost:3000/api/v1/friend/1
+Authorization: Bearer [token]
+content-type: application/json

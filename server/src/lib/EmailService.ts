@@ -55,4 +55,12 @@ export default class EmailService {
     );
     console.log(`CLUB SENT TO ${email} : ${club.title}`);
   }
+
+  static async sendClubJoinRequestApprovedEmail(email: string, club: Club) {
+    await this.sendEmail(
+      email,
+      `Your request to join ${club.title} was accepted!\n\nCheck it out in your 'My Clubs' list on ClubWAT!`,
+      "Club Join Request Approved"
+    );
+  }
 }

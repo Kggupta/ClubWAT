@@ -29,7 +29,7 @@ class InboxViewModel(private val userRepository: UserRepository) : ViewModel() {
                 val responseCode = con.responseCode
                 println("Response Code :: $responseCode")
                 if (responseCode == HttpURLConnection.HTTP_OK) {
-                    _notifications.value = _notifications.value.filter { it.id != id }.toMutableList()
+                    getNotifications()
                 }
             } catch (e: Exception) {
                 e.printStackTrace()

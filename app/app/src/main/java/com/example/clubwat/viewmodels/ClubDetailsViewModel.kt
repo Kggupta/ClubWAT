@@ -49,16 +49,16 @@ class ClubDetailsViewModel(private val userRepository: UserRepository) : ViewMod
                     println("Error Response: $responseCode")
                 } else if (_club.value!!.isJoined || _club.value!!.isJoinPending) {
                     _club.update {
-                        it!!.copy(isJoined = false, isJoinPending = false)
+                        it!!.copy(isJoined = false, isJoinPending = false, isClubAdmin = false)
                     }
                 } else {
                     if (_club.value!!.membershipFee > 0) {
                         _club.update {
-                            it!!.copy(isJoined = false, isJoinPending = true)
+                            it!!.copy(isJoined = false, isJoinPending = true, isClubAdmin = false)
                         }
                     } else {
                         _club.update {
-                            it!!.copy(isJoined = true, isJoinPending = false)
+                            it!!.copy(isJoined = true, isJoinPending = false, isClubAdmin = false)
                         }
                     }
                 }

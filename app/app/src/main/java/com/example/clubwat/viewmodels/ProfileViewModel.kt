@@ -1,16 +1,29 @@
 package com.example.clubwat.viewmodels
 
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.auth0.jwt.JWT
+import com.example.clubwat.BuildConfig
 import com.example.clubwat.model.User
+import com.example.clubwat.model.UserProfile
 import com.example.clubwat.repository.UserRepository
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import org.json.JSONObject
+import java.io.OutputStreamWriter
+import java.net.HttpURLConnection
+import java.net.URL
 
 class ProfileViewModel(private val userRepository: UserRepository) : ViewModel() {
 
     var firstName = userRepository.currentUser.value?.firstName
     var lastName = userRepository.currentUser.value?.lastName
+    var userId = 0
     var faculty = mutableStateOf("")
     var program = mutableStateOf("")
     var hobbies = mutableStateOf<List<String>>(listOf())
@@ -24,7 +37,28 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
     var passwordSuccess = mutableStateOf<String?>(null)
     var emailError = mutableStateOf<String?>(null)
 
+    init {
+        getID(userRepository.currentUser.value?.userId.toString())
+    }
+
+    private fun getID(userToken: String) {
+        try {
+            val decodedJWT = JWT.decode(userToken)
+            decodedJWT?.let { jwt ->
+                userId = jwt.getClaim("id").asInt()
+            }
+        } catch (e: Exception) {
+            println(e.printStackTrace())
+        }
+    }
+
     var addFriendMessage = mutableStateOf<String?>(null)
+
+    private val _friends: MutableStateFlow<MutableList<UserProfile>> = MutableStateFlow(arrayListOf())
+    var friends = _friends.asStateFlow()
+
+    private val _reqFriends: MutableStateFlow<MutableList<UserProfile>> = MutableStateFlow(arrayListOf())
+    var req_friends = _reqFriends.asStateFlow()
 
 
     private var oldPasswordStored = userRepository.currentUser.value?.password
@@ -35,7 +69,7 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
     // friends and friendRequest list
 
     // this is an example of how it will look
-    val friends = listOf(
+    val friends1 = listOf(
         User(
             userId = "1",
             firstName = mutableStateOf("John"),
@@ -57,7 +91,17 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
     // send to api as: (id, name, type)
     //    where 'type' would be the categories you've got already (program, hobbies, ethnicity, religion).
 
+    // INTERESTS PROFILE FUNCTIONS
+    fun getFaculties() {
+    }
 
+    fun getEthicity() {
+
+    }
+
+    fun getReligion() {
+
+    }
 
     fun addHobbies() {
         if (currentInput.value.isNotBlank()) {
@@ -78,6 +122,7 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
     }
 
     fun editInterests(facultyInput: String, ethnicityInput: String, religionInput: String) {
+        // PUT update
         faculty.value = facultyInput
         ethnicity.value = ethnicityInput
         religion.value = religionInput
@@ -85,19 +130,11 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
         println(faculty.value)
     }
 
-
-    fun editProfile() {
-
-    }
-
-    fun editFriends() {
-
-    }
-
     fun getHobbies() {
 
     }
 
+    // PASSWORD PROFILE FUNCTIONS
     private fun isValidPassword(password: String): Boolean {
         val passwordPattern = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=])(?=\\S+$).{8,}$"
         return password.matches(passwordPattern.toRegex())
@@ -111,7 +148,6 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
             passwordError.value = null
             return true
         }
-
     }
 
     fun editPassword() {
@@ -126,36 +162,143 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
 
     }
 
+    // FRIENDS PROFILE FUNCTIONS
+    fun getFriends() {
+        viewModelScope.launch(Dispatchers.IO) {
+            println("GET FRIENDS")
+            try {
+                val obj = URL(BuildConfig.GET_FRIEND_URL + "?id=" + "$userId")
+                val con = obj.openConnection() as HttpURLConnection
+                con.requestMethod = "GET"
+                con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+                val responseCode = con.responseCode
+                println("GET FRIENDS Response Code :: $responseCode")
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    val response = con.inputStream.bufferedReader().use { it.readText() }
+                    val friends: MutableList<UserProfile> = Gson().fromJson(response, object : TypeToken<List<UserProfile>>() {}.type)
+                    _friends.value = friends
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
 
+    fun getFriendsReq() {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                println("GET FRIEND REQUEST")
+                val obj = URL(BuildConfig.GET_FRIEND_URL + "?requests?id=" + "$userId")
+                val con = obj.openConnection() as HttpURLConnection
+                con.requestMethod = "GET"
+                con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+                val responseCode = con.responseCode
+                println("Response Code :: $responseCode")
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    val response = con.inputStream.bufferedReader().use { it.readText() }
+                    _reqFriends.value = Gson().fromJson(response, object : TypeToken<List<UserProfile>>() {}.type)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
 
-    // Handling edit action
-    fun deleteFriend(userID: String) {
+    fun deleteFriend(id: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val obj = URL(BuildConfig.GET_FRIEND_URL + "/$id")
+                val con = obj.openConnection() as HttpURLConnection
+                con.requestMethod = "DELETE"
+                con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
 
+                val responseCode = con.responseCode
+                println("Response Code :: $responseCode")
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    _friends.value = _friends.value.filter { it.id != id.toInt() }.toMutableList()
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 
     fun addFriend(email: String) {
-        // api to add friend
-        addFriendMessage.value = "Friend request sent!"
+        viewModelScope.launch(Dispatchers.IO) {
+            println("INSIDE ADD FRIEND")
+            println(email)
+            println("IDDDD")
+            println(userId)
+            var created = false
+            try {
+                val url = URL(BuildConfig.GET_FRIEND_URL)
+                (url.openConnection() as HttpURLConnection).apply {
+                    requestMethod = "POST"
+                    doOutput = true
+                    setRequestProperty("Content-Type", "application/json")
+                    setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
 
-        addFriendMessage.value = "Error could not send request."
+
+                    val requestBody = """
+                        {
+                            "user": {
+                                "id": $userId
+                            },
+                            "email": "$email"
+                        }
+                    """.trimIndent()
+
+
+                    OutputStreamWriter(outputStream).use { it.write(requestBody) }
+
+                    val responseCode = responseCode
+                    created = responseCode == HttpURLConnection.HTTP_OK
+                    println(responseCode)
+                    if (created) {
+                        // Handle the response
+                        val response = inputStream.bufferedReader().use { it.readText() }
+
+                        addFriendMessage.value = "Friend request sent!"
+                        println("Friend req Successful: $response")
+                    } else {
+                        // Handle error
+                        addFriendMessage.value = "Error could not send request."
+                        val response = errorStream.bufferedReader().use { it.readText() }
+                        println("Request Failed: $response")
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 
-    fun acceptFriend(userID: String) {
+    fun acceptFriend(id: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val url = URL(BuildConfig.GET_NOTIFICATIONS_URL + "club")
+                (url.openConnection() as HttpURLConnection).apply {
+                    requestMethod = "PUT"
+                    doOutput = true
+                    setRequestProperty("Content-Type", "application/json")
+                    setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+
+                    val body = """{"source_friend_id": "$userId",
+                        "destination_friend_id": "$id",
+                        "is_accepeted": "${true}"}"""
+
+                    OutputStreamWriter(outputStream).use { it.write(body) }
+                    val responseCode = responseCode
+                    println("Response: $responseCode")
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
 
     }
 
-    fun getFaculties() {
-        // call api to get all faculties and store in arr
-    }
-
-    fun getEthicity() {
-
-    }
-
-    fun getReligion() {
-
-    }
-
+    // LOGOUT
     fun logout() {
         userRepository.resetUser()
     }
