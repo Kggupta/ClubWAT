@@ -74,3 +74,6 @@
 | 03/10/2024 | 1      |        |        |         |         |         | Rework club admin positions to include admin + owner        |
 | 03/10/2024 | 6      |        |        |         |         |         | Club User management flow for club admins (be, fe, design)  |
 | 03/10/2024 |        | 1      |        |         |         |         | 30 sec wait time for resend button                          |
+| 03/06/2024 |        |        |        |         | 5       |         | Component Diagram + D3 Review                               |
+| 03/10/2024 |        |        |        |         | 5       |         | User Friendship Endpoints setup                             |
+| 03/11/2024 |        |        |        |         | 2       |         | User Friendship Endpoints review + fixes according to UI    |
