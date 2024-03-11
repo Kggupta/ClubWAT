@@ -11,5 +11,5 @@ content-type: application/json
 ###
 
 GET http://localhost:3000/api/v1/event/my-events
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDAsImVtYWlsIjoiYTM3OGd1cHRAdXdhdGVybG9vLmNhIiwicGFzc3dvcmQiOiIkMmIkMTAkc1ppRERLbGNySnVUZGwzT29vdnBqZWpsc0RVaUlwTEdDQmRvLnlXWG9ocE9jSjg1RHVaR0siLCJmaXJzdF9uYW1lIjoiQW5qYWxpIiwibGFzdF9uYW1lIjoiR3VwdGEiLCJhZG1pbl9mbGFnIjpmYWxzZSwiaWF0IjoxNzA5MzM4MjA3fQ.RgxG-LnczIiSYdzTqcSzVQZ5hQfW-t8mQYK0f48yK0Q
+Authorization: Bearer [token]
 content-type: application/json

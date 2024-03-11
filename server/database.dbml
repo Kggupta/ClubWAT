@@ -152,8 +152,13 @@ Table Friend {
   id Int [pk, increment]
   source_friend_id Int [not null]
   destination_friend_id Int [not null]
+  is_accepted Boolean [not null, default: false]
   source_friend User [not null]
   destination_friend User [not null]
+
+  indexes {
+    (source_friend_id, destination_friend_id) [unique]
+  }
 }
 
 Ref: ClubCategory.club_id > Club.id

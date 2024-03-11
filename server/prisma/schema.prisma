@@ -170,9 +170,12 @@ model Notification {
 
 model Friend {
   id Int @id @default(autoincrement())
-  source_friend_id Int
+  source_friend_id      Int
   destination_friend_id Int
+  is_accepted           Boolean @default(false)
+
   source_friend         User   @relation(name: "source_friend_id", fields: [source_friend_id], references: [id])
-  destination_friend   User   @relation(name: "destination_friend_id", fields: [destination_friend_id], references: [id])
-  
+  destination_friend    User   @relation(name: "destination_friend_id", fields: [destination_friend_id], references: [id]) 
+
+  @@unique([source_friend_id, destination_friend_id])
 }

@@ -18,7 +18,7 @@ content-type: application/json
 
 
 GET http://localhost:3000/api/v1/club/:id
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzksImVtYWlsIjoiaW1vaGFuYWtAdXdhdGVybG9vLmNhIiwicGFzc3dvcmQiOiIkMmIkMTAkb1NQdXJCNTJaRHZvbm5TbXZoeDBnZWE2WFVYaWlBbWdsVXJXTWxkc3NRN3E1S1JHV21LamUiLCJmaXJzdF9uYW1lIjoiSXNzaGFuYSIsImxhc3RfbmFtZSI6Ik1vaGFuYWt1bWFyIiwiYWRtaW5fZmxhZyI6ZmFsc2UsImlhdCI6MTcwOTMxNjE4MH0.KmPEEoDRA86-ZQt6TyFph1MUCbxa32ybqXRWZa2YQeM
+Authorization: Bearer [token]
 content-type: application/json
 
 ###
@@ -30,13 +30,13 @@ content-type: application/json
 ###
 
 GET http://localhost:3000/api/v1/club/my-clubs
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzksImVtYWlsIjoiaW1vaGFuYWtAdXdhdGVybG9vLmNhIiwicGFzc3dvcmQiOiIkMmIkMTAkb1NQdXJCNTJaRHZvbm5TbXZoeDBnZWE2WFVYaWlBbWdsVXJXTWxkc3NRN3E1S1JHV21LamUiLCJmaXJzdF9uYW1lIjoiSXNzaGFuYSIsImxhc3RfbmFtZSI6Ik1vaGFuYWt1bWFyIiwiYWRtaW5fZmxhZyI6ZmFsc2UsImlhdCI6MTcwOTMxNjE4MH0.KmPEEoDRA86-ZQt6TyFph1MUCbxa32ybqXRWZa2YQeM
+Authorization: Bearer [token]
 content-type: application/json
 
 ###
 
 GET http://localhost:3000/api/v1/club/for-you
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzksImVtYWlsIjoiaW1vaGFuYWtAdXdhdGVybG9vLmNhIiwicGFzc3dvcmQiOiIkMmIkMTAkb1NQdXJCNTJaRHZvbm5TbXZoeDBnZWE2WFVYaWlBbWdsVXJXTWxkc3NRN3E1S1JHV21LamUiLCJmaXJzdF9uYW1lIjoiSXNzaGFuYSIsImxhc3RfbmFtZSI6Ik1vaGFuYWt1bWFyIiwiYWRtaW5fZmxhZyI6ZmFsc2UsImlhdCI6MTcwOTMxNjE4MH0.KmPEEoDRA86-ZQt6TyFph1MUCbxa32ybqXRWZa2YQeM
+Authorization: Bearer [token]
 content-type: application/json
 
 ###
@@ -55,7 +55,7 @@ content-type: application/json
 
 ###
 
-PUT http://localhost:3000/api/v1/club/:id
+PUT http://localhost:3000/api/v1/club/6
 Authorization: Bearer [token]
 content-type: application/json
 
@@ -64,6 +64,7 @@ content-type: application/json
     "description": "This is a very cool club that you should join.",
     "membership_fee": 10,
     "categories": [1],
+    "position": "VP of Marketing",
     "is_approved": true 
 }
 
