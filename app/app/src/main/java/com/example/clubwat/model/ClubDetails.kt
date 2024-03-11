@@ -10,7 +10,9 @@ data class ClubDetails(
     val events: List<Event>,
     val membershipFee: Float,
     var isJoined: Boolean,
-    var isJoinPending: Boolean
+    var isJoinPending: Boolean,
+    var isClubAdmin: Boolean = false,
+    var isCreator: Boolean = false
 )
 
 data class Category(

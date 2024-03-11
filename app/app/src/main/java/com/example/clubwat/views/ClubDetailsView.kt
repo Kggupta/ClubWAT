@@ -25,6 +25,7 @@ import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.ChatBubble
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -90,6 +91,13 @@ fun ClubDetailsView(
                         )
                     }
                 },
+                actions = {
+                    if (club != null && club!!.isClubAdmin) {
+                        IconButton(onClick = { navController.navigate("club/${clubId}/management") }) {
+                            Icon(Icons.Filled.Settings, null)
+                        }
+                    }
+                },
                 title = {
                     Text(
                         text = viewModel.getClubTitle(),
@@ -114,19 +122,21 @@ fun ClubDetailsView(
                     horizontalArrangement = Arrangement.Center
                 ) {
                     if (club != null) {
-                        Button(onClick = { viewModel.updateClubMembership() }, colors = ButtonDefaults.buttonColors(
-                            containerColor = if (!club!!.isJoinPending && !club!!.isJoined) LightOrange else Color.LightGray,
-                            contentColor = if (!club!!.isJoinPending && !club!!.isJoined) Color.White else Color.Black
-                        )) {
-                            Icon(if (club!!.isJoined) {
-                                Icons.AutoMirrored.Filled.ExitToApp
-                            } else if (club!!.isJoinPending) {
-                                Icons.Filled.Cancel
-                            } else {
-                                Icons.Filled.Add
-                            }, contentDescription = "Leave Club")
+                        if (!club!!.isCreator) {
+                            Button(onClick = { viewModel.updateClubMembership() }, colors = ButtonDefaults.buttonColors(
+                                containerColor = if (!club!!.isJoinPending && !club!!.isJoined) LightOrange else Color.LightGray,
+                                contentColor = if (!club!!.isJoinPending && !club!!.isJoined) Color.White else Color.Black
+                            )) {
+                                Icon(if (club!!.isJoined) {
+                                    Icons.AutoMirrored.Filled.ExitToApp
+                                } else if (club!!.isJoinPending) {
+                                    Icons.Filled.Cancel
+                                } else {
+                                    Icons.Filled.Add
+                                }, contentDescription = "Leave Club")
+                            }
+                            Spacer(modifier = Modifier.width(16.dp))
                         }
-                        Spacer(modifier = Modifier.width(16.dp))
                         if (club!!.isJoined) {
                             Button(onClick = {
                                 navController.navigate("discussion/${clubId}")
