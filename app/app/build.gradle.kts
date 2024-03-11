@@ -84,6 +84,10 @@ android {
         if (clubAdmin != null) {
             buildConfigField("String", "CLUB_ADMIN_URL", clubAdmin)
         }
+        val getForYouReccs = properties["FOR_YOU_URL"]?.toString()
+        if (getForYouReccs != null) {
+            buildConfigField("String", "FOR_YOU_URL", getForYouReccs)
+        }
     }
 
     buildTypes {
