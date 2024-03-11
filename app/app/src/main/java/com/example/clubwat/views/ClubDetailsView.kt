@@ -1,5 +1,6 @@
 package com.example.clubwat.views
 
+import DetailItem
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -23,6 +24,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.AttachMoney
 import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.ChatBubble
 import androidx.compose.material.icons.filled.Settings
@@ -57,6 +59,8 @@ import com.example.clubwat.model.EventWrapper
 import com.example.clubwat.ui.theme.LightOrange
 import com.example.clubwat.ui.theme.LightYellow
 import com.example.clubwat.viewmodels.ClubDetailsViewModel
+import java.text.NumberFormat
+import java.util.Currency
 
 @OptIn(ExperimentalLayoutApi::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -169,6 +173,14 @@ fun ClubDetailsView(
                         showClubDetailsView = true
                 })
                 Spacer(modifier = Modifier.height(16.dp))
+                if (club != null) {
+                    val format = NumberFormat.getNumberInstance()
+                    format.minimumFractionDigits = 2
+                    format.maximumFractionDigits = 2
+                    DetailItem(text = format.format(club!!.membershipFee), icon = Icons.Filled.AttachMoney)
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+
                 Column(modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(fontWeight = FontWeight.Bold,
