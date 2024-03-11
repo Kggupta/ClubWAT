@@ -66,7 +66,20 @@ router.get("/requests", authenticateToken, async (req, res) => {
 
 router.post("/", authenticateToken, async (req, res) => {
   const userId = req.body.user.id;
-  const friendId = req.body.destination_friend_id;
+  const friendEmail = req.body.email;
+  const friend = await prisma.user.findFirst({
+    where: { email: friendEmail },
+  });
+
+  if (!friend) {
+    return res.sendStatus(NOT_FOUND_CODE);
+  }
+
+  if (!userId || !friendEmail || userId === friend.id) {
+    return res.sendStatus(INVALID_REQUEST_CODE);
+  }
+
+  const friendId = friend?.id;
 
   try {
     await prisma.friend.create({
@@ -84,11 +97,19 @@ router.post("/", authenticateToken, async (req, res) => {
 
 router.put("/approve-request", authenticateToken, async (req, res) => {
   const userId = req.body.user.id;
-  const friendId = req.body.destination_friend_id;
+  const friendEmail = req.body.email;
+  const friend = await prisma.user.findFirst({
+    where: { email: friendEmail },
+  });
+  if (!friend) {
+    return res.sendStatus(NOT_FOUND_CODE);
+  }
 
-  if (userId === friendId || !userId || !friendId) {
+  if (!userId || !friendEmail || userId === friend.id) {
     return res.sendStatus(INVALID_REQUEST_CODE);
   }
+
+  const friendId = friend?.id;
 
   try {
     await prisma.friend.update({
@@ -105,7 +126,6 @@ router.put("/approve-request", authenticateToken, async (req, res) => {
   } catch (error) {
     return res.sendStatus(INTERNAL_ERROR_CODE);
   }
-
   return res.sendStatus(OK_CODE);
 });
 
