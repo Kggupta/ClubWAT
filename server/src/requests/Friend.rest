@@ -26,7 +26,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiO
 content-type: application/json
 
 {
-    "email": "abhineet0309@gmail.com"
+    "friend_id": 2
 }
 
 ###
