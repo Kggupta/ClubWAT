@@ -29,7 +29,6 @@ class ForYouViewModel(private val userRepository: UserRepository) : ViewModel() 
                     val response = con.inputStream.bufferedReader().use { it.readText() }
                     val clubsList: List<Club> = Gson().fromJson(response, object : TypeToken<List<Club>>() {}.type)
                     allClubs.value = clubsList
-                    println(clubsList)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
