@@ -167,7 +167,7 @@ model Notification {
   club_id             Int?
   event_id            Int?
   content             String
-  create_date         DateTime @default(dbgenerated("NOW()"))
+  create_date         DateTime
   source_user         User   @relation(name: "source_user", fields: [source_user_id], references: [id])
   destination_user    User   @relation(name: "destination_user", fields: [destination_user_id], references: [id])
   club                Club?  @relation(fields: [club_id], references: [id])
