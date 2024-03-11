@@ -345,7 +345,7 @@ fun ProfileView(
             onDismissRequest = { showEditFriends = false },
             onConfirmation = {
                 showEditFriends = false
-                viewModel.editFriends()
+                // viewModel.editFriends()
             },
             dialogTitle = "Friends",
             dialogText = "",
@@ -388,7 +388,7 @@ fun ProfileView(
                     Text("Email", style = MaterialTheme.typography.bodySmall)
                     Text("Accept Friend", style = MaterialTheme.typography.bodySmall)
                 }
-                viewModel.friends.forEach { user ->
+                viewModel.friends1.forEach { user ->
                     UserComponent(
                         user = user,
                         onEditClicked = { user.userId?.let { viewModel.acceptFriend(it) } },
@@ -414,7 +414,7 @@ fun ProfileView(
                     Text("Remove Friend", style = MaterialTheme.typography.bodySmall)
                 }
 
-                viewModel.friends.forEach { user ->
+                viewModel.friends1.forEach { user ->
                     UserComponent(
                         user = user,
                         onEditClicked = { user.userId?.let { viewModel.deleteFriend(it) } },
@@ -428,8 +428,6 @@ fun ProfileView(
     }
 
 }
-
-
 
 @Composable
 fun TextWithIcon(
