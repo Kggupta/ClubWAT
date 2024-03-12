@@ -219,25 +219,23 @@ router.put<ClubDetails, void>(
       }
 
       const clubId = Number(req.params.id);
-      Promise.all([
-        prisma.club.update({
-          where: {
-            id: clubId,
-          },
-          data: {
-            title: req.body.title,
-            description: req.body.description,
-            membership_fee: req.body.membership_fee,
-            is_approved: req.body.is_approved,
-          },
-        }),
-        (async () => {
-          await prisma.clubCategory.deleteMany({
-            where: { club_id: clubId },
-          });
-          addClubCategories(clubId, req.body.categories);
-        })(),
-      ]);
+
+      await prisma.club.update({
+        where: {
+          id: clubId,
+        },
+        data: {
+          title: req.body.title,
+          description: req.body.description,
+          membership_fee: req.body.membership_fee,
+        },
+      });
+
+      await prisma.clubCategory.deleteMany({
+        where: { club_id: clubId },
+      });
+
+      await addClubCategories(clubId, req.body.categories);
 
       res.sendStatus(OK_CODE);
     } catch (error) {
