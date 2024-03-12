@@ -27,45 +27,15 @@ type UserInterestWithoutId = {
   category_id: number
 }
 
-type UserInterestFiltered = {
-  category_id: number,
-  category: {
-    type: string,
-    name: string
-  }
-}
-
 router.get<void, InterestsResponse>("/all", authenticateToken, async (req, res) => {
   try {
-    const categories = await prisma.category.findMany();
+    const categories: Category[] = await prisma.category.findMany();
 
-    const faculties: Category[] = [];
-    const ethnicities: Category[] = [];
-    const religions: Category[] = [];
-    const programs: Category[] = [];
-    const hobbies: Category[] = [];
-
-    categories.forEach(category => {
-      switch (category.type) {
-        case 'faculty':
-          faculties.push(category);
-          break;
-        case 'ethnicity':
-          ethnicities.push(category);
-          break;
-        case 'religion':
-          religions.push(category);
-          break;
-        case 'program':
-          programs.push(category);
-          break;
-        case 'hobby':
-          hobbies.push(category);
-          break;
-        default:
-          break;
-      }
-    });
+    const faculties: Category[] = categories.filter(category => category.type === 'faculty');
+    const ethnicities: Category[] = categories.filter(category => category.type === 'ethnicity');
+    const religions: Category[] = categories.filter(category => category.type === 'religion');
+    const programs: Category[] = categories.filter(category => category.type === 'program');
+    const hobbies: Category[] = categories.filter(category => category.type === 'hobby');
 
     res.status(OK_CODE).json({faculties, ethnicities, religions, programs, hobbies});
   } catch(error) {
@@ -73,26 +43,20 @@ router.get<void, InterestsResponse>("/all", authenticateToken, async (req, res) 
   }
 });
 
-router.get<void, UserInterestFiltered[]>("/", authenticateToken, async (req, res) => {
+router.get<void, any[]>("/", authenticateToken, async (req, res) => {
   try {
     const userId = req.body.user.id;
 
-    const interests: UserInterestFiltered[] = await prisma.userInterest.findMany({
+    const interests = await prisma.userInterest.findMany({
       where: {
         user_id: userId
       },
-      select: {
-        category_id: true,
-        category: {
-          select: {
-            type: true,
-            name: true
-          }
-        }
+      include: {
+        category: true
       }
     })
-
-    res.status(OK_CODE).json(interests);
+    
+    res.status(OK_CODE).json(interests.map(x => x.category));
   } catch(error) {
     res.sendStatus(INTERNAL_ERROR_CODE);
   }
@@ -145,7 +109,7 @@ router.put<UserInterestsRequest, void>("/", authenticateToken, async (req, res) 
       ]
     })
 
-    res.status(OK_CODE).json();
+    res.status(OK_CODE);
   } catch(error) {
     res.sendStatus(INTERNAL_ERROR_CODE);
   }
