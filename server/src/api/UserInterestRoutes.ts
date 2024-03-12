@@ -2,7 +2,7 @@ import express from "express";
 import { authenticateToken } from "../middlewares";
 import { prisma } from "../lib/prisma";
 import { INTERNAL_ERROR_CODE, INVALID_REQUEST_CODE, OK_CODE } from "../lib/StatusCodes";
-import { Category } from "@prisma/client";
+import { Category, UserInterest } from "@prisma/client";
 
 const router = express.Router();
 
@@ -27,6 +27,10 @@ type UserInterestWithoutId = {
   category_id: number
 }
 
+interface UserInterestExtension extends UserInterest {
+  category: Category
+}
+
 router.get<void, InterestsResponse>("/all", authenticateToken, async (req, res) => {
   try {
     const categories: Category[] = await prisma.category.findMany();
@@ -47,7 +51,7 @@ router.get<void, any[]>("/", authenticateToken, async (req, res) => {
   try {
     const userId = req.body.user.id;
 
-    const interests = await prisma.userInterest.findMany({
+    const interests: UserInterestExtension[] = await prisma.userInterest.findMany({
       where: {
         user_id: userId
       },
