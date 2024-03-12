@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,17 +18,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Logout
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Inbox
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.PersonAddAlt1
 import androidx.compose.material.icons.filled.Visibility
@@ -46,8 +41,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -60,7 +55,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
@@ -69,6 +63,7 @@ import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import androidx.navigation.NavController
 import com.example.clubwat.R
+import com.example.clubwat.model.Interest
 import com.example.clubwat.model.UserProfile
 import com.example.clubwat.ui.theme.LightYellow
 import com.example.clubwat.viewmodels.ProfileViewModel
@@ -83,6 +78,7 @@ fun ProfileView(
     var showEditInterests by remember { mutableStateOf(false) }
     var showEditProfile by remember { mutableStateOf(false) }
     var showEditFriends by remember { mutableStateOf(false) }
+
 
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -174,48 +170,23 @@ fun ProfileView(
 
 
     if (showEditInterests) {
-        val facultyList = listOf<String>("Arts", "Engineering", "Environment", "Health", "Mathematics", "Science")
-        val ethnicityList = listOf<String>("African",
-            "African American",
-            "Asian",
-            "Asian American",
-            "Caucasian",
-            "European",
-            "Hispanic",
-            "Latino",
-            "Middle Eastern",
-            "Native American",
-            "Pacific Islander",
-            "South Asian",
-            "Caribbean",
-            "Mixed Ethnicity",
-            "Other")
-        val religionList = listOf<String>("Buddhism",
-            "Christianity",
-            "Hinduism",
-            "Islam",
-            "Judaism",
-            "Sikhism",
-            "Baha'i",
-            "Confucianism",
-            "Jainism",
-            "Shinto",
-            "Taoism",
-            "Zoroastrianism",
-            "Paganism",
-            "Atheism",
-            "Agnosticism",
-            "Other")
-        var faculty by rememberSaveable { mutableStateOf(0) }
-        var ethnicity by rememberSaveable { mutableStateOf(0) }
-        var religion by rememberSaveable { mutableStateOf(0) }
-        var buttonModifier = Modifier.width(100.dp)
+        viewModel.getUserInterests()
+
+        var faculty by rememberSaveable { mutableStateOf(viewModel.faculty?.id ?: 0) }
+        var ethnicity by rememberSaveable { mutableStateOf(viewModel.ethicity?.id ?: 0) }
+        var religion by rememberSaveable { mutableStateOf(viewModel.religion?.id ?: 0) }
+        var program by rememberSaveable { mutableStateOf(viewModel.program?.id ?: 0) }
+        var hobbies by rememberSaveable { mutableStateOf(viewModel.hobby?.id ?: 0) }
+
+
+        var buttonModifier = Modifier.width(1000.dp)
 
         AlertDialogExample(
             onDismissRequest = { showEditInterests = false },
             onConfirmation = {
                 showEditInterests = false
-                viewModel.editInterests(facultyList[faculty], ethnicityList[ethnicity], religionList[religion])
+                viewModel.editInterests(faculty, ethnicity, religion, program, hobbies)
+
             },
             dialogTitle = "Edit Interests",
             dialogText = "Here you can edit your interests.",
@@ -224,49 +195,34 @@ fun ProfileView(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text("Select Faculty", style = MaterialTheme.typography.titleSmall)
-                DropdownList(itemList = facultyList, selectedIndex = faculty, modifier = buttonModifier, onItemClick = {faculty = it})
+                DropdownList(itemList = viewModel.faculties, selectedIndex = faculty, modifier = buttonModifier) {
+                    faculty = it
+                }
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text("Select Ethnicity", style = MaterialTheme.typography.titleSmall)
-                DropdownList(itemList = ethnicityList, selectedIndex = ethnicity, modifier = buttonModifier, onItemClick = {ethnicity = it})
+                DropdownList(itemList = viewModel.ethnicities, selectedIndex = ethnicity, modifier = buttonModifier) {
+                    ethnicity = it
+                }
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text("Select Religion", style = MaterialTheme.typography.titleSmall)
-                DropdownList(itemList = religionList, selectedIndex = religion, modifier = buttonModifier, onItemClick = {religion = it})
+                DropdownList(itemList = viewModel.religions, selectedIndex = religion, modifier = buttonModifier) {
+                    religion = it
+                }
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text("Select Program", style = MaterialTheme.typography.titleSmall)
-                OutlinedTextField(
-                    value = viewModel.program.value,
-                    onValueChange = { viewModel.program.value = it },
-                    label = { Text("Program") }
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                Text("Enter Hobbies", style = MaterialTheme.typography.titleSmall)
-                OutlinedTextField(
-                    value = viewModel.currentInput.value,
-                    onValueChange = { viewModel.currentInput.value = it },
-                    label = { Text("Hobbies") },
-                    singleLine = true,
-                    keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
-                    keyboardActions = KeyboardActions(onDone = { viewModel.addHobbies() }),
-                    trailingIcon = {
-                        IconButton(onClick = { viewModel.addHobbies() }) {
-                            Icon(Icons.Default.Add, contentDescription = "Add Hobby")
-                        }
-                    }
-                )
-                FlowRow (
-                    modifier = Modifier.padding(8.dp),
-                ) {
-                    viewModel.hobbies.value.forEach { hobby ->
-                        Chips(
-                            text = hobby,
-                            onDismiss = { viewModel.removeHobby(hobby) },
-                            modifier = Modifier.padding(4.dp)
-                        )
-                    }
+                DropdownList(itemList = viewModel.programs, selectedIndex = program, modifier = buttonModifier) {
+                    program = it
                 }
+                // TO DO MAKE THIS MULTI-SELECT
+                Spacer(modifier = Modifier.height(16.dp))
+                Text("Select Hobbies", style = MaterialTheme.typography.titleSmall)
+                DropdownList(itemList = viewModel.hobbies, selectedIndex = hobbies, modifier = buttonModifier) {
+                    hobbies = it
+                }
+                Spacer(modifier = Modifier.height(16.dp))
 
             }
         )
@@ -531,13 +487,19 @@ fun AlertDialogExample(
 
 // taken from https://medium.com/@2018.itsuki/android-kotlin-jetpack-compose-dropdown-selectable-list-menu-b7ad86ba6a5a
 @Composable
-fun DropdownList(itemList: List<String>, selectedIndex: Int, modifier: Modifier, onItemClick: (Int) -> Unit) {
+fun DropdownList(itemList: List<Interest>?, selectedIndex: Int, modifier: Modifier, onItemClick: (Int) -> Unit) {
 
     var showDropdown by rememberSaveable { mutableStateOf(false) }
     val scrollState = rememberScrollState()
+    val selectedIndex = if (selectedIndex != 0) {
+        itemList?.indexOfFirst { it.id == selectedIndex } ?: 0
+    } else {
+        0
+    }
+
 
     Column(
-        modifier = Modifier,
+        modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center) {
 
@@ -545,11 +507,13 @@ fun DropdownList(itemList: List<String>, selectedIndex: Int, modifier: Modifier,
         Box(
             modifier = modifier
                 .background(Color.White)
+                .fillMaxWidth()
                 .clickable { showDropdown = true },
 //            .clickable { showDropdown = !showDropdown },
             contentAlignment = Alignment.Center
         ) {
-            Text(text = itemList[selectedIndex], modifier = Modifier.padding(3.dp))
+            itemList?.get(selectedIndex)
+                ?.let { Text(text = it.name, modifier = Modifier.padding(3.dp)) }
         }
 
         // dropdown list
@@ -572,7 +536,7 @@ fun DropdownList(itemList: List<String>, selectedIndex: Int, modifier: Modifier,
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
 
-                        itemList.onEachIndexed { index, item ->
+                        itemList?.onEachIndexed { index, item ->
                             if (index != 0) {
                                 Divider(thickness = 1.dp, color = Color.LightGray)
                             }
@@ -581,12 +545,12 @@ fun DropdownList(itemList: List<String>, selectedIndex: Int, modifier: Modifier,
                                     .background(Color.White)
                                     .fillMaxWidth()
                                     .clickable {
-                                        onItemClick(index)
+                                        onItemClick(item.id)
                                         showDropdown = !showDropdown
                                     },
                                 contentAlignment = Alignment.Center
                             ) {
-                                Text(text = item,)
+                                Text(text = item.name,)
                             }
                         }
 

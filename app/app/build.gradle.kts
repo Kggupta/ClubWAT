@@ -88,6 +88,11 @@ android {
         if (getForYouReccs != null) {
             buildConfigField("String", "FOR_YOU_URL", getForYouReccs)
         }
+
+        val getInterests = properties["GET_INTERESTS"]?.toString()
+        if (getInterests != null) {
+            buildConfigField("String", "GET_INTERESTS", getInterests)
+        }
     }
 
     buildTypes {

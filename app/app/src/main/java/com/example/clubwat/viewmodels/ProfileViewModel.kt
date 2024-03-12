@@ -1,12 +1,17 @@
 package com.example.clubwat.viewmodels
 
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.auth0.jwt.JWT
 import com.example.clubwat.BuildConfig
 import com.example.clubwat.model.User
 import com.example.clubwat.model.UserProfile
+import com.example.clubwat.model.Interest
+import com.example.clubwat.model.InterestsResponse
+import com.example.clubwat.model.UserInterests
 import com.example.clubwat.repository.UserRepository
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -14,7 +19,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import org.json.JSONObject
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
@@ -24,12 +28,9 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
     var firstName = userRepository.currentUser.value?.firstName
     var lastName = userRepository.currentUser.value?.lastName
     var userId = 0
-    var faculty = mutableStateOf("")
-    var program = mutableStateOf("")
-    var hobbies = mutableStateOf<List<String>>(listOf())
-    var ethnicity = mutableStateOf("")
-    var religion = mutableStateOf("")
-    var currentInput = mutableStateOf("")
+
+
+
     var oldPassword = mutableStateOf("")
     var newPassword = mutableStateOf("")
     var addFriend = mutableStateOf("")
@@ -37,8 +38,23 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
     var passwordSuccess = mutableStateOf<String?>(null)
     var emailError = mutableStateOf<String?>(null)
 
+    var faculty by mutableStateOf<Interest?>(null)
+    var ethicity by mutableStateOf<Interest?>(null)
+    var religion by mutableStateOf<Interest?>(null)
+    var program by mutableStateOf<Interest?>(null)
+    var hobby by mutableStateOf<Interest?>(null)
+
+    var faculties by  mutableStateOf<List<Interest>?>(null)
+    var ethnicities by  mutableStateOf<List<Interest>?>(null)
+    var religions by  mutableStateOf<List<Interest>?>(null)
+    var programs by  mutableStateOf<List<Interest>?>(null)
+    var hobbies by mutableStateOf<List<Interest>?>(null)
+
+
+
     init {
         getID(userRepository.currentUser.value?.userId.toString())
+        getInterests()
     }
 
     private fun getID(userToken: String) {
@@ -60,11 +76,9 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
     private val _reqFriends: MutableStateFlow<MutableList<UserProfile>> = MutableStateFlow(arrayListOf())
     var req_friends = _reqFriends.asStateFlow()
 
-
     private var oldPasswordStored = userRepository.currentUser.value?.password
 
-    var faculties = mutableStateOf<List<String>>(listOf())
-    var religions = mutableStateOf<List<String>>(listOf())
+
 
     // friends and friendRequest list
 
@@ -92,42 +106,103 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
     //    where 'type' would be the categories you've got already (program, hobbies, ethnicity, religion).
 
     // INTERESTS PROFILE FUNCTIONS
-    fun getFaculties() {
-    }
+    fun getInterests() {
+        viewModelScope.launch(Dispatchers.IO) {
+            println("GET INTERESTS")
+            try {
+                val obj = URL(BuildConfig.GET_INTERESTS + "/all")
+                val con = obj.openConnection() as HttpURLConnection
+                con.requestMethod = "GET"
+                con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+                val responseCode = con.responseCode
+                println("GET INTERESTS Response Code :: $responseCode")
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    val response = con.inputStream.bufferedReader().use { it.readText() }
+                    val interestsResponse = Gson().fromJson(response, InterestsResponse::class.java)
 
-    fun getEthicity() {
+                    faculties = interestsResponse.faculties
+                    ethnicities = interestsResponse.ethnicities
+                    religions = interestsResponse.religions
+                    programs = interestsResponse.programs
+                    hobbies = interestsResponse.hobbies
 
-    }
-
-    fun getReligion() {
-
-    }
-
-    fun addHobbies() {
-        if (currentInput.value.isNotBlank()) {
-            hobbies.value = hobbies.value + currentInput.value.trim()
-            currentInput.value = ""
-        }
-        println("ADDED")
-        println(faculty.value)
-    }
-
-    fun removeHobby(program: String) {
-        val index = hobbies.value.indexOf(program)
-        if (index != -1) {
-            hobbies.value = hobbies.value.toMutableList().apply {
-                removeAt(index)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
     }
 
-    fun editInterests(facultyInput: String, ethnicityInput: String, religionInput: String) {
-        // PUT update
-        faculty.value = facultyInput
-        ethnicity.value = ethnicityInput
-        religion.value = religionInput
-        println("faculty input")
-        println(faculty.value)
+    fun getUserInterests() {
+        viewModelScope.launch(Dispatchers.IO) {
+            println("GET USER INTERESTS")
+            try {
+                val obj = URL(BuildConfig.GET_INTERESTS)
+                val con = obj.openConnection() as HttpURLConnection
+                con.requestMethod = "GET"
+                con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+                val responseCode = con.responseCode
+                println("GET INTERESTS Response Code :: $responseCode")
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    val response = con.inputStream.bufferedReader().use { it.readText() }
+                    println(response)
+                    val gson = Gson()
+                    val type = object : TypeToken<List<Interest>>() {}.type
+                    val interestsResponse: List<Interest> = gson.fromJson(response, type)
+
+                    // val interestsResponse = Gson().fromJson(response, UserInterests::class.java)
+                    println("IN HEREEE 1111")
+
+
+                    faculty = interestsResponse.find { it.type == "faculty" }
+                    ethicity = interestsResponse.find { it.type == "ethnicity" }
+                    religion = interestsResponse.find { it.type == "religion" }
+                    program = interestsResponse.find { it.type == "program" }
+                    hobby = interestsResponse.find { it.type == "hobby" }
+                    println("IN HEREEE")
+                    println(faculty!!.id)
+
+
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun editInterests(facultyInput: Int, ethnicityInput: Int, religionInput: Int, programInput: Int, hobbiesInput: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val gson = Gson()
+                println(facultyInput)
+                println("DOWJDOIWJD")
+                println(religionInput)
+                val requestBody = mapOf(
+                    "faculty" to facultyInput,
+                    "ethnicity" to ethnicityInput,
+                    "religion" to religionInput,
+                    "program" to programInput,
+                    "hobbies" to listOf(hobbiesInput)
+                )
+                val requestBodyString = gson.toJson(requestBody)
+
+                val url = URL(BuildConfig.GET_INTERESTS)
+                (url.openConnection() as HttpURLConnection).apply {
+                    requestMethod = "PUT"
+                    doOutput = true
+                    setRequestProperty("Content-Type", "application/json")
+                    setRequestProperty(
+                        "Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString()
+                    )
+
+                    OutputStreamWriter(outputStream).use { it.write(requestBodyString) }
+                    val responseCode = responseCode
+                    println("EDIT INTERESTS Response Code: $responseCode")
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 
     fun getHobbies() {
@@ -167,6 +242,7 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
         viewModelScope.launch(Dispatchers.IO) {
             println("GET FRIENDS")
             try {
+                println(userRepository.currentUser.value?.userId.toString())
                 val obj = URL(BuildConfig.GET_FRIEND_URL + "?id=" + "$userId")
                 val con = obj.openConnection() as HttpURLConnection
                 con.requestMethod = "GET"
