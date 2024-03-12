@@ -55,6 +55,8 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
     init {
         getID(userRepository.currentUser.value?.userId.toString())
         getInterests()
+        getFriendsReq()
+        getFriends()
     }
 
     private fun getID(userToken: String) {
@@ -174,9 +176,6 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val gson = Gson()
-                println(facultyInput)
-                println("DOWJDOIWJD")
-                println(religionInput)
                 val requestBody = mapOf(
                     "faculty" to facultyInput,
                     "ethnicity" to ethnicityInput,
@@ -205,9 +204,6 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
         }
     }
 
-    fun getHobbies() {
-
-    }
 
     // PASSWORD PROFILE FUNCTIONS
     private fun isValidPassword(password: String): Boolean {
@@ -225,13 +221,33 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
         }
     }
 
-    fun editPassword() {
-        if (oldPasswordStored != oldPassword) {
-            passwordError.value += "  The old password is incorrect, unable to make change"
-        }
-        if (validatePasswordAndSignUp(newPassword.value)) {
-            passwordSuccess.value = "Password has been updated"
-            // call api to update password
+    fun editPassword(oldPassword: String, newPassword: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val url = URL("http://10.0.2.2:3000/api/v1/user/change-password")
+                (url.openConnection() as HttpURLConnection).apply {
+                    requestMethod = "PUT"
+                    doOutput = true
+                    setRequestProperty("Content-Type", "application/json")
+                    // Assuming userRepository.currentUser.value?.token contains the correct authorization token
+                    setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+
+                    val jsonBody = """{
+                    "oldPassword": "$oldPassword",
+                    "password": "$newPassword"
+                }"""
+
+                    OutputStreamWriter(outputStream).use { it.write(jsonBody) }
+                    val responseCode = responseCode
+                    if (responseCode == HttpURLConnection.HTTP_OK) {
+                        println("Password successfully updated")
+                    } else {
+                        println("Failed to update password: $responseCode")
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
 
 
@@ -273,25 +289,6 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
                 if (responseCode == HttpURLConnection.HTTP_OK) {
                     val response = con.inputStream.bufferedReader().use { it.readText() }
                     _reqFriends.value = Gson().fromJson(response, object : TypeToken<List<UserProfile>>() {}.type)
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-    }
-
-    fun deleteFriend(id: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val obj = URL(BuildConfig.GET_FRIEND_URL + "/$id")
-                val con = obj.openConnection() as HttpURLConnection
-                con.requestMethod = "DELETE"
-                con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
-
-                val responseCode = con.responseCode
-                println("Response Code :: $responseCode")
-                if (responseCode == HttpURLConnection.HTTP_OK) {
-                    _friends.value = _friends.value.filter { it.id != id.toInt() }.toMutableList()
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -349,24 +346,55 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
         }
     }
 
-    fun acceptFriend(id: Int) {
+    fun deleteFriend(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val url = URL(BuildConfig.GET_NOTIFICATIONS_URL + "club")
+                val obj = URL(BuildConfig.GET_FRIEND_URL + "/$id")
+                val con = obj.openConnection() as HttpURLConnection
+                con.requestMethod = "DELETE"
+                con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+
+                val responseCode = con.responseCode
+                println("Response Code :: $responseCode")
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    _friends.value = _friends.value.filter { it.id != id }.toMutableList()
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun acceptFriend(id: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            println("ACCEPT FRIEND")
+            println(userId)
+            println(id)
+            try {
+                val url = URL(BuildConfig.GET_NOTIFICATIONS_URL + "approve-request")
+                println(url)
                 (url.openConnection() as HttpURLConnection).apply {
                     requestMethod = "PUT"
                     doOutput = true
                     setRequestProperty("Content-Type", "application/json")
                     setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
 
-                    val body = """{"source_friend_id": "$userId",
-                        "destination_friend_id": "$id",
-                        "is_accepeted": "${true}"}"""
+                    val body = """
+                    {
+                        "friend_id": $id
+                    }
+                """.trimIndent()
 
                     OutputStreamWriter(outputStream).use { it.write(body) }
                     val responseCode = responseCode
-                    println("Response: $responseCode")
+                    println("ACCPET FRIEND Response: $responseCode")
+                    if (responseCode == HttpURLConnection.HTTP_OK) {
+                        _reqFriends.value = _reqFriends.value.filter { it.id != id.toInt() }.toMutableList()
+                        println("doneee")
+                    }
                 }
+
+                // getFriends()
             } catch (e: Exception) {
                 e.printStackTrace()
             }

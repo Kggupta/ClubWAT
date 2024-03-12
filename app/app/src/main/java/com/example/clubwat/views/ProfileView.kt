@@ -272,7 +272,7 @@ fun ProfileView(
                 Spacer(modifier = Modifier.height(16.dp))
                 Button(onClick = {
                     viewModel.validatePasswordAndSignUp(viewModel.newPassword.value)
-                    viewModel.editPassword()
+                    viewModel.editPassword(viewModel.newPassword.value, viewModel.oldPassword.value)
                 }) {
                     Text("Update")
                 }
