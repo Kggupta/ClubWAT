@@ -10,6 +10,7 @@ import clubAdminRoutes from "./ClubAdminRoutes";
 import clubDiscussion from "./ClubDiscussionRoutes";
 import shareRoutes from "./ShareRoutes";
 import friendRoutes from "./FriendRoutes";
+import userInterestRoutes from "./UserInterestRoutes";
 
 const router = express.Router();
 
@@ -20,6 +21,7 @@ router.get<{}, MessageResponse>("/", (req, res) => {
 });
 
 router.use("/user", userRoutes);
+router.use("/interest/user", userInterestRoutes);
 router.use("/club", clubRoutes);
 router.use("/club/:id/event", clubEventRoutes);
 router.use("/club/admin", clubAdminRoutes);
