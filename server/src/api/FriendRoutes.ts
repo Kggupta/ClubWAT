@@ -81,6 +81,26 @@ router.post("/", authenticateToken, async (req, res) => {
 
   const friendId = friend?.id;
 
+  // check if a friend relationship already exists
+  const existingFriend = await prisma.friend.findFirst({
+    where: {
+      OR: [
+        {
+          source_friend_id: userId,
+          destination_friend_id: friendId,
+        },
+        {
+          source_friend_id: friendId,
+          destination_friend_id: userId,
+        },
+      ],
+    },
+  });
+
+  if (existingFriend) {
+    return res.sendStatus(INVALID_REQUEST_CODE);
+  }
+
   try {
     await prisma.friend.create({
       data: {
