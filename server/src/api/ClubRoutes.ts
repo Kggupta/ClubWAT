@@ -136,8 +136,7 @@ router.put<ClubDetails, void>(
         !req.body.title ||
         !req.body.description ||
         (!req.body.membership_fee && req.body.membership_fee !== 0) ||
-        !req.body.categories ||
-        !req.body.is_approved
+        !req.body.categories
       ) {
         return res.sendStatus(INVALID_REQUEST_CODE);
       }
@@ -163,6 +162,7 @@ router.put<ClubDetails, void>(
 
       res.sendStatus(OK_CODE);
     } catch (error) {
+      console.log(error);
       res.sendStatus(INTERNAL_ERROR_CODE);
     }
   }
