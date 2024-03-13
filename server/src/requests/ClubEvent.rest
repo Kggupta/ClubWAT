@@ -12,7 +12,9 @@ content-type: application/json
     "title": "Event 2",
     "description": "This is event two",
     "start_date": "2023-04-15T14:00:00Z",
-    "end_date": "2023-04-17T14:00:00Z"
+    "end_date": "2023-04-17T14:00:00Z",
+    "location": "Remote",
+    "private_flag": false
 }
 
 ###
