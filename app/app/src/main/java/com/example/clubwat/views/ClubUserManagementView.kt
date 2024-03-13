@@ -103,7 +103,7 @@ fun ClubUserManagementView(
                                                 clubId
                                             )
                                         }) {
-                                            Text(color = LightOrange, text = "Approve")
+                                            Text(color = LightOrange, text = "Paid")
                                         }
                                     } else {
                                         TextButton(onClick = {

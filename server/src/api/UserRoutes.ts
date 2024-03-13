@@ -106,6 +106,38 @@ type RegistrationResponse = {
   data: string;
 };
 
+router.put("/change-password", authenticateToken, async (req, res) => {
+  const password = req.body.password;
+  const oldPassword = req.body.oldPassword;
+
+  if (!password || !oldPassword) return res.sendStatus(INVALID_REQUEST_CODE);
+
+  const strength = passwordStrength(password);
+
+  if (strength.contains.length !== 4 || strength.length < 8)
+    return res.sendStatus(INVALID_REQUEST_CODE);
+
+  if (
+    !PasswordHashingService.compareHash(req.body.user.password, oldPassword)
+  ) {
+    return res.sendStatus(UNAUTHORIZED_CODE);
+  }
+
+  const updatedUser: User = await prisma.user.update({
+    where: { id: req.body.user.id },
+    data: {
+      password: PasswordHashingService.hashPassword(password),
+    },
+  });
+
+  const token: string = jwt.sign(
+    updatedUser,
+    process.env.ACCESS_TOKEN_SECRET as string
+  );
+
+  res.status(OK_CODE).json({ data: token });
+});
+
 router.post<RegistrationRequest, RegistrationResponse>(
   "/register",
   async (req, res) => {

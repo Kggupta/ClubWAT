@@ -81,3 +81,5 @@
 | 03/10/2024 |        |        | 0.5    |         |         |         | Reviewed Frontend PRs                                       |
 | 03/10/2024 |        |        | 5.5    |         |         |         | Worked on For You Page                                      |
 | 03/10/2024 | 1      |        |        |         |         |         | Bug fix for notifications, membership fee in club details   |
+| 03/12/2024 | 0.5    |        |        |         |         |         | Update the put club + event ep, ui clarifications           |
+| 03/12/2024 | 0.1    |        |        |         |         |         | Added all logic for private event handling in the backend   |
