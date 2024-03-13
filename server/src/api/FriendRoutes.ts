@@ -129,7 +129,10 @@ router.delete("/:id", authenticateToken, async (req, res) => {
   }
   await prisma.friend.delete({
     where: {
-      id: friendId,
+      source_friend_id_destination_friend_id: {
+        source_friend_id: req.body.user.id,
+        destination_friend_id: friendId,
+      },
     },
   });
 
