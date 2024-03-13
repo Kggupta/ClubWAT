@@ -29,6 +29,7 @@ import com.example.clubwat.viewmodels.ClubDiscussionViewModel
 import com.example.clubwat.viewmodels.ClubManagementViewModel
 import com.example.clubwat.viewmodels.ClubUserManagementViewModel
 import com.example.clubwat.viewmodels.CodeVerificationViewModel
+import com.example.clubwat.viewmodels.EditClubDetailsViewModel
 import com.example.clubwat.viewmodels.EventDetailsViewModel
 import com.example.clubwat.viewmodels.ForYouViewModel
 import com.example.clubwat.viewmodels.InboxViewModel
@@ -39,6 +40,7 @@ import com.example.clubwat.viewmodels.factories.ClubDiscussionViewModelFactory
 import com.example.clubwat.viewmodels.factories.ClubManagementViewModelFactory
 import com.example.clubwat.viewmodels.factories.ClubUserManagementViewModelFactory
 import com.example.clubwat.viewmodels.factories.CodeVerificationViewModelFactory
+import com.example.clubwat.viewmodels.factories.EditClubDetailsViewModelFactory
 import com.example.clubwat.viewmodels.factories.EventDetailsViewModelFactory
 import com.example.clubwat.viewmodels.factories.ForYouViewModelFactory
 import com.example.clubwat.viewmodels.factories.HomeViewModelFactory
@@ -80,6 +82,8 @@ class MainActivity : ComponentActivity() {
                 val clubManagementViewModel: ClubManagementViewModel by viewModels { ClubManagementViewModelFactory(userRepository) }
                 val clubUserManagementViewModel: ClubUserManagementViewModel by viewModels { ClubUserManagementViewModelFactory(userRepository) }
                 val addEventViewModel: AddEventViewModel by viewModels { AddEventViewModelFactory(userRepository) }
+                val editClubDetailsViewModel: EditClubDetailsViewModel by viewModels { EditClubDetailsViewModelFactory(userRepository) }
+
 
                 Scaffold(
                     bottomBar = {
@@ -150,6 +154,11 @@ class MainActivity : ComponentActivity() {
                             }
                             composable("club/{clubId}/management/users") {backStackEntry ->
                                 ClubUserManagementView(viewModel = clubUserManagementViewModel,
+                                    navController = navController,
+                                    clubId = backStackEntry.arguments?.getString("clubId"))
+                            }
+                            composable("club/{clubId}/management/clubDetails") {backStackEntry ->
+                                EditClubDetailsView(viewModel = editClubDetailsViewModel,
                                     navController = navController,
                                     clubId = backStackEntry.arguments?.getString("clubId"))
                             }
