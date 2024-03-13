@@ -188,11 +188,6 @@ fun ClubDetailsView(
                     )
                     if (club != null) {
                         LazyColumn {
-                            if (club!!.isClubAdmin) {
-                                item {
-                                    AddEventItem(navController = navController, clubId, club!!.membershipFee > 0)
-                                }
-                            }
                             items(club!!.events) { event ->
                                 Row {
                                     val eventWrapper = EventWrapper(event)

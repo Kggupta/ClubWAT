@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.RadioButton
 import androidx.compose.material.RadioButtonDefaults
 import androidx.compose.material3.OutlinedTextField
@@ -38,7 +40,7 @@ import com.example.clubwat.viewmodels.AddEventViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun AddEventView(viewModel: AddEventViewModel, navController: NavController, clubId: String?, isClubPaid: Boolean?) {
+fun AddEventView(viewModel: AddEventViewModel, navController: NavController, clubId: String?) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -68,8 +70,9 @@ fun AddEventView(viewModel: AddEventViewModel, navController: NavController, clu
                 modifier = Modifier
                     .padding(it)
                     .fillMaxSize()
-                    .padding(14.dp),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
+                    .padding(14.dp)
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(7.dp)
             ) {
                 if (clubId == null) return@Scaffold
                 Column() {
@@ -102,8 +105,7 @@ fun AddEventView(viewModel: AddEventViewModel, navController: NavController, clu
                             focusedIndicatorColor = Orange,
                             unfocusedContainerColor = Color.Transparent,
                             focusedContainerColor = Color.Transparent
-                        ),
-                        singleLine = true
+                        )
                     )
                 }
 
@@ -119,65 +121,49 @@ fun AddEventView(viewModel: AddEventViewModel, navController: NavController, clu
 
                 Column() {
                     Text(text = "Location", style = TextStyle(fontWeight = FontWeight.Bold))
+                    OutlinedTextField(
+                        value = viewModel.location.value,
+                        onValueChange = { newValue: String -> viewModel.location.value = newValue },
+                        modifier = Modifier
+                            .padding(vertical = 8.dp)
+                            .fillMaxWidth(),
+                        colors = TextFieldDefaults.colors(
+                            focusedIndicatorColor = Orange,
+                            unfocusedContainerColor = Color.Transparent,
+                            focusedContainerColor = Color.Transparent
+                        ),
+                        singleLine = true
+                    )
+                }
+
+                Column() {
+                    Text(text = "Privacy", style = TextStyle(fontWeight = FontWeight.Bold))
                     Row(
                         modifier = Modifier.padding(horizontal = 16.dp)
                     ) {
                         RadioButton(
-                            selected = viewModel.location.value == "Remote",
+                            selected = !viewModel.isPrivate.value,
                             colors = RadioButtonDefaults.colors(selectedColor = Orange),
                             onClick = {
-                                viewModel.location.value = "Remote"
+                                viewModel.isPrivate.value = false
                             }
                         )
                         Text(
-                            text = "Remote",
+                            text = "Public",
                             modifier = Modifier.align(Alignment.CenterVertically)
                         )
                         Spacer(modifier = Modifier.padding(20.dp))
                         RadioButton(
-                            selected = viewModel.location.value == "In-person",
+                            selected = viewModel.isPrivate.value,
                             colors = RadioButtonDefaults.colors(selectedColor = Orange),
                             onClick = {
-                                viewModel.location.value = "In-person"
+                                viewModel.isPrivate.value = true
                             }
                         )
                         Text(
-                            text = "In-person",
+                            text = "Private",
                             modifier = Modifier.align(Alignment.CenterVertically)
                         )
-                    }
-                }
-
-                if (isClubPaid == true) {
-                    Column() {
-                        Text(text = "Privacy", style = TextStyle(fontWeight = FontWeight.Bold))
-                        Row(
-                            modifier = Modifier.padding(horizontal = 16.dp)
-                        ) {
-                            RadioButton(
-                                selected = !viewModel.isPrivate.value,
-                                colors = RadioButtonDefaults.colors(selectedColor = Orange),
-                                onClick = {
-                                    viewModel.isPrivate.value = false
-                                }
-                            )
-                            Text(
-                                text = "Public",
-                                modifier = Modifier.align(Alignment.CenterVertically)
-                            )
-                            Spacer(modifier = Modifier.padding(20.dp))
-                            RadioButton(
-                                selected = viewModel.isPrivate.value,
-                                colors = RadioButtonDefaults.colors(selectedColor = Orange),
-                                onClick = {
-                                    viewModel.isPrivate.value = true
-                                }
-                            )
-                            Text(
-                                text = "Private",
-                                modifier = Modifier.align(Alignment.CenterVertically)
-                            )
-                        }
                     }
                 }
 

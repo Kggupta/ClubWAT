@@ -138,11 +138,10 @@ class MainActivity : ComponentActivity() {
                                     navController = navController,
                                     eventId = backStackEntry.arguments?.getString("eventId"))
                             }
-                            composable("event/{clubId}/{isClubPaid}/new") {backStackEntry ->
+                            composable("club/{clubId}/event/new") {backStackEntry ->
                                 AddEventView(viewModel = addEventViewModel,
                                     navController = navController,
-                                    clubId = backStackEntry.arguments?.getString("clubId"),
-                                    isClubPaid = backStackEntry.arguments?.getString("isClubPaid").toBoolean())
+                                    clubId = backStackEntry.arguments?.getString("clubId"))
                             }
                             composable("club/{clubId}/management") {backStackEntry ->
                                 ClubManagementView(viewModel = clubManagementViewModel,

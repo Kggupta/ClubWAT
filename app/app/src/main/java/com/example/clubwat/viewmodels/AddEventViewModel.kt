@@ -23,7 +23,7 @@ class AddEventViewModel(private val userRepository: UserRepository) : ViewModel(
     var errorMessage = mutableStateOf("")
     var startDateTime = mutableStateOf(Calendar.getInstance())
     var endDateTime = mutableStateOf(Calendar.getInstance())
-    var location = mutableStateOf("Remote")
+    var location = mutableStateOf("")
     var isPrivate = mutableStateOf(false)
 
     private fun formatDateTime(calendar: Calendar): String {
@@ -33,9 +33,9 @@ class AddEventViewModel(private val userRepository: UserRepository) : ViewModel(
     }
 
     private fun checkIsFormValid(): Pair<Boolean, String> {
-        if (title.value.isBlank() || description.value.isBlank()) {
+        if (title.value.isBlank() || description.value.isBlank() || location.value.isBlank()) {
             return Pair(false, "Input is missing!")
-        } else if (startDateTime.value >= endDateTime.value) {
+        } else if (!(startDateTime.value.time.before(endDateTime.value.time))) {
             return Pair(false, "Start date must be earlier than end date!")
         }
         return Pair(true, "")
@@ -45,7 +45,7 @@ class AddEventViewModel(private val userRepository: UserRepository) : ViewModel(
         title.value = ""
         description.value = ""
         errorMessage.value = ""
-        location.value = "Remote"
+        location.value = ""
         isPrivate.value = false
         startDateTime.value = Calendar.getInstance()
         endDateTime.value = Calendar.getInstance()
@@ -71,7 +71,7 @@ class AddEventViewModel(private val userRepository: UserRepository) : ViewModel(
                     val jsonObject = JSONObject().apply {
                         put("title", title.value.trim())
                         put("description", description.value.trim())
-                        put("location", location.value)
+                        put("location", location.value.trim())
                         put("private_flag", isPrivate.value)
                         put("start_date", formatDateTime(startDateTime.value))
                         put("end_date", formatDateTime(endDateTime.value))
