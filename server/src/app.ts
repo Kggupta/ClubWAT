@@ -10,6 +10,10 @@ require("dotenv").config();
 
 const app = express();
 
+if (!process.env.WUSA_CLUB_ID) {
+  throw new Error("WUSA_CLUB_ID .env is missing");
+}
+
 app.use(morgan("dev"));
 app.use(helmet());
 app.use(cors());

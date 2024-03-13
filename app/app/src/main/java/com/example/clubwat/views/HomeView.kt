@@ -1,7 +1,10 @@
 package com.example.clubwat.views
 import HomeViewModel
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,6 +13,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.Tab
 import androidx.compose.material.TabRow
 import androidx.compose.material.TabRowDefaults
@@ -17,17 +22,20 @@ import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Inbox
+import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -36,10 +44,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.clubwat.R
+import com.example.clubwat.model.EventWrapper
+import com.example.clubwat.ui.theme.LightOrange
 import com.example.clubwat.ui.theme.LightYellow
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,6 +59,13 @@ fun HomeView(
     viewModel: HomeViewModel,
     navController: NavController
 ) {
+    LaunchedEffect(key1 = true) {
+        viewModel.getSpotlight()
+    }
+
+    val spotlight by viewModel.spotlight.collectAsState()
+
+    var showClubFairView by remember { mutableStateOf(true) }
     var selectedTabIndex by remember { mutableIntStateOf(0) }
 
     Scaffold(
@@ -104,6 +122,43 @@ fun HomeView(
             }
         }
     )
+
+    if (spotlight != null && showClubFairView) {
+        AlertDialog(
+            modifier= Modifier
+                .fillMaxWidth(),
+            title = {
+                Text(modifier= Modifier.fillMaxWidth(), fontWeight = FontWeight.Bold, text = "Club Fair Alert!", textAlign = TextAlign.Center)
+                Spacer(Modifier.height(8.dp))
+            },
+            text = {
+                Column {
+                    EventItem(eventWrapper = EventWrapper(spotlight!!), navController = navController)
+                }
+            },
+            onDismissRequest = {
+                showClubFairView = false
+            },
+            confirmButton = {},
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        showClubFairView = false
+                    }
+                ) {
+                    Text("Close")
+                }
+                TextButton(
+                    onClick = {
+                        showClubFairView = false
+                        viewModel.dismissSpotlight()
+                    }
+                ) {
+                    Text("Don't Show Again")
+                }
+            }
+        )
+    }
 }
 
 @Composable

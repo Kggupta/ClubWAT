@@ -1,0 +1,17 @@
+GET http://localhost:3000/api/v1/spotlight
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDEsImVtYWlsIjoiY2x1YndhdC5hZG1pbkB1d2F0ZXJsb28uY2EiLCJwYXNzd29yZCI6IiQyYiQxMiRSY1VxMmtWemZHRDIzTFdCWFlGSFFPeVQuaWZUS0dFSVRXUmpvZ3ZwMUdwTGxrRVVSWUhWMiIsImZpcnN0X25hbWUiOiJBcHBsaWNhdGlvbiIsImxhc3RfbmFtZSI6IkFkbWluIiwiYWRtaW5fZmxhZyI6ZmFsc2UsImlhdCI6MTcxMDM3MzA0M30.j94566pleyNJV3EUj21mXlcgemN9GBjrkRK87iKuUQg
+
+###
+
+POST http://localhost:3000/api/v1/spotlight
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDEsImVtYWlsIjoiY2x1YndhdC5hZG1pbkB1d2F0ZXJsb28uY2EiLCJwYXNzd29yZCI6IiQyYiQxMiRSY1VxMmtWemZHRDIzTFdCWFlGSFFPeVQuaWZUS0dFSVRXUmpvZ3ZwMUdwTGxrRVVSWUhWMiIsImZpcnN0X25hbWUiOiJBcHBsaWNhdGlvbiIsImxhc3RfbmFtZSI6IkFkbWluIiwiYWRtaW5fZmxhZyI6ZmFsc2UsImlhdCI6MTcxMDM3MzA0M30.j94566pleyNJV3EUj21mXlcgemN9GBjrkRK87iKuUQg
+
+{
+	"title": "WUSA Club Fair",
+	"description": "Come see all the clubs WUSA has to offer in SLC!",
+	"startDate": "2024-05-15T14:00:00Z",
+	"endDate":"2024-05-15T16:00:00Z",
+	"location": "SLC Black & Gold Room"
+}

@@ -10,7 +10,7 @@ import {
   OK_CODE,
   UNAUTHORIZED_CODE,
 } from "./lib/StatusCodes";
-import { ClubAdmin } from "@prisma/client";
+import { ClubAdmin, User } from "@prisma/client";
 
 export function resourceNotFound(
   req: Request,
@@ -73,6 +73,24 @@ export async function verifyIsClubAdmin(
     });
 
     if (!isAdmin) return res.sendStatus(UNAUTHORIZED_CODE);
+  }
+
+  next();
+}
+
+export async function verifyIsSuperAdmin(
+  req: Request | any,
+  res: Response,
+  next: NextFunction
+) {
+  if (process.env.ENVIRONMENT === "PRODUCTION") {
+    const user: User | null = await prisma.user.findFirst({
+      where: {
+        id: req.body.user.id,
+      },
+    });
+
+    if (!user || !user.admin_flag) return res.sendStatus(UNAUTHORIZED_CODE);
   }
 
   next();

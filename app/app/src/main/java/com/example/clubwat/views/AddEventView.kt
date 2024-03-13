@@ -44,8 +44,7 @@ fun AddEventView(viewModel: AddEventViewModel, navController: NavController, clu
     Scaffold(
         topBar = {
             TopAppBar(
-                navigationIcon =
-                {
+                navigationIcon = {
                     IconButton(
                         onClick = { navController.popBackStack() }) {
                         Icon(
@@ -171,7 +170,7 @@ fun AddEventView(viewModel: AddEventViewModel, navController: NavController, clu
                     onClick = {
                         viewModel.addEvent(clubId) { isAdded ->
                             if (isAdded) {
-                                navController.navigate("club/${clubId}")
+                                navController.popBackStack()
                             }
                         }
                     },
