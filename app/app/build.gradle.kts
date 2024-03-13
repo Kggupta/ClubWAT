@@ -88,6 +88,10 @@ android {
         if (getForYouReccs != null) {
             buildConfigField("String", "FOR_YOU_URL", getForYouReccs)
         }
+        val addEvent = properties["ADD_EVENT_URL"]?.toString()
+        if (addEvent != null) {
+            buildConfigField("String", "ADD_EVENT_URL", addEvent)
+        }
     }
 
     buildTypes {

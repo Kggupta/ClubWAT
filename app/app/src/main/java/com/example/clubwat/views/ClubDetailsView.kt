@@ -60,7 +60,6 @@ import com.example.clubwat.ui.theme.LightOrange
 import com.example.clubwat.ui.theme.LightYellow
 import com.example.clubwat.viewmodels.ClubDetailsViewModel
 import java.text.NumberFormat
-import java.util.Currency
 
 @OptIn(ExperimentalLayoutApi::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -189,6 +188,11 @@ fun ClubDetailsView(
                     )
                     if (club != null) {
                         LazyColumn {
+                            if (club!!.isClubAdmin) {
+                                item {
+                                    AddEventItem(navController = navController, clubId, club!!.membershipFee > 0)
+                                }
+                            }
                             items(club!!.events) { event ->
                                 Row {
                                     val eventWrapper = EventWrapper(event)
