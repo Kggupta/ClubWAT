@@ -8,6 +8,7 @@ import com.example.clubwat.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.json.JSONObject
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
@@ -67,13 +68,15 @@ class AddEventViewModel(private val userRepository: UserRepository) : ViewModel(
                     setRequestProperty("Content-Type", "application/json")
                     setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value!!.userId )
 
-                    val body = ("""{"title": "${title.value.trim()}",""" +
-                            """ "description": "${description.value.trim()}",""" +
-                            """ "location": "${location.value}",""" +
-                            """ "private_flag": ${isPrivate.value},""" +
-                            """ "start_date": "${formatDateTime(startDateTime.value)}",""" +
-                            """ "end_date": "${formatDateTime(endDateTime.value)}"}""").trimMargin()
-                    OutputStreamWriter(outputStream).use { it.write(body) }
+                    val jsonObject = JSONObject().apply {
+                        put("title", title.value.trim())
+                        put("description", description.value.trim())
+                        put("location", location.value)
+                        put("private_flag", isPrivate.value)
+                        put("start_date", formatDateTime(startDateTime.value))
+                        put("end_date", formatDateTime(endDateTime.value))
+                    }
+                    OutputStreamWriter(outputStream).use { it.write(jsonObject.toString()) }
 
                     val responseCode = responseCode
                     isEventAdded = responseCode == HttpURLConnection.HTTP_CREATED
