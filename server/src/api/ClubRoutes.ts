@@ -136,7 +136,8 @@ router.put<ClubDetails, void>(
         !req.body.title ||
         !req.body.description ||
         (!req.body.membership_fee && req.body.membership_fee !== 0) ||
-        !req.body.categories
+        !req.body.categories ||
+        req.body.categories.length() > 5
       ) {
         return res.sendStatus(INVALID_REQUEST_CODE);
       }
