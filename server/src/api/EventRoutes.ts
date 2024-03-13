@@ -11,15 +11,6 @@ import { Event } from "@prisma/client";
 
 const eventRoutes = express.Router({ mergeParams: true });
 
-eventRoutes.get<void, Event[]>("/", authenticateToken, async (req, res) => {
-  try {
-    const events: Event[] = await prisma.event.findMany();
-    res.status(OK_CODE).json(events);
-  } catch (error) {
-    res.sendStatus(INTERNAL_ERROR_CODE);
-  }
-});
-
 eventRoutes.get<void, Event[]>(
   "/search",
   authenticateToken,
@@ -27,11 +18,18 @@ eventRoutes.get<void, Event[]>(
     try {
       const query: string = (req.query.searchQuery ?? "") as string;
 
-      const events: Event[] = await prisma.event.findMany({
+      let events: Event[] = await prisma.event.findMany({
         where: {
           title: { startsWith: "%" + query, mode: "insensitive" },
         },
         orderBy: { title: "asc" },
+      });
+
+      const userClubs = await prisma.clubMember.findMany({
+        where: {
+          user_id: req.body.user.id,
+          is_approved: true,
+        },
       });
 
       res.status(OK_CODE).json(events);
@@ -184,6 +182,12 @@ eventRoutes.get<void, MyEventResponse>(
         (event, index) =>
           index ===
           myEvents.findIndex((other) => event.event.id === other.event.id)
+      );
+
+      myEvents = myEvents.filter(
+        (x) =>
+          !x.event.private_flag ||
+          (x.event.private_flag && joinedClubs.includes(x.event.club_id))
       );
 
       res.status(OK_CODE).json({ data: myEvents });

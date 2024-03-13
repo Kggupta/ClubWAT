@@ -88,10 +88,10 @@ clubEventRoutes.put<EventsQuery, Event>(
   async (req, res) => {
     try {
       const eventId = Number(req.params.eventId);
-      const { title, description, start_date, end_date } = req.body;
+      const { title, description, start_date, end_date, location } = req.body;
       const updatedEvent = await prisma.event.update({
         where: { id: eventId },
-        data: { title, description, start_date, end_date },
+        data: { title, description, start_date, end_date, location },
       });
       res.status(OK_CODE).json(updatedEvent);
     } catch (error) {
