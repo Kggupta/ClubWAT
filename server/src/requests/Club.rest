@@ -41,7 +41,7 @@ content-type: application/json
 ###
 
 POST http://localhost:3000/api/v1/club
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDEsImVtYWlsIjoiY2x1YndhdC5hZG1pbkB1d2F0ZXJsb28uY2EiLCJwYXNzd29yZCI6IiQyYiQxMiRSY1VxMmtWemZHRDIzTFdCWFlGSFFPeVQuaWZUS0dFSVRXUmpvZ3ZwMUdwTGxrRVVSWUhWMiIsImZpcnN0X25hbWUiOiJBcHBsaWNhdGlvbiIsImxhc3RfbmFtZSI6IkFkbWluIiwiYWRtaW5fZmxhZyI6ZmFsc2UsImlhdCI6MTcxMDM2MDEyOH0.TBc96WCxc1IIcnjJUkgxIs5MiPjJ0kh5iSi1UErg-ns
+Authorization: Bearer [token]
 content-type: application/json
 
 {
@@ -55,7 +55,7 @@ content-type: application/json
 ###
 
 PUT http://localhost:3000/api/v1/club/31
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDEsImVtYWlsIjoiY2x1YndhdC5hZG1pbkB1d2F0ZXJsb28uY2EiLCJwYXNzd29yZCI6IiQyYiQxMiRSY1VxMmtWemZHRDIzTFdCWFlGSFFPeVQuaWZUS0dFSVRXUmpvZ3ZwMUdwTGxrRVVSWUhWMiIsImZpcnN0X25hbWUiOiJBcHBsaWNhdGlvbiIsImxhc3RfbmFtZSI6IkFkbWluIiwiYWRtaW5fZmxhZyI6ZmFsc2UsImlhdCI6MTcxMDM2MDEyOH0.TBc96WCxc1IIcnjJUkgxIs5MiPjJ0kh5iSi1UErg-ns
+Authorization: Bearer [token]
 content-type: application/json
 
 {"title":"Computer Science Club","description":"We frequently host events related to computing, including talks, tutorials and demonstrations.","membership_fee":3,"categories":[6,7,10,11,13]}
