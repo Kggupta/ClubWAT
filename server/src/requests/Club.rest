@@ -45,27 +45,20 @@ Authorization: Bearer [token]
 content-type: application/json
 
 {
-    "title": "UW HipHop",
-    "description": "This is a cool club that you should join.",
-    "membership_fee": 12,
-    "categories": [1],
-    "position": "VP of Marketing"
+    "title": "WUSA",
+    "description": "Waterloo Undergraduate Student Association",
+    "membership_fee": 0,
+    "categories": [],
+    "position": "X"
 }
 
 ###
 
-PUT http://localhost:3000/api/v1/club/6
+PUT http://localhost:3000/api/v1/club/31
 Authorization: Bearer [token]
 content-type: application/json
 
-{
-    "title": "UW Dhamaka",
-    "description": "This is a very cool club that you should join.",
-    "membership_fee": 10,
-    "categories": [1],
-    "position": "VP of Marketing",
-    "is_approved": true 
-}
+{"title":"Computer Science Club","description":"We frequently host events related to computing, including talks, tutorials and demonstrations.","membership_fee":3,"categories":[6,7,10,11,13]}
 
 ###
 

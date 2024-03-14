@@ -32,7 +32,15 @@ eventRoutes.get<void, Event[]>(
         },
       });
 
-      res.status(OK_CODE).json(events);
+      res
+        .status(OK_CODE)
+        .json(
+          events.filter(
+            (x) =>
+              !x.private_flag ||
+              userClubs.some((club) => club.club_id === x.club_id)
+          )
+        );
     } catch (error) {
       res.sendStatus(INTERNAL_ERROR_CODE);
     }

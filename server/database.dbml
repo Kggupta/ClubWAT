@@ -20,6 +20,7 @@ Table User {
   notifications Notification [not null]
   source_notifications Notification [not null]
   interests UserInterest [not null]
+  userReadSpotlights UserReadSpotlight [not null]
 }
 
 Table UserEmailVerification {
@@ -86,6 +87,8 @@ Table Event {
   club_id Int [not null]
   location String [not null, default: 'Remote']
   private_flag Boolean [not null, default: false]
+  spotlight_flag Boolean [not null, default: false]
+  userReadSpotlights UserReadSpotlight [not null]
   club Club [not null]
   event_attendance EventAttendance [not null]
   event_bookmark EventBookmark [not null]
@@ -163,53 +166,65 @@ Table Friend {
   }
 }
 
+Table UserReadSpotlight {
+  id Int [pk, increment]
+  user_id Int [not null]
+  event_id Int [not null]
+  event Event [not null]
+  user User [not null]
+}
+
 Enum AdminType {
   Owner
   Admin
 }
 
-Ref: ClubCategory.category_id > Category.id
+Ref: ClubCategory.category_id > Category.id [delete: Cascade]
 
-Ref: ClubCategory.club_id > Club.id
+Ref: ClubCategory.club_id > Club.id [delete: Cascade]
 
-Ref: ClubAdmin.club_id > Club.id
+Ref: ClubAdmin.club_id > Club.id [delete: Cascade]
 
 Ref: ClubAdmin.user_id > User.id [delete: Cascade]
 
-Ref: ClubDiscussion.club_id > Club.id
+Ref: ClubDiscussion.club_id > Club.id [delete: Cascade]
 
 Ref: ClubDiscussion.user_id > User.id [delete: Cascade]
 
-Ref: Event.club_id > Club.id
+Ref: Event.club_id > Club.id [delete: Cascade]
 
-Ref: EventAttendance.event_id > Event.id
+Ref: EventAttendance.event_id > Event.id [delete: Cascade]
 
 Ref: EventAttendance.user_id > User.id [delete: Cascade]
 
-Ref: EventBookmark.event_id > Event.id
+Ref: EventBookmark.event_id > Event.id [delete: Cascade]
 
 Ref: EventBookmark.user_id > User.id [delete: Cascade]
 
-Ref: EventFeedback.event_id > Event.id
+Ref: EventFeedback.event_id > Event.id [delete: Cascade]
 
 Ref: EventFeedback.user_email > User.email [delete: Cascade]
 
-Ref: ClubMember.club_id > Club.id
+Ref: ClubMember.club_id > Club.id [delete: Cascade]
 
 Ref: ClubMember.user_id > User.id [delete: Cascade]
 
-Ref: UserInterest.category_id > Category.id
+Ref: UserInterest.category_id > Category.id [delete: Cascade]
 
 Ref: UserInterest.user_id > User.id [delete: Cascade]
 
-Ref: Notification.club_id > Club.id
+Ref: Notification.club_id > Club.id [delete: Cascade]
 
 Ref: Notification.destination_user_id > User.id [delete: Cascade]
 
-Ref: Notification.event_id > Event.id
+Ref: Notification.event_id > Event.id [delete: Cascade]
 
 Ref: Notification.source_user_id > User.id [delete: Cascade]
 
 Ref: Friend.destination_friend_id > User.id [delete: Cascade]
 
 Ref: Friend.source_friend_id > User.id [delete: Cascade]
+
+Ref: UserReadSpotlight.event_id > Event.id [delete: Cascade]
+
+Ref: UserReadSpotlight.user_id > User.id [delete: Cascade]

@@ -24,7 +24,7 @@ class ClubDetailsViewModel(private val userRepository: UserRepository) : ViewMod
     private val _friends: MutableStateFlow<MutableList<UserProfile>> = MutableStateFlow(arrayListOf())
     var friends = _friends.asStateFlow()
 
-    fun getClubTitle():String {
+    fun getClubTitle(): String {
         if (_club.value == null) return ""
         return _club.value!!.title
     }
