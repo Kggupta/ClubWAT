@@ -10,7 +10,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDEsImVtYWlsI
 
 {
 	"title": "WUSA Club Fair",
-	"description": "Come see all the clubs WUSA has to offer in SLC!",
+	"description": "Come see the clubs WUSA has to offer in SLC!",
 	"startDate": "2024-05-15T14:00:00Z",
 	"endDate":"2024-05-15T16:00:00Z",
 	"location": "SLC Black & Gold Room"

@@ -127,10 +127,7 @@ fun HomeView(
         AlertDialog(
             modifier= Modifier
                 .fillMaxWidth(),
-            title = {
-                Text(modifier= Modifier.fillMaxWidth(), fontWeight = FontWeight.Bold, text = "Club Fair Alert!", textAlign = TextAlign.Center)
-                Spacer(Modifier.height(8.dp))
-            },
+            title = {},
             text = {
                 Column {
                     EventItem(eventWrapper = EventWrapper(spotlight!!), navController = navController)
