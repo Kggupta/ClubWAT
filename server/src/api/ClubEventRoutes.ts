@@ -59,8 +59,8 @@ clubEventRoutes.post<EventsQuery, Event>(
   async (req, res) => {
     try {
       const club_Id = Number(req.params.id);
-      const { title, description, start_date, end_date } = req.body;
-      if (!title || !description || !start_date || !end_date || !club_Id) {
+      const { title, description, start_date, end_date, location, private_flag } = req.body;
+      if (!title || !description || !start_date || !end_date || !club_Id || !location || typeof private_flag !== 'boolean') {
         return res.sendStatus(INVALID_REQUEST_CODE);
       }
       const event = await prisma.event.create({
@@ -69,7 +69,9 @@ clubEventRoutes.post<EventsQuery, Event>(
           description,
           start_date,
           end_date,
-          club_id: club_Id,
+          location,
+          private_flag,
+          club_id: club_Id
         },
       });
       res.status(CREATED_CODE).json(event);
@@ -86,10 +88,10 @@ clubEventRoutes.put<EventsQuery, Event>(
   async (req, res) => {
     try {
       const eventId = Number(req.params.eventId);
-      const { title, description, start_date, end_date } = req.body;
+      const { title, description, start_date, end_date, location } = req.body;
       const updatedEvent = await prisma.event.update({
         where: { id: eventId },
-        data: { title, description, start_date, end_date },
+        data: { title, description, start_date, end_date, location },
       });
       res.status(OK_CODE).json(updatedEvent);
     } catch (error) {

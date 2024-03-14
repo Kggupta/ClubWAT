@@ -88,7 +88,8 @@ fun ClubUserManagementView(
                         Column (Modifier.padding(8.dp)) {
                             Row {
                                 Column {
-                                    Text("${member.firstName} ${member.lastName}".take(50), fontWeight = FontWeight.SemiBold)
+                                    val name = "${member.firstName} ${member.lastName.first()}"
+                                    Text(if (name.length > 15) name.take(12) + "..." else "$name." , fontWeight = FontWeight.SemiBold)
                                     Text(member.email.substringBefore("@"))
                                 }
                                 if (!isClientClubAdmin) return@Row
@@ -103,7 +104,7 @@ fun ClubUserManagementView(
                                                 clubId
                                             )
                                         }) {
-                                            Text(color = LightOrange, text = "Approve")
+                                            Text(color = LightOrange, text = "Paid")
                                         }
                                     } else {
                                         TextButton(onClick = {

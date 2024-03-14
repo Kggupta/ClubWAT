@@ -9,16 +9,18 @@ Table User {
   first_name String [not null]
   last_name String [not null]
   admin_flag Boolean [not null]
-  source_friend Friend [not null]
-  destination_friend Friend [not null]
-  source_notifications Notification [not null]
-  notifications Notification [not null]
   admins ClubAdmin [not null]
+  club_discussions ClubDiscussion [not null]
+  club_members ClubMember [not null]
   event_attendance EventAttendance [not null]
   event_bookmarks EventBookmark [not null]
   event_feedback EventFeedback [not null]
-  club_discussions ClubDiscussion [not null]
-  club_members ClubMember [not null]
+  destination_friend Friend [not null]
+  source_friend Friend [not null]
+  notifications Notification [not null]
+  source_notifications Notification [not null]
+  interests UserInterest [not null]
+  userReadSpotlights UserReadSpotlight [not null]
 }
 
 Table UserEmailVerification {
@@ -33,12 +35,12 @@ Table Club {
   description String [not null]
   membership_fee Float [not null]
   is_approved Boolean [not null, default: false]
-  notifications Notification [not null]
-  categories ClubCategory [not null]
   admins ClubAdmin [not null]
-  events Event [not null]
+  categories ClubCategory [not null]
   discussions ClubDiscussion [not null]
   club_members ClubMember [not null]
+  events Event [not null]
+  notifications Notification [not null]
 }
 
 Table Category {
@@ -53,17 +55,17 @@ Table ClubCategory {
   id Int [pk, increment]
   club_id Int [not null]
   category_id Int [not null]
-  club Club [not null]
   category Category [not null]
+  club Club [not null]
 }
 
 Table ClubAdmin {
   id Int [pk, increment]
-  user_id Int [not null]
   club_id Int [not null]
+  user_id Int [not null]
   position AdminType [not null, default: 'Owner']
-  user User [not null]
   club Club [not null]
+  user User [not null]
 }
 
 Table ClubDiscussion {
@@ -72,8 +74,8 @@ Table ClubDiscussion {
   club_id Int [not null]
   message String [not null]
   create_date DateTime [not null]
-  user User [not null]
   club Club [not null]
+  user User [not null]
 }
 
 Table Event {
@@ -82,30 +84,32 @@ Table Event {
   description String [not null]
   start_date DateTime [not null]
   end_date DateTime [not null]
+  club_id Int [not null]
   location String [not null, default: 'Remote']
   private_flag Boolean [not null, default: false]
-  club_id Int [not null]
+  spotlight_flag Boolean [not null, default: false]
+  userReadSpotlights UserReadSpotlight [not null]
   club Club [not null]
-  notifications Notification [not null]
-  event_feedback EventFeedback [not null]
   event_attendance EventAttendance [not null]
   event_bookmark EventBookmark [not null]
+  event_feedback EventFeedback [not null]
+  notifications Notification [not null]
 }
 
 Table EventAttendance {
   id Int [pk, increment]
   user_id Int [not null]
   event_id Int [not null]
-  user User [not null]
   event Event [not null]
+  user User [not null]
 }
 
 Table EventBookmark {
   id Int [pk, increment]
   user_id Int [not null]
   event_id Int [not null]
-  user User [not null]
   event Event [not null]
+  user User [not null]
 }
 
 Table EventFeedback {
@@ -114,17 +118,17 @@ Table EventFeedback {
   feedback String [not null]
   created DateTime [not null]
   user_email String [not null]
-  user User [not null]
   event Event [not null]
+  user User [not null]
 }
 
 Table ClubMember {
   id Int [pk, increment]
   user_id Int [not null]
   club_id Int [not null]
-  user User [not null]
-  club Club [not null]
   is_approved Boolean [not null]
+  club Club [not null]
+  user User [not null]
 }
 
 Table UserInterest {
@@ -132,6 +136,7 @@ Table UserInterest {
   user_id Int [not null]
   category_id Int [not null]
   category Category [not null]
+  user User [not null]
 }
 
 Table Notification {
@@ -142,10 +147,10 @@ Table Notification {
   event_id Int
   content String [not null]
   create_date DateTime [not null]
-  source_user User [not null]
-  destination_user User [not null]
   club Club
+  destination_user User [not null]
   event Event
+  source_user User [not null]
 }
 
 Table Friend {
@@ -153,12 +158,20 @@ Table Friend {
   source_friend_id Int [not null]
   destination_friend_id Int [not null]
   is_accepted Boolean [not null, default: false]
-  source_friend User [not null]
   destination_friend User [not null]
+  source_friend User [not null]
 
   indexes {
     (source_friend_id, destination_friend_id) [unique]
   }
+}
+
+Table UserReadSpotlight {
+  id Int [pk, increment]
+  user_id Int [not null]
+  event_id Int [not null]
+  event Event [not null]
+  user User [not null]
 }
 
 Enum AdminType {
@@ -166,46 +179,52 @@ Enum AdminType {
   Admin
 }
 
-Ref: ClubCategory.club_id > Club.id
+Ref: ClubCategory.category_id > Category.id [delete: Cascade]
 
-Ref: ClubCategory.category_id > Category.id
+Ref: ClubCategory.club_id > Club.id [delete: Cascade]
 
-Ref: ClubAdmin.user_id > User.id
+Ref: ClubAdmin.club_id > Club.id [delete: Cascade]
 
-Ref: ClubAdmin.club_id > Club.id
+Ref: ClubAdmin.user_id > User.id [delete: Cascade]
 
-Ref: ClubDiscussion.user_id > User.id
+Ref: ClubDiscussion.club_id > Club.id [delete: Cascade]
 
-Ref: ClubDiscussion.club_id > Club.id
+Ref: ClubDiscussion.user_id > User.id [delete: Cascade]
 
-Ref: Event.club_id > Club.id
+Ref: Event.club_id > Club.id [delete: Cascade]
 
-Ref: EventAttendance.user_id > User.id
+Ref: EventAttendance.event_id > Event.id [delete: Cascade]
 
-Ref: EventAttendance.event_id > Event.id
+Ref: EventAttendance.user_id > User.id [delete: Cascade]
 
-Ref: EventBookmark.user_id > User.id
+Ref: EventBookmark.event_id > Event.id [delete: Cascade]
 
-Ref: EventBookmark.event_id > Event.id
+Ref: EventBookmark.user_id > User.id [delete: Cascade]
 
-Ref: EventFeedback.user_email > User.email
+Ref: EventFeedback.event_id > Event.id [delete: Cascade]
 
-Ref: EventFeedback.event_id > Event.id
+Ref: EventFeedback.user_email > User.email [delete: Cascade]
 
-Ref: ClubMember.user_id > User.id
+Ref: ClubMember.club_id > Club.id [delete: Cascade]
 
-Ref: ClubMember.club_id > Club.id
+Ref: ClubMember.user_id > User.id [delete: Cascade]
 
-Ref: UserInterest.category_id > Category.id
+Ref: UserInterest.category_id > Category.id [delete: Cascade]
 
-Ref: Notification.source_user_id > User.id
+Ref: UserInterest.user_id > User.id [delete: Cascade]
 
-Ref: Notification.destination_user_id > User.id
+Ref: Notification.club_id > Club.id [delete: Cascade]
 
-Ref: Notification.club_id > Club.id
+Ref: Notification.destination_user_id > User.id [delete: Cascade]
 
-Ref: Notification.event_id > Event.id
+Ref: Notification.event_id > Event.id [delete: Cascade]
 
-Ref: Friend.source_friend_id > User.id
+Ref: Notification.source_user_id > User.id [delete: Cascade]
 
-Ref: Friend.destination_friend_id > User.id
+Ref: Friend.destination_friend_id > User.id [delete: Cascade]
+
+Ref: Friend.source_friend_id > User.id [delete: Cascade]
+
+Ref: UserReadSpotlight.event_id > Event.id [delete: Cascade]
+
+Ref: UserReadSpotlight.user_id > User.id [delete: Cascade]

@@ -23,20 +23,24 @@ import androidx.navigation.compose.rememberNavController
 import com.example.clubwat.repository.DiscussionRepositoryImpl
 import com.example.clubwat.repository.UserRepository
 import com.example.clubwat.ui.theme.ClubWATTheme
+import com.example.clubwat.viewmodels.AddEventViewModel
 import com.example.clubwat.viewmodels.ClubDetailsViewModel
 import com.example.clubwat.viewmodels.ClubDiscussionViewModel
 import com.example.clubwat.viewmodels.ClubManagementViewModel
 import com.example.clubwat.viewmodels.ClubUserManagementViewModel
 import com.example.clubwat.viewmodels.CodeVerificationViewModel
+import com.example.clubwat.viewmodels.EditClubDetailsViewModel
 import com.example.clubwat.viewmodels.EventDetailsViewModel
 import com.example.clubwat.viewmodels.ForYouViewModel
 import com.example.clubwat.viewmodels.InboxViewModel
 import com.example.clubwat.viewmodels.ProfileViewModel
+import com.example.clubwat.viewmodels.factories.AddEventViewModelFactory
 import com.example.clubwat.viewmodels.factories.ClubDetailsViewModelFactory
 import com.example.clubwat.viewmodels.factories.ClubDiscussionViewModelFactory
 import com.example.clubwat.viewmodels.factories.ClubManagementViewModelFactory
 import com.example.clubwat.viewmodels.factories.ClubUserManagementViewModelFactory
 import com.example.clubwat.viewmodels.factories.CodeVerificationViewModelFactory
+import com.example.clubwat.viewmodels.factories.EditClubDetailsViewModelFactory
 import com.example.clubwat.viewmodels.factories.EventDetailsViewModelFactory
 import com.example.clubwat.viewmodels.factories.ForYouViewModelFactory
 import com.example.clubwat.viewmodels.factories.HomeViewModelFactory
@@ -77,6 +81,9 @@ class MainActivity : ComponentActivity() {
                 val eventDetailsViewModel: EventDetailsViewModel by viewModels { EventDetailsViewModelFactory(userRepository) }
                 val clubManagementViewModel: ClubManagementViewModel by viewModels { ClubManagementViewModelFactory(userRepository) }
                 val clubUserManagementViewModel: ClubUserManagementViewModel by viewModels { ClubUserManagementViewModelFactory(userRepository) }
+                val addEventViewModel: AddEventViewModel by viewModels { AddEventViewModelFactory(userRepository) }
+                val editClubDetailsViewModel: EditClubDetailsViewModel by viewModels { EditClubDetailsViewModelFactory(userRepository) }
+
 
                 Scaffold(
                     bottomBar = {
@@ -135,6 +142,11 @@ class MainActivity : ComponentActivity() {
                                     navController = navController,
                                     eventId = backStackEntry.arguments?.getString("eventId"))
                             }
+                            composable("club/{clubId}/event/new") {backStackEntry ->
+                                AddEventView(viewModel = addEventViewModel,
+                                    navController = navController,
+                                    clubId = backStackEntry.arguments?.getString("clubId"))
+                            }
                             composable("club/{clubId}/management") {backStackEntry ->
                                 ClubManagementView(viewModel = clubManagementViewModel,
                                     navController = navController,
@@ -142,6 +154,11 @@ class MainActivity : ComponentActivity() {
                             }
                             composable("club/{clubId}/management/users") {backStackEntry ->
                                 ClubUserManagementView(viewModel = clubUserManagementViewModel,
+                                    navController = navController,
+                                    clubId = backStackEntry.arguments?.getString("clubId"))
+                            }
+                            composable("club/{clubId}/management/clubDetails") {backStackEntry ->
+                                EditClubDetailsView(viewModel = editClubDetailsViewModel,
                                     navController = navController,
                                     clubId = backStackEntry.arguments?.getString("clubId"))
                             }

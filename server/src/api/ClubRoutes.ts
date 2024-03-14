@@ -81,82 +81,6 @@ async function addClubCategories(clubId: number, categories: number[]) {
   await prisma.clubCategory.createMany({ data: clubCategories });
 }
 
-router.get<ClubParam, ClubResponse>(
-  "/status/:param?",
-  authenticateToken,
-  async (req, res) => {
-    try {
-      const param = req.params.param;
-      let query: {
-        where?: { id?: number; is_approved?: boolean };
-        include?: includeQuery;
-      } = {};
-
-      if (req.query.withCategories === "true") {
-        query.include = {
-          categories: {
-            select: {
-              category: {
-                select: {
-                  id: true,
-                  type: true,
-                  name: true,
-                },
-              },
-            },
-          },
-        };
-      }
-      if (param === "approved" || param === "not-approved") {
-        query.where = { is_approved: param === "approved" };
-        let clubs: ClubWithCategories[] = await prisma.club.findMany(query);
-
-        return res.json({ data: clubs }).status(OK_CODE);
-      } else if (param && !isNaN(Number(param))) {
-        const clubId = Number(param);
-        query.where = { id: clubId };
-        const club: Club | null = await prisma.club.findFirst(query);
-
-        if (club == null) {
-          return res.sendStatus(NOT_FOUND_CODE);
-        }
-
-        return res.json({ data: [club] }).status(OK_CODE);
-      } else if (param) {
-        return res.sendStatus(INVALID_REQUEST_CODE);
-      } else {
-        let clubs: ClubWithCategories[] = await prisma.club.findMany(query);
-        return res.json({ data: clubs }).status(OK_CODE);
-      }
-    } catch (error) {
-      res.sendStatus(INTERNAL_ERROR_CODE);
-    }
-  }
-);
-
-router.get<ChosenClub, ClubAdminResponse>(
-  "/:id/admins",
-  authenticateToken,
-  async (req, res) => {
-    try {
-      const param = req.params.id;
-      const clubId = Number(param);
-      const admins: ClubAdmin[] = await prisma.clubAdmin.findMany({
-        where: {
-          club_id: clubId,
-        },
-        include: {
-          user: true,
-        },
-      });
-
-      return res.json({ data: admins }).status(OK_CODE);
-    } catch (error) {
-      res.sendStatus(INTERNAL_ERROR_CODE);
-    }
-  }
-);
-
 router.post<ClubDetails, void>("/", authenticateToken, async (req, res) => {
   try {
     if (
@@ -213,34 +137,33 @@ router.put<ClubDetails, void>(
         !req.body.description ||
         (!req.body.membership_fee && req.body.membership_fee !== 0) ||
         !req.body.categories ||
-        !req.body.is_approved
+        req.body.categories.length > 5
       ) {
         return res.sendStatus(INVALID_REQUEST_CODE);
       }
 
       const clubId = Number(req.params.id);
-      Promise.all([
-        prisma.club.update({
-          where: {
-            id: clubId,
-          },
-          data: {
-            title: req.body.title,
-            description: req.body.description,
-            membership_fee: req.body.membership_fee,
-            is_approved: req.body.is_approved,
-          },
-        }),
-        (async () => {
-          await prisma.clubCategory.deleteMany({
-            where: { club_id: clubId },
-          });
-          addClubCategories(clubId, req.body.categories);
-        })(),
-      ]);
+
+      await prisma.club.update({
+        where: {
+          id: clubId,
+        },
+        data: {
+          title: req.body.title,
+          description: req.body.description,
+          membership_fee: req.body.membership_fee,
+        },
+      });
+
+      await prisma.clubCategory.deleteMany({
+        where: { club_id: clubId },
+      });
+
+      await addClubCategories(clubId, req.body.categories);
 
       res.sendStatus(OK_CODE);
     } catch (error) {
+      console.log(error);
       res.sendStatus(INTERNAL_ERROR_CODE);
     }
   }

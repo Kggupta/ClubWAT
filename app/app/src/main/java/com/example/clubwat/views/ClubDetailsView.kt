@@ -60,7 +60,6 @@ import com.example.clubwat.ui.theme.LightOrange
 import com.example.clubwat.ui.theme.LightYellow
 import com.example.clubwat.viewmodels.ClubDetailsViewModel
 import java.text.NumberFormat
-import java.util.Currency
 
 @OptIn(ExperimentalLayoutApi::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")

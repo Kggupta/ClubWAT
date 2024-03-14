@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -17,23 +14,24 @@ datasource db {
 }
 
 model User {
-  id         Int     @id @default(autoincrement())
-  email      String  @unique
-  password   String
-  first_name String
-  last_name  String
-  admin_flag Boolean
-
-  source_friend Friend[] @relation("source_friend_id")
-  destination_friend Friend[] @relation("destination_friend_id")
-  source_notifications Notification[]    @relation("source_user")
-  notifications        Notification[]    @relation("destination_user")
+  id                   Int                 @id @default(autoincrement())
+  email                String              @unique
+  password             String
+  first_name           String
+  last_name            String
+  admin_flag           Boolean
   admins               ClubAdmin[]
+  club_discussions     ClubDiscussion[]
+  club_members         ClubMember[]
   event_attendance     EventAttendance[]
   event_bookmarks      EventBookmark[]
   event_feedback       EventFeedback[]
-  club_discussions     ClubDiscussion[]
-  club_members         ClubMember[]
+  destination_friend   Friend[]            @relation("destination_friend_id")
+  source_friend        Friend[]            @relation("source_friend_id")
+  notifications        Notification[]      @relation("destination_user")
+  source_notifications Notification[]      @relation("source_user")
+  interests            UserInterest[]
+  userReadSpotlights   UserReadSpotlight[]
 }
 
 model UserEmailVerification {
@@ -43,18 +41,17 @@ model UserEmailVerification {
 }
 
 model Club {
-  id             Int     @id @default(autoincrement())
+  id             Int              @id @default(autoincrement())
   title          String
   description    String
   membership_fee Float
-  is_approved    Boolean @default(false)
-
-  notifications Notification[]
-  categories    ClubCategory[]
-  admins        ClubAdmin[]
-  events        Event[]
-  discussions   ClubDiscussion[]
-  club_members  ClubMember[]
+  is_approved    Boolean          @default(false)
+  admins         ClubAdmin[]
+  categories     ClubCategory[]
+  discussions    ClubDiscussion[]
+  club_members   ClubMember[]
+  events         Event[]
+  notifications  Notification[]
 }
 
 model Category {
@@ -69,23 +66,17 @@ model ClubCategory {
   id          Int      @id @default(autoincrement())
   club_id     Int
   category_id Int
-  club        Club     @relation(fields: [club_id], references: [id])
-  category    Category @relation(fields: [category_id], references: [id])
+  category    Category @relation(fields: [category_id], references: [id], onDelete: Cascade)
+  club        Club     @relation(fields: [club_id], references: [id], onDelete: Cascade)
 }
 
 model ClubAdmin {
-  id       Int    @id @default(autoincrement())
-  user_id  Int
+  id       Int       @id @default(autoincrement())
   club_id  Int
-
+  user_id  Int
   position AdminType @default(Owner)
-  user     User   @relation(fields: [user_id], references: [id])
-  club     Club   @relation(fields: [club_id], references: [id])
-}
-
-enum AdminType {
-  Owner
-  Admin
+  club     Club      @relation(fields: [club_id], references: [id], onDelete: Cascade)
+  user     User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
 
 model ClubDiscussion {
@@ -94,43 +85,42 @@ model ClubDiscussion {
   club_id     Int
   message     String
   create_date DateTime
-  user        User     @relation(fields: [user_id], references: [id])
-  club        Club     @relation(fields: [club_id], references: [id])
+  club        Club     @relation(fields: [club_id], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
 
 model Event {
-  id           Int      @id @default(autoincrement())
-  title        String
-  description  String
-  start_date   DateTime
-  end_date     DateTime
-  location     String   @default("Remote")
-  private_flag Boolean  @default(false)
-  club_id      Int
-  club         Club     @relation(fields: [club_id], references: [id])
-
-  notifications    Notification[]
-  event_feedback   EventFeedback[]
+  id               Int               @id @default(autoincrement())
+  title            String
+  description      String
+  start_date       DateTime
+  end_date         DateTime
+  club_id          Int
+  location         String            @default("Remote")
+  private_flag     Boolean           @default(false)
+  spotlight_flag Boolean @default(false)
+  userReadSpotlights UserReadSpotlight[]
+  club             Club              @relation(fields: [club_id], references: [id], onDelete: Cascade)
   event_attendance EventAttendance[]
   event_bookmark   EventBookmark[]
+  event_feedback   EventFeedback[]
+  notifications    Notification[]
 }
 
 model EventAttendance {
-  id       Int @id @default(autoincrement())
+  id       Int   @id @default(autoincrement())
   user_id  Int
   event_id Int
-
-  user  User  @relation(fields: [user_id], references: [id])
-  event Event @relation(fields: [event_id], references: [id])
+  event    Event @relation(fields: [event_id], references: [id], onDelete: Cascade)
+  user     User  @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
 
 model EventBookmark {
-  id       Int @id @default(autoincrement())
+  id       Int   @id @default(autoincrement())
   user_id  Int
   event_id Int
-
-  user  User  @relation(fields: [user_id], references: [id])
-  event Event @relation(fields: [event_id], references: [id])
+  event    Event @relation(fields: [event_id], references: [id], onDelete: Cascade)
+  user     User  @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
 
 model EventFeedback {
@@ -139,49 +129,61 @@ model EventFeedback {
   feedback   String
   created    DateTime
   user_email String
-
-  user  User  @relation(fields: [user_email], references: [email])
-  event Event @relation(fields: [event_id], references: [id])
+  event      Event    @relation(fields: [event_id], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [user_email], references: [email], onDelete: Cascade)
 }
 
 model ClubMember {
   id          Int     @id @default(autoincrement())
   user_id     Int
   club_id     Int
-  user        User    @relation(fields: [user_id], references: [id])
-  club        Club    @relation(fields: [club_id], references: [id])
   is_approved Boolean
+  club        Club    @relation(fields: [club_id], references: [id], onDelete: Cascade)
+  user        User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
 
 model UserInterest {
   id          Int      @id @default(autoincrement())
   user_id     Int
   category_id Int
-  category    Category @relation(fields: [category_id], references: [id])
+  category    Category @relation(fields: [category_id], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
 
 model Notification {
-  id                  Int    @id @default(autoincrement())
+  id                  Int      @id @default(autoincrement())
   destination_user_id Int
   source_user_id      Int
   club_id             Int?
   event_id            Int?
   content             String
   create_date         DateTime
-  source_user         User   @relation(name: "source_user", fields: [source_user_id], references: [id])
-  destination_user    User   @relation(name: "destination_user", fields: [destination_user_id], references: [id])
-  club                Club?  @relation(fields: [club_id], references: [id])
-  event               Event? @relation(fields: [event_id], references: [id])
+  club                Club?    @relation(fields: [club_id], references: [id], onDelete: Cascade)
+  destination_user    User     @relation("destination_user", fields: [destination_user_id], references: [id], onDelete: Cascade)
+  event               Event?   @relation(fields: [event_id], references: [id], onDelete: Cascade)
+  source_user         User     @relation("source_user", fields: [source_user_id], references: [id], onDelete: Cascade)
 }
 
 model Friend {
-  id Int @id @default(autoincrement())
+  id                    Int     @id @default(autoincrement())
   source_friend_id      Int
   destination_friend_id Int
   is_accepted           Boolean @default(false)
-
-  source_friend         User   @relation(name: "source_friend_id", fields: [source_friend_id], references: [id])
-  destination_friend    User   @relation(name: "destination_friend_id", fields: [destination_friend_id], references: [id]) 
+  destination_friend    User    @relation("destination_friend_id", fields: [destination_friend_id], references: [id], onDelete: Cascade)
+  source_friend         User    @relation("source_friend_id", fields: [source_friend_id], references: [id], onDelete: Cascade)
 
   @@unique([source_friend_id, destination_friend_id])
+}
+
+model UserReadSpotlight {
+  id           Int       @id @default(autoincrement())
+  user_id      Int
+  event_id Int
+  event    Event @relation(fields: [event_id], references: [id], onDelete: Cascade)
+  user         User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+enum AdminType {
+  Owner
+  Admin
 }
