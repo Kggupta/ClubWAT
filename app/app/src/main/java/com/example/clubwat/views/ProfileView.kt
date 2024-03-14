@@ -66,6 +66,7 @@ import com.example.clubwat.R
 import com.example.clubwat.model.Interest
 import com.example.clubwat.model.UserProfile
 import com.example.clubwat.ui.theme.LightYellow
+import com.example.clubwat.ui.theme.successGreen
 import com.example.clubwat.viewmodels.ProfileViewModel
 
 
@@ -230,9 +231,14 @@ fun ProfileView(
 
     if (showEditProfile) {
         AlertDialogExample(
-            onDismissRequest = { showEditProfile = false },
+            onDismissRequest = {
+                showEditProfile = false
+                viewModel.profileReset()
+
+                               },
             onConfirmation = {
                 showEditProfile = false
+                viewModel.profileReset()
             },
             dialogTitle = "Edit Password",
             dialogText = "",
@@ -272,7 +278,7 @@ fun ProfileView(
                 Spacer(modifier = Modifier.height(16.dp))
                 Button(onClick = {
                     viewModel.validatePasswordAndSignUp(viewModel.newPassword.value)
-                    viewModel.editPassword(viewModel.newPassword.value, viewModel.oldPassword.value)
+                    viewModel.editPassword(viewModel.oldPassword.value, viewModel.newPassword.value)
                 }) {
                     Text("Update")
                 }
@@ -287,7 +293,7 @@ fun ProfileView(
                 if (viewModel.passwordSuccess.value != null) {
                     Text(
                         text = viewModel.passwordSuccess.value!!,
-                        color = Color.Green,
+                        color = successGreen,
                         style = MaterialTheme.typography.bodySmall
                     )
 
@@ -304,10 +310,12 @@ fun ProfileView(
         val reqFriends by viewModel.req_friends.collectAsState()
 
         AlertDialogExample(
-            onDismissRequest = { showEditFriends = false },
+            onDismissRequest = {
+                showEditFriends = false
+                viewModel.resetFriends()},
             onConfirmation = {
                 showEditFriends = false
-                // viewModel.editFriends()
+                viewModel.resetFriends()
             },
             dialogTitle = "Friends",
             dialogText = "",

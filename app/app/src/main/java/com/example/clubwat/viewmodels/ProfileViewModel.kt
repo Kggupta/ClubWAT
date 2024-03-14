@@ -19,6 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
@@ -240,8 +241,12 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
                     OutputStreamWriter(outputStream).use { it.write(jsonBody) }
                     val responseCode = responseCode
                     if (responseCode == HttpURLConnection.HTTP_OK) {
+                        passwordSuccess.value = "Password Changed!"
+                        passwordError.value = null
                         println("Password successfully updated")
                     } else {
+                        passwordError.value = "Error password could not be changed"
+                        passwordSuccess.value = null
                         println("Failed to update password: $responseCode")
                     }
                 }
@@ -253,13 +258,20 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
 
     }
 
+    fun profileReset() {
+        passwordSuccess.value = null
+        passwordError.value = null
+        newPassword.value  = ""
+        oldPassword.value = ""
+    }
+
     // FRIENDS PROFILE FUNCTIONS
     fun getFriends() {
         viewModelScope.launch(Dispatchers.IO) {
             println("GET FRIENDS")
             try {
                 println(userRepository.currentUser.value?.userId.toString())
-                val obj = URL(BuildConfig.GET_FRIEND_URL + "?id=" + "$userId")
+                val obj = URL(BuildConfig.GET_FRIEND_URL)
                 val con = obj.openConnection() as HttpURLConnection
                 con.requestMethod = "GET"
                 con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
@@ -280,7 +292,7 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 println("GET FRIEND REQUEST")
-                val obj = URL(BuildConfig.GET_FRIEND_URL + "?requests?id=" + "$userId")
+                val obj = URL(BuildConfig.GET_FRIEND_URL + "requests")
                 val con = obj.openConnection() as HttpURLConnection
                 con.requestMethod = "GET"
                 con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
@@ -349,7 +361,7 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
     fun deleteFriend(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val obj = URL(BuildConfig.GET_FRIEND_URL + "/$id")
+                val obj = URL(BuildConfig.GET_FRIEND_URL + "$id")
                 val con = obj.openConnection() as HttpURLConnection
                 con.requestMethod = "DELETE"
                 con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
@@ -366,40 +378,47 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
     }
 
     fun acceptFriend(id: Int) {
+        val url = URL(BuildConfig.GET_FRIEND_URL + "approve-request")
+        println(url)
         viewModelScope.launch(Dispatchers.IO) {
-            println("ACCEPT FRIEND")
-            println(userId)
-            println(id)
             try {
-                val url = URL(BuildConfig.GET_NOTIFICATIONS_URL + "approve-request")
-                println(url)
                 (url.openConnection() as HttpURLConnection).apply {
                     requestMethod = "PUT"
                     doOutput = true
                     setRequestProperty("Content-Type", "application/json")
+                    // Ensure the Authorization token is correct and valid.
                     setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
 
-                    val body = """
-                    {
-                        "friend_id": $id
-                    }
+                    val jsonBody = """
+                {
+                    "friend_id": $id
+                }
                 """.trimIndent()
 
-                    OutputStreamWriter(outputStream).use { it.write(body) }
+                    OutputStreamWriter(outputStream).use { it.write(jsonBody) }
                     val responseCode = responseCode
-                    println("ACCPET FRIEND Response: $responseCode")
                     if (responseCode == HttpURLConnection.HTTP_OK) {
-                        _reqFriends.value = _reqFriends.value.filter { it.id != id.toInt() }.toMutableList()
-                        println("doneee")
+                        withContext(Dispatchers.Main) {
+                            // Update _reqFriends value on the UI thread
+                            _reqFriends.value = _reqFriends.value.filter { it.id != id }.toMutableList()
+                            getFriends()
+
+                            println("FRIEND ADDED successfully updated")
+                        }
+                    } else {
+                        println("Failed to add friend: $responseCode")
                     }
                 }
-
-                // getFriends()
             } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
 
+    }
+
+    fun resetFriends() {
+        addFriendMessage.value = null
+        addFriend.value = ""
     }
 
     // LOGOUT
