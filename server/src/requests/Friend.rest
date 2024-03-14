@@ -1,20 +1,19 @@
 
 GET http://localhost:3000/api/v1/friend
-Authorization: Bearer [token]
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDMsImVtYWlsIjoibTVhZnNoYXJAdXdhdGVybG9vLmNhIiwicGFzc3dvcmQiOiIkMmIkMTAkL1BMY0tLUVZ1UnhPZGtUSFQuQ2RHT242YkUuMVZjaFp0Rm50WUhKRWZDVFNaR2lDRXFiT1ciLCJmaXJzdF9uYW1lIjoiTWFyeSIsImxhc3RfbmFtZSI6IkEiLCJhZG1pbl9mbGFnIjpmYWxzZSwiaWF0IjoxNzEwNDQ1NDExfQ.ZOPdDxpF1qwGHVOdG6b5RVBq6XFE4WZYy4TmS9oviUg
 content-type: application/json
 
 ###
 
 GET http://localhost:3000/api/v1/friend/requests
-Authorization: Bearer [token]
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDMsImVtYWlsIjoibTVhZnNoYXJAdXdhdGVybG9vLmNhIiwicGFzc3dvcmQiOiIkMmIkMTAkL1BMY0tLUVZ1UnhPZGtUSFQuQ2RHT242YkUuMVZjaFp0Rm50WUhKRWZDVFNaR2lDRXFiT1ciLCJmaXJzdF9uYW1lIjoiTWFyeSIsImxhc3RfbmFtZSI6IkEiLCJhZG1pbl9mbGFnIjpmYWxzZSwiaWF0IjoxNzEwNDQ1NDExfQ.ZOPdDxpF1qwGHVOdG6b5RVBq6XFE4WZYy4TmS9oviUg
 content-type: application/json
 
 ###
 
 POST http://localhost:3000/api/v1/friend
-Authorization: Bearer [token]
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDMsImVtYWlsIjoibTVhZnNoYXJAdXdhdGVybG9vLmNhIiwicGFzc3dvcmQiOiIkMmIkMTAkL1BMY0tLUVZ1UnhPZGtUSFQuQ2RHT242YkUuMVZjaFp0Rm50WUhKRWZDVFNaR2lDRXFiT1ciLCJmaXJzdF9uYW1lIjoiTWFyeSIsImxhc3RfbmFtZSI6IkEiLCJhZG1pbl9mbGFnIjpmYWxzZSwiaWF0IjoxNzEwNDQ1NDExfQ.ZOPdDxpF1qwGHVOdG6b5RVBq6XFE4WZYy4TmS9oviUg
 content-type: application/json
-
 {
     "email": "m5afshar@uwaterloo.ca"
 }
@@ -22,15 +21,15 @@ content-type: application/json
 ###
 
 PUT http://localhost:3000/api/v1/friend/approve-request
-Authorization: Bearer [token]
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDMsImVtYWlsIjoibTVhZnNoYXJAdXdhdGVybG9vLmNhIiwicGFzc3dvcmQiOiIkMmIkMTAkL1BMY0tLUVZ1UnhPZGtUSFQuQ2RHT242YkUuMVZjaFp0Rm50WUhKRWZDVFNaR2lDRXFiT1ciLCJmaXJzdF9uYW1lIjoiTWFyeSIsImxhc3RfbmFtZSI6IkEiLCJhZG1pbl9mbGFnIjpmYWxzZSwiaWF0IjoxNzEwNDQ1NDExfQ.ZOPdDxpF1qwGHVOdG6b5RVBq6XFE4WZYy4TmS9oviUg
 content-type: application/json
 
 {
-    "friend_id": 3
+    "friend_id": 50
 }
 
 ###
 
-DELETE http://localhost:3000/api/v1/friend/3
-Authorization: Bearer [token]
+DELETE http://localhost:3000/api/v1/friend/49
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDMsImVtYWlsIjoibTVhZnNoYXJAdXdhdGVybG9vLmNhIiwicGFzc3dvcmQiOiIkMmIkMTAkL1BMY0tLUVZ1UnhPZGtUSFQuQ2RHT242YkUuMVZjaFp0Rm50WUhKRWZDVFNaR2lDRXFiT1ciLCJmaXJzdF9uYW1lIjoiTWFyeSIsImxhc3RfbmFtZSI6IkEiLCJhZG1pbl9mbGFnIjpmYWxzZSwiaWF0IjoxNzEwNDQ1NDExfQ.ZOPdDxpF1qwGHVOdG6b5RVBq6XFE4WZYy4TmS9oviUg
 content-type: application/json

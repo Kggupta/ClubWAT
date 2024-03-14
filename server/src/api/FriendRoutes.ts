@@ -12,6 +12,7 @@ const router = express.Router();
 
 router.get("/", authenticateToken, async (req, res) => {
   const userId = req.body.user.id;
+  console.log("DIAWJHDIWJDI");
 
   if (!userId) {
     return res.sendStatus(INVALID_REQUEST_CODE);
@@ -25,6 +26,7 @@ router.get("/", authenticateToken, async (req, res) => {
       },
       include: { source_friend: true, destination_friend: true },
     });
+    console.log(friends);
 
     let friendList = friends
       .map((x) => x.source_friend)
@@ -39,11 +41,12 @@ router.get("/", authenticateToken, async (req, res) => {
 
 router.get("/requests", authenticateToken, async (req, res) => {
   const userId = req.body.user.id;
+  console.log("WJEHUI#EHIEHIO");
 
   if (!userId) {
     return res.sendStatus(INVALID_REQUEST_CODE);
   }
-
+  console.log("FIRNED REQ");
   try {
     const friends = await prisma.friend.findMany({
       where: {
@@ -52,6 +55,8 @@ router.get("/requests", authenticateToken, async (req, res) => {
       },
       include: { source_friend: true, destination_friend: true },
     });
+
+    console.log(friends);
 
     let friendList = friends
       .map((x) => x.source_friend)
@@ -67,6 +72,8 @@ router.get("/requests", authenticateToken, async (req, res) => {
 router.post("/", authenticateToken, async (req, res) => {
   const userId = req.body.user.id;
   const friendEmail = req.body.email;
+  console.log("id: ", userId);
+  console.log("email: ", friendEmail);
   const friend = await prisma.user.findFirst({
     where: { email: friendEmail },
   });
@@ -102,12 +109,19 @@ router.post("/", authenticateToken, async (req, res) => {
   }
 
   try {
-    await prisma.friend.create({
-      data: {
-        source_friend_id: userId,
-        destination_friend_id: friendId,
-        is_accepted: false,
-      },
+    await prisma.friend.createMany({
+      data: [
+        {
+          source_friend_id: userId,
+          destination_friend_id: friendId,
+          is_accepted: false,
+        },
+        {
+          source_friend_id: friendId,
+          destination_friend_id: userId,
+          is_accepted: false,
+        },
+      ],
     });
     return res.sendStatus(OK_CODE);
   } catch (error) {
@@ -127,8 +141,8 @@ router.put("/approve-request", authenticateToken, async (req, res) => {
     await prisma.friend.update({
       where: {
         source_friend_id_destination_friend_id: {
-          source_friend_id: userId,
-          destination_friend_id: friendId,
+          source_friend_id: friendId,
+          destination_friend_id:  userId,
         },
       },
       data: {
@@ -147,14 +161,19 @@ router.delete("/:id", authenticateToken, async (req, res) => {
   if (!friendId) {
     return res.sendStatus(INVALID_REQUEST_CODE);
   }
-  await prisma.friend.delete({
-    where: {
-      source_friend_id_destination_friend_id: {
-        source_friend_id: req.body.user.id,
-        destination_friend_id: friendId,
+
+  try {
+    await prisma.friend.delete({
+      where: {
+        source_friend_id_destination_friend_id: {
+          source_friend_id: req.body.user.id,
+          destination_friend_id: friendId,
+        },
       },
-    },
-  });
+    });
+  } catch (error) {
+    return res.sendStatus(INTERNAL_ERROR_CODE);
+  }
 
   return res.sendStatus(OK_CODE);
 });
