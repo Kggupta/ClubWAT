@@ -98,7 +98,8 @@ android {
         val getSpotlights = properties["GET_SPOTLIGHTS"]?.toString()
         if (getSpotlights != null) {
             buildConfigField("String", "GET_SPOTLIGHTS", getSpotlights)
-
+        }
+        
         val getAllCategories = properties["GET_ALL_CATEGORIES"]?.toString()
         if (getAllCategories != null) {
             buildConfigField("String", "GET_ALL_CATEGORIES", getAllCategories)
