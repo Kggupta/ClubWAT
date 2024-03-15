@@ -73,7 +73,6 @@ router.put<UserInterestsRequest, void>("/", authenticateToken, async (req, res) 
           || !req.body.program || !req.body.hobbies) {
       return res.sendStatus(INVALID_REQUEST_CODE);
     }
-
     const userId = req.body.user.id;
 
     await prisma.userInterest.deleteMany({
@@ -81,7 +80,6 @@ router.put<UserInterestsRequest, void>("/", authenticateToken, async (req, res) 
         user_id: userId
       }
     })
-
     let hobbyQueries: UserInterestWithoutId[] = []
     
     req.body.hobbies.forEach((hobbyId: number) => {
@@ -113,7 +111,7 @@ router.put<UserInterestsRequest, void>("/", authenticateToken, async (req, res) 
       ]
     })
 
-    res.status(OK_CODE);
+    res.sendStatus(OK_CODE);
   } catch(error) {
     res.sendStatus(INTERNAL_ERROR_CODE);
   }

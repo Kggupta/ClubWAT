@@ -11,7 +11,6 @@ import com.example.clubwat.model.User
 import com.example.clubwat.model.UserProfile
 import com.example.clubwat.model.Interest
 import com.example.clubwat.model.InterestsResponse
-import com.example.clubwat.model.UserInterests
 import com.example.clubwat.repository.UserRepository
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -38,13 +37,22 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
     var passwordError = mutableStateOf<String?>(null)
     var passwordSuccess = mutableStateOf<String?>(null)
     var emailError = mutableStateOf<String?>(null)
+    var fillAllfields = mutableStateOf<String?>(null)
 
+    // users interests
     var faculty by mutableStateOf<Interest?>(null)
     var ethicity by mutableStateOf<Interest?>(null)
     var religion by mutableStateOf<Interest?>(null)
     var program by mutableStateOf<Interest?>(null)
-    var hobby by mutableStateOf<Interest?>(null)
+    var hobby by mutableStateOf<List<Interest>?>(null)
 
+    var facultyID by mutableStateOf(0)
+    var ethicityID by mutableStateOf(0)
+    var religionID by  mutableStateOf(0)
+    var programID by  mutableStateOf(0)
+    var hobbyID by mutableStateOf(listOf<Int>())
+
+    // all categories
     var faculties by  mutableStateOf<List<Interest>?>(null)
     var ethnicities by  mutableStateOf<List<Interest>?>(null)
     var religions by  mutableStateOf<List<Interest>?>(null)
@@ -79,34 +87,7 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
     private val _reqFriends: MutableStateFlow<MutableList<UserProfile>> = MutableStateFlow(arrayListOf())
     var req_friends = _reqFriends.asStateFlow()
 
-    private var oldPasswordStored = userRepository.currentUser.value?.password
-
-
-
     // friends and friendRequest list
-
-    // this is an example of how it will look
-    val friends1 = listOf(
-        User(
-            userId = "1",
-            firstName = mutableStateOf("John"),
-            lastName = mutableStateOf("Doe"),
-            email = mutableStateOf("john.doe@example.com"),
-            password = mutableStateOf("password123")
-        ),
-        User(
-            userId = "2",
-            firstName = mutableStateOf("Jane"),
-            lastName = mutableStateOf("Doe"),
-            email = mutableStateOf("jane.doe@example.com"),
-            password = mutableStateOf("password456")
-        )
-        // Add more users as needed
-    )
-
-
-    // send to api as: (id, name, type)
-    //    where 'type' would be the categories you've got already (program, hobbies, ethnicity, religion).
 
     // INTERESTS PROFILE FUNCTIONS
     fun getInterests() {
@@ -138,7 +119,8 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
 
     fun getUserInterests() {
         viewModelScope.launch(Dispatchers.IO) {
-            println("GET USER INTERESTS")
+            println("GET USER INTERESTS before")
+
             try {
                 val obj = URL(BuildConfig.GET_INTERESTS)
                 val con = obj.openConnection() as HttpURLConnection
@@ -148,22 +130,21 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
                 println("GET INTERESTS Response Code :: $responseCode")
                 if (responseCode == HttpURLConnection.HTTP_OK) {
                     val response = con.inputStream.bufferedReader().use { it.readText() }
-                    println(response)
                     val gson = Gson()
                     val type = object : TypeToken<List<Interest>>() {}.type
                     val interestsResponse: List<Interest> = gson.fromJson(response, type)
-
-                    // val interestsResponse = Gson().fromJson(response, UserInterests::class.java)
-                    println("IN HEREEE 1111")
-
 
                     faculty = interestsResponse.find { it.type == "faculty" }
                     ethicity = interestsResponse.find { it.type == "ethnicity" }
                     religion = interestsResponse.find { it.type == "religion" }
                     program = interestsResponse.find { it.type == "program" }
-                    hobby = interestsResponse.find { it.type == "hobby" }
-                    println("IN HEREEE")
-                    println(faculty!!.id)
+                    hobby = interestsResponse.filter { it.type == "hobby" }
+
+                    facultyID = faculty!!.id
+                    ethicityID = ethicity!!.id
+                    religionID = religion!!.id
+                    programID = program!!.id
+                    hobbyID = interestsResponse.filter { it.type == "hobby" }.map { it.id }
 
 
                 }
@@ -172,8 +153,7 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
             }
         }
     }
-
-    fun editInterests(facultyInput: Int, ethnicityInput: Int, religionInput: Int, programInput: Int, hobbiesInput: Int) {
+    fun editInterests(facultyInput: Int, ethnicityInput: Int, religionInput: Int, programInput: Int, hobbiesInput: List<Int>) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val gson = Gson()
@@ -182,7 +162,7 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
                     "ethnicity" to ethnicityInput,
                     "religion" to religionInput,
                     "program" to programInput,
-                    "hobbies" to listOf(hobbiesInput)
+                    "hobbies" to hobbiesInput
                 )
                 val requestBodyString = gson.toJson(requestBody)
 
@@ -197,7 +177,17 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
 
                     OutputStreamWriter(outputStream).use { it.write(requestBodyString) }
                     val responseCode = responseCode
-                    println("EDIT INTERESTS Response Code: $responseCode")
+                    if (responseCode == HttpURLConnection.HTTP_OK) {
+                        fillAllfields.value = "Success! Interests are saved."
+                        getUserInterests()
+                    } else {
+                        if ((facultyInput == 0) ||  (ethnicityInput == 0) || (religionInput == 0) || (hobbiesInput.isEmpty()) || (programInput == 0)) {
+                            fillAllfields.value = "Please fill all fields"
+                        } else {
+                            fillAllfields.value = "Error, could not save interests."
+                            println("Failed to add to interests: $responseCode")
+                        }
+                    }
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -205,6 +195,9 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
         }
     }
 
+    fun resetInterests() {
+        fillAllfields.value = ""
+    }
 
     // PASSWORD PROFILE FUNCTIONS
     private fun isValidPassword(password: String): Boolean {
@@ -310,10 +303,6 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
 
     fun addFriend(email: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            println("INSIDE ADD FRIEND")
-            println(email)
-            println("IDDDD")
-            println(userId)
             var created = false
             try {
                 val url = URL(BuildConfig.GET_FRIEND_URL)
@@ -338,7 +327,6 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
 
                     val responseCode = responseCode
                     created = responseCode == HttpURLConnection.HTTP_OK
-                    println(responseCode)
                     if (created) {
                         // Handle the response
                         val response = inputStream.bufferedReader().use { it.readText() }
@@ -379,7 +367,6 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
 
     fun acceptFriend(id: Int) {
         val url = URL(BuildConfig.GET_FRIEND_URL + "approve-request")
-        println(url)
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 (url.openConnection() as HttpURLConnection).apply {
@@ -423,6 +410,7 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
 
     // LOGOUT
     fun logout() {
+
         userRepository.resetUser()
     }
 

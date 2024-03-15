@@ -20,5 +20,5 @@ data class UserInterests(
     val ethnicities:Interest,
     val religions: Interest,
     val programs:Interest,
-    val hobbies: Interest
+    val hobbies: List<Interest>?
 )

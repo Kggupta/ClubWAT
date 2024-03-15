@@ -31,6 +31,7 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -79,7 +80,6 @@ fun ProfileView(
     var showEditInterests by remember { mutableStateOf(false) }
     var showEditProfile by remember { mutableStateOf(false) }
     var showEditFriends by remember { mutableStateOf(false) }
-
 
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -172,22 +172,23 @@ fun ProfileView(
 
     if (showEditInterests) {
         viewModel.getUserInterests()
+        var faculty by rememberSaveable { mutableStateOf(viewModel.facultyID)}
+        var ethnicity by rememberSaveable { mutableStateOf(viewModel.ethicityID)}
+        var religion by rememberSaveable { mutableStateOf(viewModel.religionID)}
+        var program by rememberSaveable { mutableStateOf(viewModel.programID)}
+        var hobbies by rememberSaveable { mutableStateOf(viewModel.hobbyID)}
 
-        var faculty by rememberSaveable { mutableStateOf(viewModel.faculty?.id ?: 0) }
-        var ethnicity by rememberSaveable { mutableStateOf(viewModel.ethicity?.id ?: 0) }
-        var religion by rememberSaveable { mutableStateOf(viewModel.religion?.id ?: 0) }
-        var program by rememberSaveable { mutableStateOf(viewModel.program?.id ?: 0) }
-        var hobbies by rememberSaveable { mutableStateOf(viewModel.hobby?.id ?: 0) }
 
 
         var buttonModifier = Modifier.width(1000.dp)
 
         AlertDialogExample(
-            onDismissRequest = { showEditInterests = false },
+            onDismissRequest = {
+                showEditInterests = false
+                viewModel.resetInterests()},
             onConfirmation = {
                 showEditInterests = false
-                viewModel.editInterests(faculty, ethnicity, religion, program, hobbies)
-
+                viewModel.resetInterests()
             },
             dialogTitle = "Edit Interests",
             dialogText = "Here you can edit your interests.",
@@ -220,10 +221,23 @@ fun ProfileView(
                 // TO DO MAKE THIS MULTI-SELECT
                 Spacer(modifier = Modifier.height(16.dp))
                 Text("Select Hobbies", style = MaterialTheme.typography.titleSmall)
-                DropdownList(itemList = viewModel.hobbies, selectedIndex = hobbies, modifier = buttonModifier) {
+                MultiSelectDropdownList(itemList = viewModel.hobbies, selectedIds = hobbies, modifier = buttonModifier) {
                     hobbies = it
                 }
                 Spacer(modifier = Modifier.height(16.dp))
+                Button(onClick = {
+                    viewModel.editInterests(faculty, ethnicity, religion, program, hobbies)
+                }) {
+                    Text("Save interests")
+                }
+
+                if (viewModel.fillAllfields.value != null) {
+                    Text(
+                        text = viewModel.fillAllfields.value!!,
+                        color = Color.Black,
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
 
             }
         )
@@ -473,13 +487,6 @@ fun AlertDialogExample(
             onDismissRequest()
         },
         confirmButton = {
-            TextButton(
-                onClick = {
-                    onConfirmation()
-                }
-            ) {
-                Text("Confirm")
-            }
         },
         dismissButton = {
             TextButton(
@@ -487,7 +494,7 @@ fun AlertDialogExample(
                     onDismissRequest()
                 }
             ) {
-                Text("Dismiss")
+                Text("Close")
             }
         }
     )
@@ -520,9 +527,12 @@ fun DropdownList(itemList: List<Interest>?, selectedIndex: Int, modifier: Modifi
 //            .clickable { showDropdown = !showDropdown },
             contentAlignment = Alignment.Center
         ) {
-            itemList?.get(selectedIndex)
-                ?.let { Text(text = it.name, modifier = Modifier.padding(3.dp)) }
+            itemList?.get(selectedIndex)?.let {
+                val displayName = if (selectedIndex == 0) "" else it.name
+                Text(text = displayName, modifier = Modifier.padding(3.dp))
+            }
         }
+
 
         // dropdown list
         Box() {
@@ -568,6 +578,87 @@ fun DropdownList(itemList: List<Interest>?, selectedIndex: Int, modifier: Modifi
         }
     }
 
+}
+
+@Composable
+fun MultiSelectDropdownList(
+    itemList: List<Interest>?,
+    selectedIds: List<Int>, // Use List<Int> to track multiple selections by ID
+    modifier: Modifier = Modifier,
+    onSelectionChange: (List<Int>) -> Unit // Callback with the updated list of selected IDs
+) {
+    var showDropdown by rememberSaveable { mutableStateOf(false) }
+    val scrollState = rememberScrollState()
+
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        // Button to show dropdown
+        Box(
+            modifier = modifier
+                .background(Color.White)
+                .fillMaxWidth()
+                .clickable { showDropdown = true },
+            contentAlignment = Alignment.Center
+        ) {
+            // Displaying selected item names based on IDs
+            Text(
+                text = itemList?.filter { it.id in selectedIds }?.joinToString(", ") { it.name } ?: "",
+                modifier = Modifier.padding(3.dp)
+            )
+        }
+
+        // Dropdown list
+        if (showDropdown) {
+            Popup(
+                alignment = Alignment.TopCenter,
+                properties = PopupProperties(
+                    focusable = true,
+                    dismissOnBackPress = true,
+                    dismissOnClickOutside = true
+                ),
+                onDismissRequest = { showDropdown = false }
+            ) {
+                Column(
+                    modifier = modifier
+                        .background(Color.White)
+                        .border(width = 1.dp, color = Color.Gray)
+                        .heightIn(max = 200.dp)
+                        .verticalScroll(state = scrollState)
+                ) {
+                    itemList?.forEach { item ->
+                        val isSelected = item.id in selectedIds
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 8.dp, horizontal = 16.dp)
+                                .clickable {
+                                    // Updating selected IDs based on current selection
+                                    val newSelectedIds = selectedIds.toMutableList().apply {
+                                        if (isSelected) remove(item.id) else add(item.id)
+                                    }
+                                    onSelectionChange(newSelectedIds)
+                                },
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Checkbox(
+                                checked = isSelected,
+                                onCheckedChange = null // We handle the state change with the Row's clickable
+                            )
+                            Spacer(Modifier.width(8.dp))
+                            Text(text = item.name)
+                        }
+                        // This divider logic can remain the same or be adapted if needed
+                        if (item != itemList.last()) {
+                            Divider()
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 
