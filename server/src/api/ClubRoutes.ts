@@ -19,10 +19,6 @@ import { authenticateToken, verifyIsClubAdmin } from "../middlewares";
 
 const router = express.Router();
 
-interface ClubWithCategories extends Club {
-  categories?: ClubCategory[];
-}
-
 interface ClubDetails extends Club {
   categories: number[];
   position?: string;
@@ -33,20 +29,8 @@ type ClubCategoryWithoutId = {
   category_id: number;
 };
 
-type ClubResponse = {
-  data: ClubWithCategories[];
-};
-
 type ChosenClub = {
   id: string;
-};
-
-type ClubAdminResponse = {
-  data: ClubAdmin[];
-};
-
-type ClubParam = {
-  param: string;
 };
 
 type ClubForYouItem = {
@@ -54,20 +38,6 @@ type ClubForYouItem = {
   title: string;
   description: string;
   common_interest_count: number;
-};
-
-type includeQuery = {
-  categories: {
-    select: {
-      category: {
-        select: {
-          id: true;
-          type: true;
-          name: true;
-        };
-      };
-    };
-  };
 };
 
 async function addClubCategories(clubId: number, categories: number[]) {
