@@ -5,9 +5,11 @@ import {
   INVALID_REQUEST_CODE,
   OK_CODE,
   CREATED_CODE,
+  NOT_FOUND_CODE,
 } from "../lib/StatusCodes";
 import { authenticateToken, verifyIsClubAdmin } from "../middlewares";
 import { Event } from "@prisma/client";
+import EmailService from "../lib/EmailService";
 const clubEventRoutes = express.Router({ mergeParams: true });
 
 type EventsQuery = {
@@ -58,11 +60,31 @@ clubEventRoutes.post<EventsQuery, Event>(
   verifyIsClubAdmin,
   async (req, res) => {
     try {
-      const club_Id = Number(req.params.id);
-      const { title, description, start_date, end_date, location, private_flag } = req.body;
-      if (!title || !description || !start_date || !end_date || !club_Id || !location || typeof private_flag !== 'boolean') {
+      const clubId = Number(req.params.id);
+      const {
+        title,
+        description,
+        start_date,
+        end_date,
+        location,
+        private_flag,
+      } = req.body;
+      if (
+        !title ||
+        !description ||
+        !start_date ||
+        !end_date ||
+        !clubId ||
+        !location ||
+        typeof private_flag !== "boolean"
+      ) {
         return res.sendStatus(INVALID_REQUEST_CODE);
       }
+
+      const club = await prisma.club.findFirst({ where: { id: clubId } });
+
+      if (!club) return res.sendStatus(NOT_FOUND_CODE);
+
       const event = await prisma.event.create({
         data: {
           title,
@@ -71,9 +93,37 @@ clubEventRoutes.post<EventsQuery, Event>(
           end_date,
           location,
           private_flag,
-          club_id: club_Id
+          club_id: clubId,
         },
       });
+
+      const joinedUsers = (
+        await prisma.clubMember.findMany({
+          where: { club_id: clubId, is_approved: true },
+          include: { user: true },
+        })
+      ).map((x) => x.user);
+
+      const notificationData = joinedUsers.map((x) => {
+        return {
+          source_user_id: req.body.user.id,
+          destination_user_id: x.id,
+          event_id: event.id,
+          create_date: new Date(),
+          content: `Upcoming event: ${event.title}`,
+        };
+      });
+
+      await prisma.notification.createMany({
+        data: notificationData,
+      });
+
+      await EmailService.newEventEmail(
+        joinedUsers.map((x) => x.email),
+        event,
+        club
+      );
+
       res.status(CREATED_CODE).json(event);
     } catch (error) {
       res.sendStatus(INTERNAL_ERROR_CODE);

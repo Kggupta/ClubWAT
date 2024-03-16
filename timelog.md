@@ -87,3 +87,4 @@
 | 03/13/2024 | 4      |        |        |         |         |         | Spotlight for club fairs on application startup             |
 | 03/13/2024 |        |        | 7      |         |         |         | Worked on allow club admins to edit clubs                   |
 | 03/13/2024 |        |        | 0.5    |         |         |         | Reviewed PRs and organized tickets                          |
+| 03/16/2024 | 1      |        |        |         |         |         | Notifications to club members when event created            |
