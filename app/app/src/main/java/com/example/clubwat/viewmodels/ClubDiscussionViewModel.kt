@@ -10,14 +10,17 @@ import com.example.clubwat.model.ProcessedData
 import com.example.clubwat.model.SendDiscussionMessageRequest
 import com.example.clubwat.repository.DiscussionRepository
 import com.example.clubwat.repository.UserRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ClubDiscussionViewModel(
+@HiltViewModel
+class ClubDiscussionViewModel @Inject constructor(
     val userRepository: UserRepository,
     private val discussionRepository: DiscussionRepository
 ) : ViewModel() {
