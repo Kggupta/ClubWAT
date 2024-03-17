@@ -109,19 +109,12 @@ router.post("/", authenticateToken, async (req, res) => {
   }
 
   try {
-    await prisma.friend.createMany({
-      data: [
-        {
-          source_friend_id: userId,
-          destination_friend_id: friendId,
-          is_accepted: false,
-        },
-        {
-          source_friend_id: friendId,
-          destination_friend_id: userId,
-          is_accepted: false,
-        },
-      ],
+    await prisma.friend.create({
+      data: {
+        source_friend_id: userId,
+        destination_friend_id: friendId,
+        is_accepted: false,
+      },
     });
     return res.sendStatus(OK_CODE);
   } catch (error) {
