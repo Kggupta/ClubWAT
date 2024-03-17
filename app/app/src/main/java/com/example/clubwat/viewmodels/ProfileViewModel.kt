@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.json.JSONObject
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
@@ -219,7 +220,7 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
     fun editPassword(oldPassword: String, newPassword: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val url = URL("http://10.0.2.2:3000/api/v1/user/change-password")
+                val url = URL(BuildConfig.PASSWORD_CHANGE)
                 (url.openConnection() as HttpURLConnection).apply {
                     requestMethod = "PUT"
                     doOutput = true
@@ -238,6 +239,11 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
                         passwordSuccess.value = "Password Changed!"
                         passwordError.value = null
                         println("Password successfully updated")
+                        val response = inputStream.bufferedReader().use { it.readText() }
+                        val jsonResponse = JSONObject(response)
+                        val token = jsonResponse.optString("data", null.toString())
+                        println(token)
+                        userRepository.setUserId(token)
                     } else {
                         passwordError.value = "Error password could not be changed"
                         passwordSuccess.value = null

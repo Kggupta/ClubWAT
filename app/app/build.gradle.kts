@@ -109,6 +109,11 @@ android {
         if (getInterests != null) {
             buildConfigField("String", "GET_INTERESTS", getInterests)
         }
+
+        val passwordChange = properties["PASSWORD_CHANGE"]?.toString()
+        if (passwordChange != null) {
+            buildConfigField("String", "PASSWORD_CHANGE", passwordChange)
+        }
     }
 
     buildTypes {
