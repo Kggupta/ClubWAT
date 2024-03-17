@@ -138,12 +138,12 @@ router.put("/approve-request", authenticateToken, async (req, res) => {
   }
 
   try {
-    await prisma.friend.update({
+    await prisma.friend.updateMany({
       where: {
-        source_friend_id_destination_friend_id: {
-          source_friend_id: friendId,
-          destination_friend_id:  userId,
-        },
+        OR: [
+          { source_friend_id: userId, destination_friend_id: friendId },
+          { source_friend_id: friendId, destination_friend_id: userId },
+        ],
       },
       data: {
         is_accepted: true,
@@ -156,6 +156,7 @@ router.put("/approve-request", authenticateToken, async (req, res) => {
 });
 
 router.delete("/:id", authenticateToken, async (req, res) => {
+  const userId = req.body.user.id;
   const friendId = Number(req.params.id);
 
   if (!friendId) {
@@ -163,12 +164,12 @@ router.delete("/:id", authenticateToken, async (req, res) => {
   }
 
   try {
-    await prisma.friend.delete({
+    await prisma.friend.deleteMany({
       where: {
-        source_friend_id_destination_friend_id: {
-          source_friend_id: req.body.user.id,
-          destination_friend_id: friendId,
-        },
+        OR: [
+          { source_friend_id: userId, destination_friend_id: friendId },
+          { source_friend_id: friendId, destination_friend_id: userId },
+        ],
       },
     });
   } catch (error) {
