@@ -64,6 +64,7 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
     init {
         getID(userRepository.currentUser.value?.userId.toString())
         getInterests()
+        getUserInterests()
         getFriendsReq()
         getFriends()
     }
@@ -410,7 +411,6 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
 
     // LOGOUT
     fun logout() {
-
         userRepository.resetUser()
     }
 
