@@ -44,7 +44,7 @@ class ClubDiscussionViewModel @Inject constructor(
 
                 is NetworkResult.Error -> {
                     // Can be used to handle errors in future...
-                    delay(500)
+                    delay(5000)
                     fetchUpdatedPosts(clubId) // try again after 5 seconds
                 }
             }

@@ -44,10 +44,13 @@ import com.example.clubwat.viewmodels.factories.SearchViewModelFactory
 import com.example.clubwat.viewmodels.factories.SignUpViewModelFactory
 import com.example.clubwat.views.NavigationBar.NavBar
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private val userRepository by lazy { UserRepository() }
+
+    @Inject
+    lateinit var userRepository: UserRepository
 
     override fun onResume() {
         super.onResume()
@@ -62,6 +65,7 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 val currentUser by userRepository.currentUser
 
+                // Todo -> 1. delete all factories 2. Add @Inject constructor() to each vm 3. add = hiltViewModel() to each views constructor (Discussion VM/View for example)
                 val signUpViewModel: SignUpViewModel by viewModels { SignUpViewModelFactory(userRepository) }
                 val loginViewModel: LoginViewModel by viewModels { LoginViewModelFactory(userRepository) }
                 val codeVerificationViewModel: CodeVerificationViewModel by viewModels { CodeVerificationViewModelFactory(userRepository) }
