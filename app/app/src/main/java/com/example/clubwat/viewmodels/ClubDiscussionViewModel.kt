@@ -24,10 +24,6 @@ class ClubDiscussionViewModel(
     private val _uiState = MutableStateFlow(DiscussionUiState.initial)
     val uiState: StateFlow<DiscussionUiState> = _uiState
 
-    private val _isLoadingClubDetails = MutableStateFlow(true)
-    val isLoadingClubDetails: StateFlow<Boolean> = _isLoadingClubDetails.asStateFlow()
-
-
     fun fetchUpdatedPosts(clubId: String) {
         viewModelScope.launch(Dispatchers.IO) {
             when (val response = discussionRepository.getMessages(
@@ -62,7 +58,6 @@ class ClubDiscussionViewModel(
 
     fun fetchClubDetails(clubId: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            _isLoadingClubDetails.value = true
             when (val response = discussionRepository.getClub(
                 clubId,
                 userRepository.currentUser.value?.userId.toString()
@@ -70,14 +65,18 @@ class ClubDiscussionViewModel(
                 is NetworkResult.Success -> {
                     _uiState.emit(
                         _uiState.value.copy(
-                            clubDetails = response.data
+                            clubDetails = response.data,
+                            isLoading = false
                         )
                     )
-                    _isLoadingClubDetails.value = false
                 }
 
                 is NetworkResult.Error -> {
-                    _isLoadingClubDetails.value = false
+                    _uiState.emit(
+                        _uiState.value.copy(
+                            isLoading = false
+                        )
+                    )
                     // Can be used to handle errors in future...
                 }
             }
@@ -138,9 +137,9 @@ class ClubDiscussionViewModel(
         val mutablePostList = mutableListOf<ProcessedData>()
         posts.forEach { post ->
             if (post.user.email == userRepository.currentUser.value?.email?.value) { // me identifier
-                mutablePostList.add(ProcessedData(isMe = true, isAdmin = _uiState.value.clubDetails?.isClubAdmin, messageData = post))
+                mutablePostList.add(ProcessedData(isMe = true, messageData = post))
             } else { // someone else
-                mutablePostList.add(ProcessedData(isMe = false, isAdmin = _uiState.value.clubDetails?.isClubAdmin, messageData = post))
+                mutablePostList.add(ProcessedData(isMe = false, messageData = post))
             }
         }
         return mutablePostList.reversed()
@@ -149,11 +148,13 @@ class ClubDiscussionViewModel(
     data class DiscussionUiState(
         val posts: List<ProcessedData>,
         val clubDetails: ClubDetails?,
+        val isLoading: Boolean
     ) {
         companion object {
             val initial = DiscussionUiState(
                 posts = emptyList(),
-                clubDetails = null
+                clubDetails = null,
+                isLoading = true // start loading
             )
         }
     }

@@ -1,10 +1,12 @@
 package com.example.clubwat.views
 
 //noinspection UsingMaterialAndMaterial3Libraries
+
 import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,12 +21,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.TopAppBar
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -38,6 +42,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -54,13 +59,10 @@ import com.example.clubwat.viewmodels.ClubDiscussionViewModel
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import androidx.compose.foundation.gestures.detectTapGestures
 
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.TextButton
-import androidx.compose.ui.input.pointer.pointerInput
 @RequiresApi(Build.VERSION_CODES.O)
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "SimpleDateFormat",
+@SuppressLint(
+    "UnusedMaterial3ScaffoldPaddingParameter", "SimpleDateFormat",
     "CoroutineCreationDuringComposition"
 )
 @OptIn(ExperimentalMaterial3Api::class)
@@ -71,7 +73,6 @@ fun ClubDiscussionView(
     clubId: String?
 ) {
     val uiState = viewModel.uiState.collectAsState()
-    val isLoadingClubDetails by viewModel.isLoadingClubDetails.collectAsState()
     val coroutineScope = rememberCoroutineScope()
     val state = rememberLazyListState()
 
@@ -107,7 +108,7 @@ fun ClubDiscussionView(
             )
         },
         content = {
-            if (!isLoadingClubDetails) {
+            LoadingScreen(uiState.value.isLoading) {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -139,12 +140,15 @@ fun ClubDiscussionView(
                                 message = post.messageData.message,
                                 onDelete = {
                                     if (clubId != null) {
-                                        viewModel.deleteMessage(post.messageData.id, uiState.value.clubDetails?.id)
+                                        viewModel.deleteMessage(
+                                            post.messageData.id,
+                                            uiState.value.clubDetails?.id
+                                        )
                                     }
                                 }
                             )
                             coroutineScope.launch {
-                                state.animateScrollToItem(uiState.value.posts.size -1)
+                                state.animateScrollToItem(uiState.value.posts.size - 1)
                             }
                         }
                     }
@@ -183,16 +187,22 @@ fun ClubDiscussionView(
 }
 
 @Composable
-fun MessageBubble(isClubAdmin: Boolean?, isMe: Boolean, name: String?, message: String, onDelete: () -> Unit) {
+fun MessageBubble(
+    isClubAdmin: Boolean?,
+    isMe: Boolean,
+    name: String?,
+    message: String,
+    onDelete: () -> Unit
+) {
 
-    var showDelDialog by remember { mutableStateOf(false)}
+    var showDelDialog by remember { mutableStateOf(false) }
     if (showDelDialog) {
         AlertDialog(
             onDismissRequest = { showDelDialog = false },
             title = { Text("Delete Message") },
-            text = { Text("Are you sure you want to delete this message?" ) },
+            text = { Text("Are you sure you want to delete this message?") },
             confirmButton = {
-                TextButton(onClick = { 
+                TextButton(onClick = {
                     onDelete()
                     showDelDialog = false
                 }) {
@@ -200,7 +210,7 @@ fun MessageBubble(isClubAdmin: Boolean?, isMe: Boolean, name: String?, message: 
                 }
             },
             dismissButton = {
-                TextButton(onClick = {  showDelDialog = false }) {
+                TextButton(onClick = { showDelDialog = false }) {
                     Text("Cancel")
                 }
             }
@@ -233,7 +243,7 @@ fun MessageBubble(isClubAdmin: Boolean?, isMe: Boolean, name: String?, message: 
                 )
                 .background(if (isMe) LightOrange else PurpleGrey80)
                 .pointerInput(Unit) {
-                    detectTapGestures (
+                    detectTapGestures(
                         onLongPress = {
                             if (isMe || isClubAdmin == true) {
                                 showDelDialog = true

@@ -16,6 +16,5 @@ data class MessageData(
 
 data class ProcessedData(
     val isMe: Boolean = false,
-    val isAdmin: Boolean?,
     val messageData: MessageData
 )
