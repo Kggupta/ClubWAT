@@ -30,6 +30,7 @@ import com.example.clubwat.viewmodels.ClubManagementViewModel
 import com.example.clubwat.viewmodels.ClubUserManagementViewModel
 import com.example.clubwat.viewmodels.CodeVerificationViewModel
 import com.example.clubwat.viewmodels.EditClubDetailsViewModel
+import com.example.clubwat.viewmodels.EditEventDetailsViewModel
 import com.example.clubwat.viewmodels.EventDetailsViewModel
 import com.example.clubwat.viewmodels.ForYouViewModel
 import com.example.clubwat.viewmodels.InboxViewModel
@@ -41,6 +42,7 @@ import com.example.clubwat.viewmodels.factories.ClubManagementViewModelFactory
 import com.example.clubwat.viewmodels.factories.ClubUserManagementViewModelFactory
 import com.example.clubwat.viewmodels.factories.CodeVerificationViewModelFactory
 import com.example.clubwat.viewmodels.factories.EditClubDetailsViewModelFactory
+import com.example.clubwat.viewmodels.factories.EditEventDetailsViewModelFactory
 import com.example.clubwat.viewmodels.factories.EventDetailsViewModelFactory
 import com.example.clubwat.viewmodels.factories.ForYouViewModelFactory
 import com.example.clubwat.viewmodels.factories.HomeViewModelFactory
@@ -83,7 +85,7 @@ class MainActivity : ComponentActivity() {
                 val clubUserManagementViewModel: ClubUserManagementViewModel by viewModels { ClubUserManagementViewModelFactory(userRepository) }
                 val addEventViewModel: AddEventViewModel by viewModels { AddEventViewModelFactory(userRepository) }
                 val editClubDetailsViewModel: EditClubDetailsViewModel by viewModels { EditClubDetailsViewModelFactory(userRepository) }
-
+                val editEventDetailsViewModel: EditEventDetailsViewModel by viewModels { EditEventDetailsViewModelFactory(userRepository) }
 
                 Scaffold(
                     bottomBar = {
@@ -139,6 +141,11 @@ class MainActivity : ComponentActivity() {
                             }
                             composable("event/{eventId}") {backStackEntry ->
                                 EventDetailsView(viewModel = eventDetailsViewModel,
+                                    navController = navController,
+                                    eventId = backStackEntry.arguments?.getString("eventId"))
+                            }
+                            composable("event/{eventId}/eventDetails") {backStackEntry ->
+                                EditEventDetailsView(viewModel = editEventDetailsViewModel,
                                     navController = navController,
                                     eventId = backStackEntry.arguments?.getString("eventId"))
                             }

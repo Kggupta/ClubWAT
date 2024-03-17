@@ -10,6 +10,7 @@
 | 01/22/2024 |        |        |        |         | 4       |         | Created user scenarios for searching clubs & recs           |
 | 01/22/2024 |        |        |        |         | 1       |         | Added to stakeholders and human human values                |
 | 01/28/2024 |        |        |        |         | 1       |         | Presentation Slides Prep + Review                           |
+| 01/28/2024 |        |        | 1      |         |         |         | Presentation Slides Prep + Review                           |
 | 01/25/2024 |        |        |        | 1       |         |         | Created presentation slides                                 |
 | 01/20/2024 |        | 3      |        |         |         |         | Wrote the introduction for the report                       |
 | 01/20/2024 |        | 2      |        |         |         |         | Figma mockups for recommendation system                     |
@@ -21,6 +22,7 @@
 | 01/23/2024 |        |        |        |         |         | 2       | Added on to stakeholders in project proposal                |
 | 01/26/2024 |        |        |        |         |         | 1       | Proof read proposal report and made minor edits             |
 | 01/26/2024 |        |        |        | 1       |         |         | Proof read the report                                       |
+| 01/26/2024 |        |        | 1      |         |         |         | Proof read the report                                       |
 | 02/06/2024 | 0.2    |        |        |         |         |         | Autogenerate db model                                       |
 | 02/06/2024 |        |        |        |         |         | 5       | Setup dev environments locally & built Club APIs            |
 | 02/10/2024 |        |        |        |         |         | 2       | Added ClubAdmin and Club APIs                               |
@@ -88,3 +90,6 @@
 | 03/13/2024 |        |        | 7      |         |         |         | Worked on allow club admins to edit clubs                   |
 | 03/13/2024 |        |        | 0.5    |         |         |         | Reviewed PRs and organized tickets                          |
 | 03/16/2024 | 1      |        |        |         |         |         | Notifications to club members when event created            |
+| 03/16/2024 |        |        | 0.5    |         |         |         | Reviewed PRs                                                |
+| 03/16/2024 |        |        | 2.5    |         |         |         | D4 Writeup about MVVM                                       |
+| 03/17/2024 |        |        | 8      |         |         |         | Worked on allow club admins to edit events                  |
