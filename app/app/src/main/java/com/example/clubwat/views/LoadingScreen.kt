@@ -28,6 +28,7 @@ fun LoadingScreen(
                 modifier = Modifier
             )
         }
+    } else {
+        content()
     }
-    content()
 }

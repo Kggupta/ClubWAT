@@ -190,7 +190,7 @@ fun ClubDiscussionView(
 
 @Composable
 fun MessageBubble(
-    isClubAdmin: Boolean?,
+    isClubAdmin: Boolean,
     isMe: Boolean,
     name: String?,
     message: String,
@@ -247,7 +247,7 @@ fun MessageBubble(
                 .pointerInput(Unit) {
                     detectTapGestures(
                         onLongPress = {
-                            if (isMe || isClubAdmin == true) {
+                            if (isMe || isClubAdmin) {
                                 showDelDialog = true
                             }
                         }
