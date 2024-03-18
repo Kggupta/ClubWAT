@@ -20,11 +20,14 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -39,10 +42,14 @@ fun EditEventDetailsView(
     navController: NavController,
     eventId: String?
 ) {
-    if (eventId != null) {
-        viewModel.getEvent(eventId)
-    }
 
+    var errorMessage by viewModel.errorMessage
+
+    LaunchedEffect(Unit) {
+        if (eventId != null) {
+            viewModel.getEvent(eventId)
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -142,9 +149,19 @@ fun EditEventDetailsView(
 
                 Button(
                     onClick = {
-                        viewModel.updateEvent { isAdded ->
-                            if (isAdded) {
-                                navController.popBackStack()
+                        if (viewModel.title.value == "" &&
+                            viewModel.description.value == "" &&
+                            viewModel.location.value == "" &&
+                            viewModel.formatDateTime(viewModel.startDate.value) == viewModel.getEventStartDate() &&
+                            viewModel.formatDateTime(viewModel.endDate.value) == viewModel.getEventEndDate()) {
+                            errorMessage = "Please fill in all values"
+                        } else if (!(viewModel.startDate.value.time.before(viewModel.endDate.value.time))) {
+                            errorMessage = "Start date must be earlier than end date!"
+                        } else {
+                            viewModel.updateEvent { isAdded ->
+                                if (isAdded) {
+                                    navController.popBackStack()
+                                }
                             }
                         }
                     },
@@ -162,6 +179,17 @@ fun EditEventDetailsView(
                         )
                     )
                 }
+
+                Text(
+                    text = viewModel.errorMessage.value,
+                    style = TextStyle(
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Red,
+                        fontSize = 16.sp,
+                    ),
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center
+                )
             }
         }
     )

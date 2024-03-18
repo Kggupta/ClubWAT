@@ -17,6 +17,7 @@ import org.json.JSONObject
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -31,6 +32,7 @@ class EditEventDetailsViewModel(private val userRepository: UserRepository): Vie
     var location = mutableStateOf("")
     var startDate = mutableStateOf(Calendar.getInstance())
     var endDate = mutableStateOf(Calendar.getInstance())
+    var errorMessage = mutableStateOf("")
 
     fun getEventTitle(): String {
         if (_event.value == null) return ""
@@ -47,6 +49,16 @@ class EditEventDetailsViewModel(private val userRepository: UserRepository): Vie
         return _event.value!!.location
     }
 
+    fun getEventStartDate(): String {
+        if (_event.value == null) return ""
+        return _event.value!!.startDate
+    }
+
+    fun getEventEndDate(): String {
+        if (_event.value == null) return ""
+        return _event.value!!.endDate
+    }
+
     fun getEvent(eventId: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -60,9 +72,15 @@ class EditEventDetailsViewModel(private val userRepository: UserRepository): Vie
                     val response = con.inputStream.bufferedReader().use { it.readText() }
                     _event.value = Gson().fromJson(response, Event::class.java)
                     withContext(Dispatchers.Main) {
-                        _event.value?.let { event ->
-                            startDate.value = parseDateString(event.startDate)
-                            endDate.value = parseDateString(event.endDate)
+                        _event.value?.startDate?.let {
+                            parseDateString(it)?.let { parsedStartDate ->
+                                startDate.value = parsedStartDate
+                            }
+                        }
+                        _event.value?.endDate?.let {
+                            parseDateString(it)?.let { parsedEndDate ->
+                                endDate.value = parsedEndDate
+                            }
                         }
                     }
                 }
@@ -72,15 +90,21 @@ class EditEventDetailsViewModel(private val userRepository: UserRepository): Vie
         }
     }
 
-    private fun parseDateString(dateString: String): Calendar {
-        val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
-        formatter.timeZone = TimeZone.getTimeZone("UTC")
+    private fun parseDateString(dateString: String): Calendar? {
+        val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+        formatter.timeZone = TimeZone.getDefault()
         val calendar = Calendar.getInstance()
-        calendar.time = formatter.parse(dateString)!!
+        try {
+            calendar.time = formatter.parse(dateString) ?: return null
+        } catch (e: ParseException) {
+            e.printStackTrace()
+            return null
+        }
         return calendar
     }
 
-    private fun formatDateTime(calendar: Calendar): String {
+
+     fun formatDateTime(calendar: Calendar): String {
         val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
         formatter.timeZone = TimeZone.getTimeZone("UTC")
         return formatter.format(calendar.time)
@@ -98,28 +122,27 @@ class EditEventDetailsViewModel(private val userRepository: UserRepository): Vie
                     setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value!!.userId )
 
                     val jsonObject = JSONObject().apply {
-                        put("title", title.takeIf { it.value.isNotBlank() } ?: getEventTitle())
+                        put("title", title.value.takeIf { it.isNotBlank() } ?: getEventTitle())
                         put("description", description.takeIf { it.value.isNotBlank() } ?: getEventDescription())
                         put("start_date", formatDateTime(startDate.value))
                         put("end_date", formatDateTime(endDate.value))
                         put("location", location.takeIf { it.value.isNotBlank() } ?: getEventLocation())
                     }
+                    println(jsonObject.toString())
                     OutputStreamWriter(outputStream).use { it.write(jsonObject.toString()) }
 
                     val responseCode = responseCode
-                    isEventAdded = responseCode == HttpURLConnection.HTTP_CREATED
+                    println(responseCode)
+                    isEventAdded = responseCode == HttpURLConnection.HTTP_OK
                     if (!isEventAdded) {
                         throw Exception()
                     }
                 }
             } catch (e: Exception) {
-//                errorMessage.value = "Internal server error!"
+                errorMessage.value = "Internal server error!"
                 e.printStackTrace()
             }
             withContext(Dispatchers.Main) {
-//                if (isEventAdded) {
-//                    resetForm()
-//                }
                 callback(isEventAdded)
             }
         }
