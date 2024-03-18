@@ -1,6 +1,9 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.dagger.hilt.android")
+    id("kotlin-kapt")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -105,6 +108,16 @@ android {
             buildConfigField("String", "GET_ALL_CATEGORIES", getAllCategories)
         }
 
+        val getInterests = properties["GET_INTERESTS"]?.toString()
+        if (getInterests != null) {
+            buildConfigField("String", "GET_INTERESTS", getInterests)
+        }
+
+        val passwordChange = properties["PASSWORD_CHANGE"]?.toString()
+        if (passwordChange != null) {
+            buildConfigField("String", "PASSWORD_CHANGE", passwordChange)
+        }
+
         val editEvent = properties["EDIT_EVENT_URL"]?.toString()
         if (editEvent != null) {
             buildConfigField("String", "EDIT_EVENT_URL", editEvent)
@@ -137,6 +150,11 @@ android {
     }
 }
 
+// Allow references to generated code
+kapt {
+    correctErrorTypes = true
+}
+
 dependencies {
     implementation("com.google.code.gson:gson:2.10")
     implementation("androidx.core:core-ktx:1.12.0")
@@ -165,4 +183,7 @@ dependencies {
     implementation("androidx.compose.material3:material3:1.2.0")
     implementation("androidx.compose.material3:material3-window-size-class:1.2.0")
     implementation("androidx.compose.material:material:1.6.2")
+    implementation("com.google.dagger:hilt-android:2.48")
+    kapt("com.google.dagger:hilt-android-compiler:2.48")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 }

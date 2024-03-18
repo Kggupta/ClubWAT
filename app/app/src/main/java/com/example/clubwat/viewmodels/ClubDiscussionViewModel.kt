@@ -3,19 +3,24 @@ package com.example.clubwat.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.clubwat.model.ClubDetails
+import com.example.clubwat.model.DeleteDiscussionMessageRequest
 import com.example.clubwat.model.MessageData
 import com.example.clubwat.model.NetworkResult
 import com.example.clubwat.model.ProcessedData
-import com.example.clubwat.model.SendDiscusionMessageRequest
+import com.example.clubwat.model.SendDiscussionMessageRequest
 import com.example.clubwat.repository.DiscussionRepository
 import com.example.clubwat.repository.UserRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ClubDiscussionViewModel(
+@HiltViewModel
+class ClubDiscussionViewModel @Inject constructor(
     val userRepository: UserRepository,
     private val discussionRepository: DiscussionRepository
 ) : ViewModel() {
@@ -38,14 +43,13 @@ class ClubDiscussionViewModel(
                 }
 
                 is NetworkResult.Error -> {
-                    // Can be user to handle errors in future...
-                    delay(500)
+                    // Can be used to handle errors in future...
+                    delay(5000)
                     fetchUpdatedPosts(clubId) // try again after 5 seconds
                 }
             }
         }
     }
-
     private fun startPolling(clubId: String) {
         viewModelScope.launch {
             while (true) { // ONLY IN VM SCOPE
@@ -64,12 +68,18 @@ class ClubDiscussionViewModel(
                 is NetworkResult.Success -> {
                     _uiState.emit(
                         _uiState.value.copy(
-                            clubDetails = response.data
+                            clubDetails = response.data,
+                            isLoading = false
                         )
                     )
                 }
 
                 is NetworkResult.Error -> {
+                    _uiState.emit(
+                        _uiState.value.copy(
+                            isLoading = false
+                        )
+                    )
                     // Can be used to handle errors in future...
                 }
             }
@@ -82,7 +92,7 @@ class ClubDiscussionViewModel(
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             when (val response = discussionRepository.sendMessage(
-                SendDiscusionMessageRequest(
+                SendDiscussionMessageRequest(
                     clubId,
                     message
                 ),
@@ -99,13 +109,40 @@ class ClubDiscussionViewModel(
         }
     }
 
+    fun deleteMessage(
+        messageId: Int,
+        clubId: Int?) {
+        viewModelScope.launch(Dispatchers.IO) {
+            when (val response = discussionRepository.deleteMessage(DeleteDiscussionMessageRequest(
+                clubId,
+                messageId
+            ),
+                userRepository.currentUser.value?.userId?.toString() ?: ""
+            )) {
+                is NetworkResult.Success -> {
+                    val messageToDelete = _uiState.value.posts.find { it.messageData.id == messageId }
+                    val updatedState = _uiState.value.posts.toMutableList().apply { this.remove(messageToDelete) }
+
+                    _uiState.emit(
+                        _uiState.value.copy(
+                            posts = updatedState
+                        )
+                    )
+                }
+                is NetworkResult.Error -> {
+                    // Can be used to handle errors in future...
+                }
+            }
+        }
+    }
+
     private fun processData(posts: List<MessageData>): List<ProcessedData> {
         val mutablePostList = mutableListOf<ProcessedData>()
         posts.forEach { post ->
             if (post.user.email == userRepository.currentUser.value?.email?.value) { // me identifier
-                mutablePostList.add(ProcessedData(true, post))
+                mutablePostList.add(ProcessedData(isMe = true, messageData = post))
             } else { // someone else
-                mutablePostList.add(ProcessedData(messageData = post))
+                mutablePostList.add(ProcessedData(isMe = false, messageData = post))
             }
         }
         return mutablePostList.reversed()
@@ -113,12 +150,14 @@ class ClubDiscussionViewModel(
 
     data class DiscussionUiState(
         val posts: List<ProcessedData>,
-        val clubDetails: ClubDetails?
+        val clubDetails: ClubDetails?,
+        val isLoading: Boolean
     ) {
         companion object {
             val initial = DiscussionUiState(
                 posts = emptyList(),
-                clubDetails = null
+                clubDetails = null,
+                isLoading = true // start loading
             )
         }
     }

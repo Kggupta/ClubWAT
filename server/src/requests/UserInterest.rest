@@ -1,0 +1,22 @@
+GET http://localhost:3000/api/v1/interest/user/all
+content-type: application/json
+Authorization: Bearer [token]
+###
+
+GET http://localhost:3000/api/v1/interest/user
+content-type: application/json
+Authorization: Bearer [token]
+
+###
+
+PUT http://localhost:3000/api/v1/interest/user
+content-type: application/json
+Authorization: Bearer [token]
+
+{
+  "faculty": 9,
+  "ethnicity": 17,
+  "religion": 29,
+  "program": 64,
+  "hobbies": [51, 45, 56]
+}

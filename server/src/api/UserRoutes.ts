@@ -109,16 +109,14 @@ type RegistrationResponse = {
 router.put("/change-password", authenticateToken, async (req, res) => {
   const password = req.body.password;
   const oldPassword = req.body.oldPassword;
-
   if (!password || !oldPassword) return res.sendStatus(INVALID_REQUEST_CODE);
 
   const strength = passwordStrength(password);
 
   if (strength.contains.length !== 4 || strength.length < 8)
     return res.sendStatus(INVALID_REQUEST_CODE);
-
   if (
-    !PasswordHashingService.compareHash(req.body.user.password, oldPassword)
+    !PasswordHashingService.compareHash(oldPassword, req.body.user.password)
   ) {
     return res.sendStatus(UNAUTHORIZED_CODE);
   }
@@ -134,6 +132,7 @@ router.put("/change-password", authenticateToken, async (req, res) => {
     updatedUser,
     process.env.ACCESS_TOKEN_SECRET as string
   );
+  
 
   res.status(OK_CODE).json({ data: token });
 });
@@ -166,6 +165,7 @@ router.post<RegistrationRequest, RegistrationResponse>(
 
     if (doesUserAccountExist > 0) return res.sendStatus(CONFLICT_CODE);
 
+    // console.log("CODE IS", registrationRequest.code)
     const userVerification: UserEmailVerification | null =
       await prisma.userEmailVerification.findFirst({
         where: { email: registrationRequest.email },
@@ -236,6 +236,7 @@ router.get<UserRequest, UserDetailsResponse>(
 
 router.delete<void, void>("", authenticateToken, async (req, res) => {
   const userId = Number(req.body.user.id);
+
   if (!userId) {
     return res.sendStatus(INVALID_REQUEST_CODE);
   }

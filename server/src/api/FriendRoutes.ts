@@ -53,6 +53,7 @@ router.get("/requests", authenticateToken, async (req, res) => {
       include: { source_friend: true, destination_friend: true },
     });
 
+
     let friendList = friends
       .map((x) => x.source_friend)
       .concat(friends.map((x) => x.destination_friend))
@@ -67,6 +68,7 @@ router.get("/requests", authenticateToken, async (req, res) => {
 router.post("/", authenticateToken, async (req, res) => {
   const userId = req.body.user.id;
   const friendEmail = req.body.email;
+
   const friend = await prisma.user.findFirst({
     where: { email: friendEmail },
   });
@@ -80,6 +82,26 @@ router.post("/", authenticateToken, async (req, res) => {
   }
 
   const friendId = friend?.id;
+
+  // check if a friend relationship already exists
+  const existingFriend = await prisma.friend.findFirst({
+    where: {
+      OR: [
+        {
+          source_friend_id: userId,
+          destination_friend_id: friendId,
+        },
+        {
+          source_friend_id: friendId,
+          destination_friend_id: userId,
+        },
+      ],
+    },
+  });
+
+  if (existingFriend) {
+    return res.sendStatus(INVALID_REQUEST_CODE);
+  }
 
   try {
     await prisma.friend.create({
@@ -104,12 +126,12 @@ router.put("/approve-request", authenticateToken, async (req, res) => {
   }
 
   try {
-    await prisma.friend.update({
+    await prisma.friend.updateMany({
       where: {
-        source_friend_id_destination_friend_id: {
-          source_friend_id: userId,
-          destination_friend_id: friendId,
-        },
+        OR: [
+          { source_friend_id: userId, destination_friend_id: friendId },
+          { source_friend_id: friendId, destination_friend_id: userId },
+        ],
       },
       data: {
         is_accepted: true,
@@ -122,16 +144,25 @@ router.put("/approve-request", authenticateToken, async (req, res) => {
 });
 
 router.delete("/:id", authenticateToken, async (req, res) => {
+  const userId = req.body.user.id;
   const friendId = Number(req.params.id);
 
   if (!friendId) {
     return res.sendStatus(INVALID_REQUEST_CODE);
   }
-  await prisma.friend.delete({
-    where: {
-      id: friendId,
-    },
-  });
+
+  try {
+    await prisma.friend.deleteMany({
+      where: {
+        OR: [
+          { source_friend_id: userId, destination_friend_id: friendId },
+          { source_friend_id: friendId, destination_friend_id: userId },
+        ],
+      },
+    });
+  } catch (error) {
+    return res.sendStatus(INTERNAL_ERROR_CODE);
+  }
 
   return res.sendStatus(OK_CODE);
 });

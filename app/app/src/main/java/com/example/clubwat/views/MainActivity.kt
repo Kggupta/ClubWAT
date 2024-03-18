@@ -20,12 +20,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.clubwat.repository.DiscussionRepositoryImpl
 import com.example.clubwat.repository.UserRepository
 import com.example.clubwat.ui.theme.ClubWATTheme
 import com.example.clubwat.viewmodels.AddEventViewModel
 import com.example.clubwat.viewmodels.ClubDetailsViewModel
-import com.example.clubwat.viewmodels.ClubDiscussionViewModel
 import com.example.clubwat.viewmodels.ClubManagementViewModel
 import com.example.clubwat.viewmodels.ClubUserManagementViewModel
 import com.example.clubwat.viewmodels.CodeVerificationViewModel
@@ -37,7 +35,6 @@ import com.example.clubwat.viewmodels.InboxViewModel
 import com.example.clubwat.viewmodels.ProfileViewModel
 import com.example.clubwat.viewmodels.factories.AddEventViewModelFactory
 import com.example.clubwat.viewmodels.factories.ClubDetailsViewModelFactory
-import com.example.clubwat.viewmodels.factories.ClubDiscussionViewModelFactory
 import com.example.clubwat.viewmodels.factories.ClubManagementViewModelFactory
 import com.example.clubwat.viewmodels.factories.ClubUserManagementViewModelFactory
 import com.example.clubwat.viewmodels.factories.CodeVerificationViewModelFactory
@@ -52,10 +49,14 @@ import com.example.clubwat.viewmodels.factories.ProfileViewModelFactory
 import com.example.clubwat.viewmodels.factories.SearchViewModelFactory
 import com.example.clubwat.viewmodels.factories.SignUpViewModelFactory
 import com.example.clubwat.views.NavigationBar.NavBar
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private val userRepository by lazy { UserRepository() }
-    private val discussionRepository by lazy { DiscussionRepositoryImpl() }
+
+    @Inject
+    lateinit var userRepository: UserRepository
 
     override fun onResume() {
         super.onResume()
@@ -70,6 +71,7 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 val currentUser by userRepository.currentUser
 
+                // Todo -> 1. delete all factories 2. Add @Inject constructor() to each vm 3. add = hiltViewModel() to each views constructor (Discussion VM/View for example)
                 val signUpViewModel: SignUpViewModel by viewModels { SignUpViewModelFactory(userRepository) }
                 val loginViewModel: LoginViewModel by viewModels { LoginViewModelFactory(userRepository) }
                 val codeVerificationViewModel: CodeVerificationViewModel by viewModels { CodeVerificationViewModelFactory(userRepository) }
@@ -78,7 +80,6 @@ class MainActivity : ComponentActivity() {
                 val profileViewModel: ProfileViewModel by viewModels { ProfileViewModelFactory(userRepository) }
                 val searchViewModel: SearchViewModel by viewModels { SearchViewModelFactory(userRepository) }
                 val clubDetailsViewModel: ClubDetailsViewModel by viewModels { ClubDetailsViewModelFactory(userRepository) }
-                val clubDiscussionViewModel: ClubDiscussionViewModel by viewModels { ClubDiscussionViewModelFactory(userRepository, discussionRepository) }
                 val inboxViewModel: InboxViewModel by viewModels { InboxViewModelFactory(userRepository) }
                 val eventDetailsViewModel: EventDetailsViewModel by viewModels { EventDetailsViewModelFactory(userRepository) }
                 val clubManagementViewModel: ClubManagementViewModel by viewModels { ClubManagementViewModelFactory(userRepository) }
@@ -131,7 +132,6 @@ class MainActivity : ComponentActivity() {
                             }
                             composable("discussion/{clubId}") { backStackEntry ->
                                 ClubDiscussionView(
-                                    viewModel = clubDiscussionViewModel,
                                     navController = navController,
                                     clubId = backStackEntry.arguments?.getString("clubId")
                                 )
