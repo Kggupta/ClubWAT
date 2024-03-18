@@ -322,9 +322,6 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
 
                     val requestBody = """
                         {
-                            "user": {
-                                "id": $userId
-                            },
                             "email": "$email"
                         }
                     """.trimIndent()

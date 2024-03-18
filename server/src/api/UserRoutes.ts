@@ -165,7 +165,7 @@ router.post<RegistrationRequest, RegistrationResponse>(
 
     if (doesUserAccountExist > 0) return res.sendStatus(CONFLICT_CODE);
 
-    console.log("CODE IS", registrationRequest.code)
+    // console.log("CODE IS", registrationRequest.code)
     const userVerification: UserEmailVerification | null =
       await prisma.userEmailVerification.findFirst({
         where: { email: registrationRequest.email },
@@ -236,6 +236,7 @@ router.get<UserRequest, UserDetailsResponse>(
 
 router.delete<void, void>("", authenticateToken, async (req, res) => {
   const userId = Number(req.body.user.id);
+
   if (!userId) {
     return res.sendStatus(INVALID_REQUEST_CODE);
   }

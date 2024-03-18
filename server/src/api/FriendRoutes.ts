@@ -12,7 +12,6 @@ const router = express.Router();
 
 router.get("/", authenticateToken, async (req, res) => {
   const userId = req.body.user.id;
-  console.log("DIAWJHDIWJDI");
 
   if (!userId) {
     return res.sendStatus(INVALID_REQUEST_CODE);
@@ -26,7 +25,6 @@ router.get("/", authenticateToken, async (req, res) => {
       },
       include: { source_friend: true, destination_friend: true },
     });
-    console.log(friends);
 
     let friendList = friends
       .map((x) => x.source_friend)
@@ -41,12 +39,11 @@ router.get("/", authenticateToken, async (req, res) => {
 
 router.get("/requests", authenticateToken, async (req, res) => {
   const userId = req.body.user.id;
-  console.log("WJEHUI#EHIEHIO");
 
   if (!userId) {
     return res.sendStatus(INVALID_REQUEST_CODE);
   }
-  console.log("FIRNED REQ");
+
   try {
     const friends = await prisma.friend.findMany({
       where: {
@@ -56,7 +53,6 @@ router.get("/requests", authenticateToken, async (req, res) => {
       include: { source_friend: true, destination_friend: true },
     });
 
-    console.log(friends);
 
     let friendList = friends
       .map((x) => x.source_friend)
@@ -72,8 +68,7 @@ router.get("/requests", authenticateToken, async (req, res) => {
 router.post("/", authenticateToken, async (req, res) => {
   const userId = req.body.user.id;
   const friendEmail = req.body.email;
-  console.log("id: ", userId);
-  console.log("email: ", friendEmail);
+
   const friend = await prisma.user.findFirst({
     where: { email: friendEmail },
   });

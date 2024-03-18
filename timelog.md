@@ -91,5 +91,5 @@
 | 03/13/2024 |        |        | 7      |         |         |         | Worked on allow club admins to edit clubs                   |
 | 03/13/2024 |        |        | 0.5    |         |         |         | Reviewed PRs and organized tickets                          |
 | 03/11/2024 |        |        |        |         |         | 2       | Added APIs for User Interests                               |
-| 03/15/2024 |        | 6      |        |         |         | 2       | Added APIs for User Interests to the UI                     |
+| 03/15/2024 |        | 6      |        |         |         |         | Added APIs for User Interests to the UI                     |
 | 03/16/2024 | 1      |        |        |         |         |         | Notifications to club members when event created            |

@@ -74,8 +74,7 @@ import com.example.clubwat.viewmodels.ProfileViewModel
 @OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileView(
-    viewModel: ProfileViewModel,
-    navController: NavController
+    viewModel: ProfileViewModel, navController: NavController
 ) {
     var showEditInterests by remember { mutableStateOf(false) }
     var showEditProfile by remember { mutableStateOf(false) }
@@ -96,38 +95,31 @@ fun ProfileView(
         )
     }
     Column(
-        modifier = Modifier
-            .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally
     ) {
-            androidx.compose.material.TopAppBar(
-                title = {
-                    Text(
-                        text = "Profile",
-                        modifier = Modifier.fillMaxWidth(),
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp
-                    )
-                },
-                actions = {
-                    IconButton(onClick = {
-                        viewModel.logout()
-                        navController.navigate("login")
-                    }) {
-                        Icon(Icons.AutoMirrored.Filled.Logout, null)
-                    }
-                },
-                backgroundColor = LightYellow,
-                contentColor = Color.Black
+        androidx.compose.material.TopAppBar(title = {
+            Text(
+                text = "Profile",
+                modifier = Modifier.fillMaxWidth(),
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp
             )
+        }, actions = {
+            IconButton(onClick = {
+                viewModel.logout()
+                navController.navigate("login")
+            }) {
+                Icon(Icons.AutoMirrored.Filled.Logout, null)
+            }
+        }, backgroundColor = LightYellow, contentColor = Color.Black
+        )
 
 
 
 
         Spacer(modifier = Modifier.height(16.dp))
         Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
+            contentAlignment = Alignment.Center, modifier = Modifier
                 .size(150.dp)
                 .padding(16.dp)
         ) {
@@ -136,8 +128,7 @@ fun ProfileView(
                 // change this to profile pic
                 painter = painterResource(id = R.drawable.waterloocirclelogo),
                 contentDescription = "Profile Picture",
-                modifier = Modifier
-                    .size(100.dp)
+                modifier = Modifier.size(100.dp)
             )
         }
 
@@ -146,25 +137,23 @@ fun ProfileView(
 
         if (firstName.isNotEmpty() && lastName.isNotEmpty()) {
             Text(
-                text = "$firstName $lastName",
-                fontWeight = FontWeight.Bold,
-                fontSize = 24.sp
+                text = "$firstName $lastName", fontWeight = FontWeight.Bold, fontSize = 24.sp
             )
         }
 
         Spacer(modifier = Modifier.height(8.dp))
         Divider()
         Spacer(modifier = Modifier.height(20.dp))
-        TextWithIcon("Edit Interests", Icons.Default.Edit,  onClick = {
+        TextWithIcon("Edit Interests", Icons.Default.Edit, onClick = {
             showEditInterests = true
 
         })
         Spacer(modifier = Modifier.height(20.dp))
-        TextWithIcon("Edit Password", Icons.Default.Person,  onClick = {
+        TextWithIcon("Edit Password", Icons.Default.Person, onClick = {
             showEditProfile = true
         })
         Spacer(modifier = Modifier.height(20.dp))
-        TextWithIcon("Edit Friends", Icons.Default.PersonAddAlt1,  onClick = {
+        TextWithIcon("Edit Friends", Icons.Default.PersonAddAlt1, onClick = {
             showEditFriends = true
         })
     }
@@ -172,20 +161,19 @@ fun ProfileView(
 
     if (showEditInterests) {
         viewModel.getUserInterests()
-        var faculty by rememberSaveable { mutableStateOf(viewModel.facultyID)}
-        var ethnicity by rememberSaveable { mutableStateOf(viewModel.ethicityID)}
-        var religion by rememberSaveable { mutableStateOf(viewModel.religionID)}
-        var program by rememberSaveable { mutableStateOf(viewModel.programID)}
-        var hobbies by rememberSaveable { mutableStateOf(viewModel.hobbyID)}
-
+        var faculty by rememberSaveable { mutableStateOf(viewModel.facultyID) }
+        var ethnicity by rememberSaveable { mutableStateOf(viewModel.ethicityID) }
+        var religion by rememberSaveable { mutableStateOf(viewModel.religionID) }
+        var program by rememberSaveable { mutableStateOf(viewModel.programID) }
+        var hobbies by rememberSaveable { mutableStateOf(viewModel.hobbyID) }
 
 
         var buttonModifier = Modifier.width(1000.dp)
 
-        AlertDialogExample(
-            onDismissRequest = {
-                showEditInterests = false
-                viewModel.resetInterests()},
+        AlertDialogExample(onDismissRequest = {
+            showEditInterests = false
+            viewModel.resetInterests()
+        },
             onConfirmation = {
                 showEditInterests = false
                 viewModel.resetInterests()
@@ -197,31 +185,48 @@ fun ProfileView(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text("Select Faculty", style = MaterialTheme.typography.titleSmall)
-                DropdownList(itemList = viewModel.faculties, selectedIndex = faculty, modifier = buttonModifier) {
+                DropdownList(
+                    itemList = viewModel.faculties,
+                    selectedIndex = faculty,
+                    modifier = buttonModifier
+                ) {
                     faculty = it
                 }
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text("Select Ethnicity", style = MaterialTheme.typography.titleSmall)
-                DropdownList(itemList = viewModel.ethnicities, selectedIndex = ethnicity, modifier = buttonModifier) {
+                DropdownList(
+                    itemList = viewModel.ethnicities,
+                    selectedIndex = ethnicity,
+                    modifier = buttonModifier
+                ) {
                     ethnicity = it
                 }
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text("Select Religion", style = MaterialTheme.typography.titleSmall)
-                DropdownList(itemList = viewModel.religions, selectedIndex = religion, modifier = buttonModifier) {
+                DropdownList(
+                    itemList = viewModel.religions,
+                    selectedIndex = religion,
+                    modifier = buttonModifier
+                ) {
                     religion = it
                 }
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text("Select Program", style = MaterialTheme.typography.titleSmall)
-                DropdownList(itemList = viewModel.programs, selectedIndex = program, modifier = buttonModifier) {
+                DropdownList(
+                    itemList = viewModel.programs,
+                    selectedIndex = program,
+                    modifier = buttonModifier
+                ) {
                     program = it
                 }
-                // TO DO MAKE THIS MULTI-SELECT
                 Spacer(modifier = Modifier.height(16.dp))
                 Text("Select Hobbies", style = MaterialTheme.typography.titleSmall)
-                MultiSelectDropdownList(itemList = viewModel.hobbies, selectedIds = hobbies, modifier = buttonModifier) {
+                MultiSelectDropdownList(
+                    itemList = viewModel.hobbies, selectedIds = hobbies, modifier = buttonModifier
+                ) {
                     hobbies = it
                 }
                 Spacer(modifier = Modifier.height(16.dp))
@@ -239,17 +244,15 @@ fun ProfileView(
                     )
                 }
 
-            }
-        )
+            })
     }
 
     if (showEditProfile) {
-        AlertDialogExample(
-            onDismissRequest = {
-                showEditProfile = false
-                viewModel.profileReset()
+        AlertDialogExample(onDismissRequest = {
+            showEditProfile = false
+            viewModel.profileReset()
 
-                               },
+        },
             onConfirmation = {
                 showEditProfile = false
                 viewModel.profileReset()
@@ -268,7 +271,8 @@ fun ProfileView(
                     label = { Text("Old Password") },
                     visualTransformation = if (viewPassword) VisualTransformation.None else PasswordVisualTransformation(),
                     trailingIcon = {
-                        val image = if (viewPassword) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+                        val image =
+                            if (viewPassword) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
                         val description = if (viewPassword) "Hide password" else "Show password"
                         IconButton(onClick = { viewPassword = !viewPassword }) {
                             Icon(imageVector = image, contentDescription = description)
@@ -282,7 +286,8 @@ fun ProfileView(
                     label = { Text("New Password") },
                     visualTransformation = if (viewPassword2) VisualTransformation.None else PasswordVisualTransformation(),
                     trailingIcon = {
-                        val image = if (viewPassword2) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+                        val image =
+                            if (viewPassword2) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
                         val description = if (viewPassword2) "Hide password" else "Show password"
                         IconButton(onClick = { viewPassword2 = !viewPassword2 }) {
                             Icon(imageVector = image, contentDescription = description)
@@ -313,8 +318,7 @@ fun ProfileView(
 
                 }
 
-            }
-        )
+            })
     }
 
     if (showEditFriends) {
@@ -323,373 +327,92 @@ fun ProfileView(
         val friends by viewModel.friends.collectAsState()
         val reqFriends by viewModel.req_friends.collectAsState()
 
-        AlertDialogExample(
-            onDismissRequest = {
-                showEditFriends = false
-                viewModel.resetFriends()},
-            onConfirmation = {
-                showEditFriends = false
-                viewModel.resetFriends()
-            },
-            dialogTitle = "Friends",
-            dialogText = "",
-            icon = Icons.Default.Edit,
-            content = {
-                Text(
-                    "Add a friend",
-                    style = MaterialTheme.typography.headlineSmall
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                OutlinedTextField(
-                    value = viewModel.addFriend.value,
-                    onValueChange = { viewModel.addFriend.value = it },
-                    label = { Text("Email") },
-                    singleLine = true,
-                    modifier = Modifier.fillMaxWidth()
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                Button(
-                    onClick = { viewModel.addFriend(viewModel.addFriend.value) },
-
-                ) {
-                    Text("Request")
-                }
-
-                if (viewModel.addFriendMessage.value != null) {
-                    Text(
-                        text = viewModel.addFriendMessage.value!!,
-                        style = MaterialTheme.typography.bodySmall
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(24.dp))
-                Divider()
-                Spacer(modifier = Modifier.height(24.dp))
-                Text(
-                    "View all friend requests",
-                    style = MaterialTheme.typography.headlineSmall
-                )
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text("Name", style = MaterialTheme.typography.bodySmall)
-                    Text("Email", style = MaterialTheme.typography.bodySmall)
-                    Text("Accept Friend", style = MaterialTheme.typography.bodySmall)
-                }
-                reqFriends.forEach { user ->
-                    UserComponent(
-                        user = user,
-                        onEditClicked = { user.id.let { viewModel.acceptFriend(it) } },
-                        icon = Icons.Default.Check
-                    )
-                }
-                Spacer(modifier = Modifier.height(24.dp))
-                Divider()
-                Spacer(modifier = Modifier.height(24.dp))
-                Text(
-                    "View all your friends",
-                    style = MaterialTheme.typography.headlineSmall
-                )
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text("Name", style = MaterialTheme.typography.bodySmall)
-                    Text("Email", style = MaterialTheme.typography.bodySmall)
-                    Text("Remove Friend", style = MaterialTheme.typography.bodySmall)
-                }
-
-                friends.forEach { user ->
-                    UserComponent(
-                        user = user,
-                        onEditClicked = { user.id.let { viewModel.deleteFriend(it) } },
-                        icon = Icons.Default.Delete
-                    )
-                }
-                Divider()
-
-            }
-        )
-    }
-
-}
-
-@Composable
-fun TextWithIcon(
-    text: String,
-    icon: ImageVector,
-    onClick: () -> Unit
-) {
-    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.clickable(onClick = onClick) ) {
-        Text(text = text)
-        Spacer(modifier = Modifier.width(4.dp))
-        Icon(
-            imageVector = icon,
-            contentDescription = ""
-        )
-    }
-}
-
-@Composable
-fun UserComponent(user: UserProfile, onEditClicked: () -> Unit, icon: ImageVector) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text(text = user.firstName)
-        Text(text = user.email)
-
-        IconButton(onClick = { onEditClicked() }) {
-            Icon(icon, contentDescription = "icon")
-        }
-    }
-}
-
-@Composable
-fun AlertDialogExample(
-    onDismissRequest: () -> Unit,
-    onConfirmation: () -> Unit,
-    dialogTitle: String,
-    dialogText: String,
-    icon: ImageVector,
-    content: @Composable () -> Unit
-) {
-    val scrollState = rememberScrollState()
-
-    AlertDialog(
-        icon = {
-            Icon(icon, contentDescription = "Example Icon")
-        },
-        title = {
-            Text(text = dialogTitle)
-
-        },
-        text = {
-            Column(
-                modifier = Modifier
-                    .verticalScroll(state = scrollState)
-            ) {
-                Text(text = dialogText, style = MaterialTheme.typography.headlineSmall)
-                content()
-            }
-        },
-        onDismissRequest = {
-            onDismissRequest()
-        },
-        confirmButton = {
-        },
-        dismissButton = {
-            TextButton(
-                onClick = {
-                    onDismissRequest()
-                }
-            ) {
-                Text("Close")
-            }
-        }
-    )
-}
-
-// taken from https://medium.com/@2018.itsuki/android-kotlin-jetpack-compose-dropdown-selectable-list-menu-b7ad86ba6a5a
-@Composable
-fun DropdownList(itemList: List<Interest>?, selectedIndex: Int, modifier: Modifier, onItemClick: (Int) -> Unit) {
-
-    var showDropdown by rememberSaveable { mutableStateOf(false) }
-    val scrollState = rememberScrollState()
-    val selectedIndex = if (selectedIndex != 0) {
-        itemList?.indexOfFirst { it.id == selectedIndex } ?: 0
-    } else {
-        0
-    }
-
-
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center) {
-
-        // button
-        Box(
-            modifier = modifier
-                .background(Color.White)
-                .fillMaxWidth()
-                .clickable { showDropdown = true },
-//            .clickable { showDropdown = !showDropdown },
-            contentAlignment = Alignment.Center
-        ) {
-            itemList?.get(selectedIndex)?.let {
-                val displayName = if (selectedIndex == 0) "" else it.name
-                Text(text = displayName, modifier = Modifier.padding(3.dp))
-            }
-        }
-
-
-        // dropdown list
-        Box() {
-            if (showDropdown) {
-                Popup(
-                    alignment = Alignment.TopCenter,
-                    properties = PopupProperties(
-                        excludeFromSystemGesture = true,
-                    ),
-                    // to dismiss on click outside
-                    onDismissRequest = { showDropdown = false }
-                ) {
-
-                    Column(
-                        modifier = modifier
-                            .heightIn(max = 90.dp)
-                            .verticalScroll(state = scrollState)
-                            .border(width = 1.dp, color = Color.Gray),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                    ) {
-
-                        itemList?.onEachIndexed { index, item ->
-                            if (index != 0) {
-                                Divider(thickness = 1.dp, color = Color.LightGray)
-                            }
-                            Box(
-                                modifier = Modifier
-                                    .background(Color.White)
-                                    .fillMaxWidth()
-                                    .clickable {
-                                        onItemClick(item.id)
-                                        showDropdown = !showDropdown
-                                    },
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text(text = item.name,)
-                            }
-                        }
-
-                    }
-                }
-            }
-        }
-    }
-
-}
-
-@Composable
-fun MultiSelectDropdownList(
-    itemList: List<Interest>?,
-    selectedIds: List<Int>, // Use List<Int> to track multiple selections by ID
-    modifier: Modifier = Modifier,
-    onSelectionChange: (List<Int>) -> Unit // Callback with the updated list of selected IDs
-) {
-    var showDropdown by rememberSaveable { mutableStateOf(false) }
-    val scrollState = rememberScrollState()
-
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        // Button to show dropdown
-        Box(
-            modifier = modifier
-                .background(Color.White)
-                .fillMaxWidth()
-                .clickable { showDropdown = true },
-            contentAlignment = Alignment.Center
-        ) {
-            // Displaying selected item names based on IDs
+        AlertDialogExample(onDismissRequest = {
+            showEditFriends = false
+            viewModel.resetFriends()
+        }, onConfirmation = {
+            showEditFriends = false
+            viewModel.resetFriends()
+        }, dialogTitle = "Friends", dialogText = "", icon = Icons.Default.Edit, content = {
             Text(
-                text = itemList?.filter { it.id in selectedIds }?.joinToString(", ") { it.name } ?: "",
-                modifier = Modifier.padding(3.dp)
+                "Add a friend", style = MaterialTheme.typography.headlineSmall
             )
-        }
+            Spacer(modifier = Modifier.height(8.dp))
+            OutlinedTextField(
+                value = viewModel.addFriend.value,
+                onValueChange = { viewModel.addFriend.value = it },
+                label = { Text("Email") },
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(
+                onClick = { viewModel.addFriend(viewModel.addFriend.value) },
 
-        // Dropdown list
-        if (showDropdown) {
-            Popup(
-                alignment = Alignment.TopCenter,
-                properties = PopupProperties(
-                    focusable = true,
-                    dismissOnBackPress = true,
-                    dismissOnClickOutside = true
-                ),
-                onDismissRequest = { showDropdown = false }
-            ) {
-                Column(
-                    modifier = modifier
-                        .background(Color.White)
-                        .border(width = 1.dp, color = Color.Gray)
-                        .heightIn(max = 200.dp)
-                        .verticalScroll(state = scrollState)
                 ) {
-                    itemList?.forEach { item ->
-                        val isSelected = item.id in selectedIds
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 8.dp, horizontal = 16.dp)
-                                .clickable {
-                                    // Updating selected IDs based on current selection
-                                    val newSelectedIds = selectedIds.toMutableList().apply {
-                                        if (isSelected) remove(item.id) else add(item.id)
-                                    }
-                                    onSelectionChange(newSelectedIds)
-                                },
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Checkbox(
-                                checked = isSelected,
-                                onCheckedChange = null // We handle the state change with the Row's clickable
-                            )
-                            Spacer(Modifier.width(8.dp))
-                            Text(text = item.name)
-                        }
-                        // This divider logic can remain the same or be adapted if needed
-                        if (item != itemList.last()) {
-                            Divider()
-                        }
-                    }
-                }
+                Text("Request")
             }
-        }
-    }
-}
 
+            if (viewModel.addFriendMessage.value != null) {
+                Text(
+                    text = viewModel.addFriendMessage.value!!,
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
 
-
-
-@Composable
-fun Chips(
-    text: String,
-    onDismiss: () -> Unit,
-    modifier: Modifier
-) {
-    var enabled by remember { mutableStateOf(true) }
-    if (!enabled) return
-
-    InputChip(
-        modifier = modifier,
-        onClick = {
-            onDismiss()
-            enabled = !enabled
-        },
-        label = { Text(text) },
-        selected = enabled,
-        trailingIcon = {
-            Icon(
-                Icons.Default.Close,
-                contentDescription = "Localized description",
-                Modifier.size(InputChipDefaults.AvatarSize)
+            Spacer(modifier = Modifier.height(24.dp))
+            Divider()
+            Spacer(modifier = Modifier.height(24.dp))
+            Text(
+                "View all friend requests", style = MaterialTheme.typography.headlineSmall
             )
-        },
-    )
-}
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text("Name", style = MaterialTheme.typography.bodySmall)
+                Text("Email", style = MaterialTheme.typography.bodySmall)
+                Text("Accept Friend", style = MaterialTheme.typography.bodySmall)
+            }
+            reqFriends.forEach { user ->
+                UserComponent(
+                    user = user,
+                    onEditClicked = { user.id.let { viewModel.acceptFriend(it) } },
+                    icon = Icons.Default.Check
+                )
+            }
+            Spacer(modifier = Modifier.height(24.dp))
+            Divider()
+            Spacer(modifier = Modifier.height(24.dp))
+            Text(
+                "View all your friends", style = MaterialTheme.typography.headlineSmall
+            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text("Name", style = MaterialTheme.typography.bodySmall)
+                Text("Email", style = MaterialTheme.typography.bodySmall)
+                Text("Remove Friend", style = MaterialTheme.typography.bodySmall)
+            }
 
+            friends.forEach { user ->
+                UserComponent(
+                    user = user,
+                    onEditClicked = { user.id.let { viewModel.deleteFriend(it) } },
+                    icon = Icons.Default.Delete
+                )
+            }
+
+        })
+    }
+
+}
 
 
