@@ -87,6 +87,26 @@ android {
         if (clubAdmin != null) {
             buildConfigField("String", "CLUB_ADMIN_URL", clubAdmin)
         }
+
+        val getForYouReccs = properties["FOR_YOU_URL"]?.toString()
+        if (getForYouReccs != null) {
+            buildConfigField("String", "FOR_YOU_URL", getForYouReccs)
+        }
+
+        val addEvent = properties["ADD_EVENT_URL"]?.toString()
+        if (addEvent != null) {
+            buildConfigField("String", "ADD_EVENT_URL", addEvent)
+        }
+
+        val getSpotlights = properties["GET_SPOTLIGHTS"]?.toString()
+        if (getSpotlights != null) {
+            buildConfigField("String", "GET_SPOTLIGHTS", getSpotlights)
+        }
+
+        val getAllCategories = properties["GET_ALL_CATEGORIES"]?.toString()
+        if (getAllCategories != null) {
+            buildConfigField("String", "GET_ALL_CATEGORIES", getAllCategories)
+        }
     }
 
     buildTypes {

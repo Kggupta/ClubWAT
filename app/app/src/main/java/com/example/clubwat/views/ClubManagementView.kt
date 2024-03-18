@@ -1,11 +1,14 @@
 package com.example.clubwat.views
 import DetailItem
 import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Event
 import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -61,11 +64,18 @@ fun ClubManagementView(
                     .padding(it)
                     .fillMaxSize()
                     .padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(14.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 if (clubId == null) return@Scaffold
                 DetailItem(text = "Manage Members", icon = Icons.Filled.Groups, onClick = {
                     navController.navigate("club/$clubId/management/users")
+                })
+                DetailItem(text = "Manage Club Details", icon = Icons.Filled.Edit, onClick = {
+                    navController.navigate("club/$clubId/management/clubDetails")
+                })
+                DetailItem(text = "Add Event", icon = Icons.Filled.Event, onClick = {
+                    navController.navigate("club/$clubId/event/new")
                 })
             }
         }

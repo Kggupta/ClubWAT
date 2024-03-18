@@ -29,6 +29,22 @@ export default class EmailService {
     });
   }
 
+  private static async sendBccEmails(
+    emails: string[],
+    content: string,
+    title: string
+  ) {
+    await transporter.sendMail({
+      from: {
+        name: "ClubWAT",
+        address: process.env.EMAIL as string,
+      },
+      bcc: emails,
+      subject: title,
+      text: content,
+    });
+  }
+
   static async sendVerificationEmail(email: string, code: number) {
     await this.sendEmail(
       email,
@@ -61,6 +77,14 @@ export default class EmailService {
       email,
       `Your request to join ${club.title} was accepted!\n\nCheck it out in your 'My Clubs' list on ClubWAT!`,
       "Club Join Request Approved"
+    );
+  }
+
+  static async newEventEmail(emails: string[], event: Event, club: Club) {
+    await this.sendBccEmails(
+      emails,
+      `${club.title} has an upcoming event: ${event.title}!\n\nCheck out your inbox on ClubWAT to learn more!\n\nYou're getting this email because you're a member of this club.`,
+      "Upcoming Event!"
     );
   }
 }

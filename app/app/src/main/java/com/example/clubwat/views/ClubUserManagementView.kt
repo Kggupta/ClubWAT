@@ -1,5 +1,4 @@
 package com.example.clubwat.views
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,12 +9,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.TextButton
 import androidx.compose.material.TopAppBar
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Cancel
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.MoveDown
-import androidx.compose.material.icons.filled.WorkspacePremium
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -95,7 +88,8 @@ fun ClubUserManagementView(
                         Column (Modifier.padding(8.dp)) {
                             Row {
                                 Column {
-                                    Text("${member.firstName} ${member.lastName}".take(50), fontWeight = FontWeight.SemiBold)
+                                    val name = "${member.firstName} ${member.lastName.first()}"
+                                    Text(if (name.length > 15) name.take(12) + "..." else "$name." , fontWeight = FontWeight.SemiBold)
                                     Text(member.email.substringBefore("@"))
                                 }
                                 if (!isClientClubAdmin) return@Row
@@ -110,7 +104,7 @@ fun ClubUserManagementView(
                                                 clubId
                                             )
                                         }) {
-                                            Text(color = LightOrange, text = "Approve")
+                                            Text(color = LightOrange, text = "Paid")
                                         }
                                     } else {
                                         TextButton(onClick = {

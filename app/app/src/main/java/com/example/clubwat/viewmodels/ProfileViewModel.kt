@@ -7,7 +7,7 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
 
     var firstName = userRepository.currentUser.value?.firstName
     var lastName = userRepository.currentUser.value?.lastName
-
+    
     fun editInterests() {
 
     }

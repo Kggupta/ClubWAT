@@ -41,6 +41,7 @@ router.put("/club", authenticateToken, async (req, res) => {
       source_user_id: sourceUser.id,
       destination_user_id: destinationUserId,
       club_id: clubId,
+      create_date: new Date(),
       content: `${sharedClub.title} was shared with you!`,
     },
   });
@@ -77,6 +78,7 @@ router.put("/event", authenticateToken, async (req, res) => {
       source_user_id: sourceUser.id,
       destination_user_id: destinationUserId,
       event_id: eventId,
+      create_date: new Date(),
       content: `${sharedEvent.title} was shared with you!`,
     },
   });

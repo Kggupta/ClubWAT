@@ -7,6 +7,7 @@
     "build": "npx tsc",
     "migratedev": "dotenv -e .env.dev -- npx prisma migrate dev",
     "migrateprod": "dotenv -e .env.prod -- npx prisma migrate dev",
+    "pulldbprod": "dotenv -e .env.prod -- npx prisma db pull",
     "dev": "tsc -w & nodemon -r dotenv/config dist/index.js dotenv_config_path=.env.dev",
     "prod": "tsc -w & nodemon -r dotenv/config dist/index.js dotenv_config_path=.env.prod"
   },
