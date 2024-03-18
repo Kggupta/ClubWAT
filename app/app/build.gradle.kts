@@ -107,6 +107,16 @@ android {
         if (getAllCategories != null) {
             buildConfigField("String", "GET_ALL_CATEGORIES", getAllCategories)
         }
+
+        val getInterests = properties["GET_INTERESTS"]?.toString()
+        if (getInterests != null) {
+            buildConfigField("String", "GET_INTERESTS", getInterests)
+        }
+
+        val passwordChange = properties["PASSWORD_CHANGE"]?.toString()
+        if (passwordChange != null) {
+            buildConfigField("String", "PASSWORD_CHANGE", passwordChange)
+        }
     }
 
     buildTypes {
