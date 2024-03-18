@@ -1,8 +1,6 @@
 package com.example.clubwat.viewmodels
 
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.clubwat.BuildConfig
@@ -13,6 +11,8 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
@@ -27,28 +27,56 @@ class UserInterestsViewModel @Inject constructor(
     var fillAllfields = mutableStateOf<String?>(null)
 
     // users interests
-    var faculty by mutableStateOf<Interest?>(null)
-    var ethicity by mutableStateOf<Interest?>(null)
-    var religion by mutableStateOf<Interest?>(null)
-    var program by mutableStateOf<Interest?>(null)
-    var hobby by mutableStateOf<List<Interest>?>(null)
+    private var _userFaculty = MutableStateFlow<Interest?>(null)
+    var userFaculty =_userFaculty.asStateFlow()
 
-    var facultyID by mutableStateOf(0)
-    var ethicityID by mutableStateOf(0)
-    var religionID by  mutableStateOf(0)
-    var programID by  mutableStateOf(0)
-    var hobbyID by mutableStateOf(listOf<Int>())
+    private var _userEthnicity = MutableStateFlow<Interest?>(null)
+    var userEthnicity =_userEthnicity.asStateFlow()
+
+    private var _userReligion = MutableStateFlow<Interest?>(null)
+    var userReligion =_userReligion.asStateFlow()
+
+    private var _userProgram = MutableStateFlow<Interest?>(null)
+    var userProgram =_userProgram.asStateFlow()
+
+    var selectedUserHobbies = mutableStateOf(setOf<Int>())
+
 
     // all categories
-    var faculties by  mutableStateOf<List<Interest>?>(null)
-    var ethnicities by  mutableStateOf<List<Interest>?>(null)
-    var religions by  mutableStateOf<List<Interest>?>(null)
-    var programs by  mutableStateOf<List<Interest>?>(null)
-    var hobbies by mutableStateOf<List<Interest>?>(null)
+    private val _faculties: MutableStateFlow<MutableList<Interest>> = MutableStateFlow(arrayListOf())
+    var faculties = _faculties.asStateFlow()
+
+    private val _ethnicities: MutableStateFlow<MutableList<Interest>> = MutableStateFlow(arrayListOf())
+    var ethnicities = _ethnicities.asStateFlow()
+
+    private val _religions: MutableStateFlow<MutableList<Interest>> = MutableStateFlow(arrayListOf())
+    var religions = _religions.asStateFlow()
+
+    private val _programs: MutableStateFlow<MutableList<Interest>> = MutableStateFlow(arrayListOf())
+    var programs = _programs.asStateFlow()
+
+    private val _hobbies: MutableStateFlow<MutableList<Interest>> = MutableStateFlow(arrayListOf())
+    var hobbies = _hobbies.asStateFlow()
 
     init {
         getInterests()
         getUserInterests()
+    }
+
+    fun updateUserFaculty(interest: Interest) {
+        _userFaculty.value = interest.copy()
+    }
+
+    fun updateUserEthnicity(interest: Interest) {
+        _userEthnicity.value = interest.copy()
+    }
+
+    fun updateUserReligion(interest: Interest) {
+        _userReligion.value = interest.copy()
+    }
+
+    fun updateUserProgram(interest: Interest) {
+        _userProgram.value = interest.copy()
     }
 
     fun getInterests() {
@@ -65,12 +93,11 @@ class UserInterestsViewModel @Inject constructor(
                     val response = con.inputStream.bufferedReader().use { it.readText() }
                     val interestsResponse = Gson().fromJson(response, InterestsResponse::class.java)
 
-                    faculties = interestsResponse.faculties
-                    ethnicities = interestsResponse.ethnicities
-                    religions = interestsResponse.religions
-                    programs = interestsResponse.programs
-                    hobbies = interestsResponse.hobbies
-
+                    _faculties.value = interestsResponse.faculties!!.toMutableList()
+                    _ethnicities.value = interestsResponse.ethnicities!!.toMutableList()
+                    _religions.value = interestsResponse.religions!!.toMutableList()
+                    _programs.value = interestsResponse.programs!!.toMutableList()
+                    _hobbies.value = interestsResponse.hobbies!!.toMutableList()
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -95,19 +122,11 @@ class UserInterestsViewModel @Inject constructor(
                     val type = object : TypeToken<List<Interest>>() {}.type
                     val interestsResponse: List<Interest> = gson.fromJson(response, type)
 
-                    faculty = interestsResponse.find { it.type == "faculty" }
-                    ethicity = interestsResponse.find { it.type == "ethnicity" }
-                    religion = interestsResponse.find { it.type == "religion" }
-                    program = interestsResponse.find { it.type == "program" }
-                    hobby = interestsResponse.filter { it.type == "hobby" }
-
-                    facultyID = faculty!!.id
-                    ethicityID = ethicity!!.id
-                    religionID = religion!!.id
-                    programID = program!!.id
-                    hobbyID = interestsResponse.filter { it.type == "hobby" }.map { it.id }
-
-
+                    _userFaculty.value = interestsResponse.find { it.type == "faculty" }
+                    _userEthnicity.value = interestsResponse.find { it.type == "ethnicity" }
+                    _userReligion.value = interestsResponse.find { it.type == "religion" }
+                    _userProgram.value = interestsResponse.find { it.type == "program" }
+                    selectedUserHobbies.value = interestsResponse.filter { it.type == "hobby" }.map { it.id }.toSet()
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -115,16 +134,22 @@ class UserInterestsViewModel @Inject constructor(
         }
     }
 
-    fun editInterests(facultyInput: Int, ethnicityInput: Int, religionInput: Int, programInput: Int, hobbiesInput: List<Int>) {
+    fun saveInterests() {
+        if (userFaculty.value == null ||
+            userEthnicity.value == null ||
+            userReligion.value == null ||
+            userProgram.value == null) {
+            fillAllfields.value = "Fill All Interests"
+        }
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val gson = Gson()
                 val requestBody = mapOf(
-                    "faculty" to facultyInput,
-                    "ethnicity" to ethnicityInput,
-                    "religion" to religionInput,
-                    "program" to programInput,
-                    "hobbies" to hobbiesInput
+                    "faculty" to userFaculty.value!!.id,
+                    "ethnicity" to userEthnicity.value!!.id,
+                    "religion" to userReligion.value!!.id,
+                    "program" to userProgram.value!!.id,
+                    "hobbies" to selectedUserHobbies.value.toList()
                 )
                 val requestBodyString = gson.toJson(requestBody)
 
@@ -143,12 +168,8 @@ class UserInterestsViewModel @Inject constructor(
                         fillAllfields.value = "Success! Interests are saved."
                         getUserInterests()
                     } else {
-                        if ((facultyInput == 0) ||  (ethnicityInput == 0) || (religionInput == 0) || (hobbiesInput.isEmpty()) || (programInput == 0)) {
-                            fillAllfields.value = "Please fill all fields"
-                        } else {
-                            fillAllfields.value = "Error, could not save interests."
-                            println("Failed to add to interests: $responseCode")
-                        }
+                        fillAllfields.value = "Error, could not save interests."
+                        println("Failed to add to interests: $responseCode")
                     }
                 }
             } catch (e: Exception) {
