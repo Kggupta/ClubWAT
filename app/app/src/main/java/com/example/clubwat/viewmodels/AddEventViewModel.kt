@@ -51,7 +51,7 @@ class AddEventViewModel(private val userRepository: UserRepository) : ViewModel(
         endDateTime.value = Calendar.getInstance()
     }
 
-    fun addEvent(clubId: String?, callback: (Boolean) -> Unit) {
+    fun addEvent(clubId: String?, type: String?, callback: (Boolean) -> Unit) {
         val (isValid, errorMsg) = this.checkIsFormValid()
         if (!isValid) {
             errorMessage.value = errorMsg
@@ -61,7 +61,11 @@ class AddEventViewModel(private val userRepository: UserRepository) : ViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             var isEventAdded = false
             try {
-                val url = URL(String.format(BuildConfig.ADD_EVENT_URL, clubId))
+                var urlString = String.format(BuildConfig.ADD_EVENT_URL, clubId)
+                if (type == "spotlight") {
+                    urlString = BuildConfig.ADD_SPOTLIGHT_URL
+                }
+                val url = URL(urlString)
                 (url.openConnection() as HttpURLConnection).apply {
                     requestMethod = "POST"
                     doOutput = true

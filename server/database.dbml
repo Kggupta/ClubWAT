@@ -9,6 +9,7 @@ Table User {
   first_name String [not null]
   last_name String [not null]
   admin_flag Boolean [not null]
+  notification_flag Boolean [not null, default: true]
   admins ClubAdmin [not null]
   club_discussions ClubDiscussion [not null]
   club_members ClubMember [not null]

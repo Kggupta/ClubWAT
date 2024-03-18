@@ -93,3 +93,6 @@
 | 03/11/2024 |        |        |        |         |         | 2       | Added APIs for User Interests                               |
 | 03/15/2024 |        | 6      |        |         |         |         | Added APIs for User Interests to the UI                     |
 | 03/16/2024 | 1      |        |        |         |         |         | Notifications to club members when event created            |
+| 03/17/2024 | 3      |        |        |         |         |         | Download user data, delete user ui/api                      |
+| 03/18/2024 | 9      |        |        |         |         |         | Enable/disable emails, edit profile ui/ux improvements      |
+| 03/15/2024 | 3      |        |        |         |         |         | D4 work on client-server                                    |

@@ -25,6 +25,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.DataArray
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.DeleteForever
@@ -33,6 +34,7 @@ import androidx.compose.material.icons.filled.Event
 import androidx.compose.material.icons.filled.Group
 import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.Interests
+import androidx.compose.material.icons.filled.Mail
 import androidx.compose.material.icons.filled.Password
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.PersonAddAlt1
@@ -41,6 +43,7 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -74,6 +77,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import androidx.navigation.NavController
+import com.example.clubwat.BuildConfig
 import com.example.clubwat.R
 import com.example.clubwat.model.Interest
 import com.example.clubwat.model.UserProfile
@@ -87,9 +91,13 @@ import com.example.clubwat.viewmodels.ProfileViewModel
 fun ProfileView(
     viewModel: ProfileViewModel, navController: NavController
 ) {
-    var showEditInterests by remember { mutableStateOf(false) }
-    var showEditProfile by remember { mutableStateOf(false) }
-    var showEditFriends by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
+        viewModel.getUserProfile()
+    }
+
+    var showDownloadData by remember { mutableStateOf(false) }
+    var showDeleteAccount by remember { mutableStateOf(false) }
+    val profile = viewModel.profile.collectAsState()
     Scaffold(
         topBar = {
             TopAppBar(
@@ -123,7 +131,7 @@ fun ProfileView(
             ) {
                 DetailItem(text = "Edit Profile", icon = Icons.Filled.VerifiedUser,
                     onClick = {
-                        navController.navigate("user")
+                        navController.navigate("editprofile")
                     })
                 DetailItem(text = "Edit Interests", icon = Icons.Filled.Interests,
                     onClick = {
@@ -139,271 +147,63 @@ fun ProfileView(
                     })
                 DetailItem(text = "Download Data", icon = Icons.Filled.DataArray,
                     onClick = {
-                        // TODO
+                        showDownloadData = true
                     })
                 Spacer(modifier = Modifier.height(20.dp))
                 Text(text = "Danger Zone", fontWeight = FontWeight.Bold)
                 DetailItem(text = "Delete Account", icon = Icons.Filled.DeleteForever, onClick = {
-                        // TODO
+                    showDeleteAccount = true
+                })
+                if (profile.value != null && profile.value!!.adminFlag) {
+                    DetailItem(text = "Create Club Fair", icon = Icons.Filled.Create, onClick = {
+                        navController.navigate("club/${BuildConfig.WUSA_CLUB_ID}/event/new/spotlight")
                     })
+                }
             }
         }
     )
+    
+    if (showDownloadData) {
+        AlertDialog(title = {
+            Text(text = "Download Your Data?")
 
-    if (showEditInterests) {
-        viewModel.getUserInterests()
-        var faculty by rememberSaveable { mutableStateOf(viewModel.facultyID) }
-        var ethnicity by rememberSaveable { mutableStateOf(viewModel.ethicityID) }
-        var religion by rememberSaveable { mutableStateOf(viewModel.religionID) }
-        var program by rememberSaveable { mutableStateOf(viewModel.programID) }
-        var hobbies by rememberSaveable { mutableStateOf(viewModel.hobbyID) }
-
-
-        var buttonModifier = Modifier.width(1000.dp)
-
-        AlertDialogExample(onDismissRequest = {
-            showEditInterests = false
-            viewModel.resetInterests()
-        },
-            onConfirmation = {
-                showEditInterests = false
-                viewModel.resetInterests()
-            },
-            dialogTitle = "Edit Interests",
-            dialogText = "Here you can edit your interests.",
-            icon = Icons.Default.Edit,
-            content = {
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Text("Select Faculty", style = MaterialTheme.typography.titleSmall)
-                DropdownList(
-                    itemList = viewModel.faculties,
-                    selectedIndex = faculty,
-                    modifier = buttonModifier
-                ) {
-                    faculty = it
-                }
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Text("Select Ethnicity", style = MaterialTheme.typography.titleSmall)
-                DropdownList(
-                    itemList = viewModel.ethnicities,
-                    selectedIndex = ethnicity,
-                    modifier = buttonModifier
-                ) {
-                    ethnicity = it
-                }
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Text("Select Religion", style = MaterialTheme.typography.titleSmall)
-                DropdownList(
-                    itemList = viewModel.religions,
-                    selectedIndex = religion,
-                    modifier = buttonModifier
-                ) {
-                    religion = it
-                }
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Text("Select Program", style = MaterialTheme.typography.titleSmall)
-                DropdownList(
-                    itemList = viewModel.programs,
-                    selectedIndex = program,
-                    modifier = buttonModifier
-                ) {
-                    program = it
-                }
-                Spacer(modifier = Modifier.height(16.dp))
-                Text("Select Hobbies", style = MaterialTheme.typography.titleSmall)
-                MultiSelectDropdownList(
-                    itemList = viewModel.hobbies, selectedIds = hobbies, modifier = buttonModifier
-                ) {
-                    hobbies = it
-                }
-                Spacer(modifier = Modifier.height(16.dp))
-                Button(onClick = {
-                    viewModel.editInterests(faculty, ethnicity, religion, program, hobbies)
-                }) {
-                    Text("Save interests")
-                }
-
-                if (viewModel.fillAllfields.value != null) {
-                    Text(
-                        text = viewModel.fillAllfields.value!!,
-                        color = Color.Black,
-                        style = MaterialTheme.typography.bodySmall
-                    )
-                }
-
-            })
-    }
-
-    if (showEditProfile) {
-        AlertDialogExample(onDismissRequest = {
-            showEditProfile = false
-            viewModel.profileReset()
-
-        },
-            onConfirmation = {
-                showEditProfile = false
-                viewModel.profileReset()
-            },
-            dialogTitle = "Edit Password",
-            dialogText = "",
-            icon = Icons.Default.Edit,
-            content = {
-                Text("Edit Password")
-                var viewPassword by remember { mutableStateOf(false) }
-                var viewPassword2 by remember { mutableStateOf(false) }
-
-                OutlinedTextField(
-                    value = viewModel.oldPassword.value,
-                    onValueChange = { viewModel.oldPassword.value = it },
-                    label = { Text("Old Password") },
-                    visualTransformation = if (viewPassword) VisualTransformation.None else PasswordVisualTransformation(),
-                    trailingIcon = {
-                        val image =
-                            if (viewPassword) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
-                        val description = if (viewPassword) "Hide password" else "Show password"
-                        IconButton(onClick = { viewPassword = !viewPassword }) {
-                            Icon(imageVector = image, contentDescription = description)
-                        }
-                    },
-                )
-
-                OutlinedTextField(
-                    value = viewModel.newPassword.value,
-                    onValueChange = { viewModel.newPassword.value = it },
-                    label = { Text("New Password") },
-                    visualTransformation = if (viewPassword2) VisualTransformation.None else PasswordVisualTransformation(),
-                    trailingIcon = {
-                        val image =
-                            if (viewPassword2) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
-                        val description = if (viewPassword2) "Hide password" else "Show password"
-                        IconButton(onClick = { viewPassword2 = !viewPassword2 }) {
-                            Icon(imageVector = image, contentDescription = description)
-                        }
-                    },
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                Button(onClick = {
-                    viewModel.validatePasswordAndSignUp(viewModel.newPassword.value)
-                    viewModel.editPassword(viewModel.oldPassword.value, viewModel.newPassword.value)
-                }) {
-                    Text("Update")
-                }
-
-                if (viewModel.passwordError.value != null) {
-                    Text(
-                        text = viewModel.passwordError.value!!,
-                        color = MaterialTheme.colorScheme.error,
-                        style = MaterialTheme.typography.bodySmall
-                    )
-                }
-                if (viewModel.passwordSuccess.value != null) {
-                    Text(
-                        text = viewModel.passwordSuccess.value!!,
-                        color = successGreen,
-                        style = MaterialTheme.typography.bodySmall
-                    )
-
-                }
-
-            })
-    }
-
-    if (showEditFriends) {
-        viewModel.getFriends()
-        viewModel.getFriendsReq()
-        val friends by viewModel.friends.collectAsState()
-        val reqFriends by viewModel.req_friends.collectAsState()
-
-        AlertDialogExample(onDismissRequest = {
-            showEditFriends = false
-            viewModel.resetFriends()
-        }, onConfirmation = {
-            showEditFriends = false
-            viewModel.resetFriends()
-        }, dialogTitle = "Friends", dialogText = "", icon = Icons.Default.Edit, content = {
-            Text(
-                "Add a friend", style = MaterialTheme.typography.headlineSmall
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            OutlinedTextField(
-                value = viewModel.addFriend.value,
-                onValueChange = { viewModel.addFriend.value = it },
-                label = { Text("Email") },
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth()
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Button(
-                onClick = { viewModel.addFriend(viewModel.addFriend.value) },
-
-                ) {
-                Text("Request")
+        }, onDismissRequest = {
+            showDownloadData = false
+        }, confirmButton = {
+            TextButton(onClick = {
+                viewModel.downloadData()
+                showDownloadData = false
+            }) {
+                Text("Confirm")
             }
-
-            if (viewModel.addFriendMessage.value != null) {
-                Text(
-                    text = viewModel.addFriendMessage.value!!,
-                    style = MaterialTheme.typography.bodySmall
-                )
+        }, dismissButton = {
+            TextButton(onClick = {
+                showDownloadData = false
+            }) {
+                Text("Close")
             }
-
-            Spacer(modifier = Modifier.height(24.dp))
-            Divider()
-            Spacer(modifier = Modifier.height(24.dp))
-            Text(
-                "View all friend requests", style = MaterialTheme.typography.headlineSmall
-            )
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text("Name", style = MaterialTheme.typography.bodySmall)
-                Text("Email", style = MaterialTheme.typography.bodySmall)
-                Text("Accept Friend", style = MaterialTheme.typography.bodySmall)
-            }
-            reqFriends.forEach { user ->
-                UserComponent(
-                    user = user,
-                    onEditClicked = { user.id.let { viewModel.acceptFriend(it) } },
-                    icon = Icons.Default.Check
-                )
-            }
-            Spacer(modifier = Modifier.height(24.dp))
-            Divider()
-            Spacer(modifier = Modifier.height(24.dp))
-            Text(
-                "View all your friends", style = MaterialTheme.typography.headlineSmall
-            )
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text("Name", style = MaterialTheme.typography.bodySmall)
-                Text("Email", style = MaterialTheme.typography.bodySmall)
-                Text("Remove Friend", style = MaterialTheme.typography.bodySmall)
-            }
-
-            friends.forEach { user ->
-                UserComponent(
-                    user = user,
-                    onEditClicked = { user.id.let { viewModel.deleteFriend(it) } },
-                    icon = Icons.Default.Delete
-                )
-            }
-
         })
     }
-
+    
+    if (showDeleteAccount) {
+        AlertDialog(title = {
+            Text(text = "Delete Your Account?")
+        }, onDismissRequest = {
+            showDeleteAccount = false
+        }, confirmButton = {
+            TextButton(onClick = {
+                viewModel.deleteAccount()
+                navController.navigate("login")
+                showDeleteAccount = false
+            }) {
+                Text("Confirm")
+            }
+        }, dismissButton = {
+            TextButton(onClick = {
+                showDeleteAccount = false
+            }) {
+                Text("Close")
+            }
+        })
+    }
 }
-
-
