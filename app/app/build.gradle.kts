@@ -104,6 +104,11 @@ android {
         if (getAllCategories != null) {
             buildConfigField("String", "GET_ALL_CATEGORIES", getAllCategories)
         }
+
+        val editEvent = properties["EDIT_EVENT_URL"]?.toString()
+        if (editEvent != null) {
+            buildConfigField("String", "EDIT_EVENT_URL", editEvent)
+        }
     }
 
     buildTypes {
