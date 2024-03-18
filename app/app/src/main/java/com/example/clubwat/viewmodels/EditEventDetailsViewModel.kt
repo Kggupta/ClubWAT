@@ -1,6 +1,5 @@
 package com.example.clubwat.viewmodels
 
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -33,6 +32,15 @@ class EditEventDetailsViewModel(private val userRepository: UserRepository): Vie
     var startDate = mutableStateOf(Calendar.getInstance())
     var endDate = mutableStateOf(Calendar.getInstance())
     var errorMessage = mutableStateOf("")
+
+    private fun resetForm() {
+        title.value = ""
+        description.value = ""
+        errorMessage.value = ""
+        location.value = ""
+        startDate.value = Calendar.getInstance()
+        endDate.value = Calendar.getInstance()
+    }
 
     fun getEventTitle(): String {
         if (_event.value == null) return ""
@@ -123,10 +131,10 @@ class EditEventDetailsViewModel(private val userRepository: UserRepository): Vie
 
                     val jsonObject = JSONObject().apply {
                         put("title", title.value.takeIf { it.isNotBlank() } ?: getEventTitle())
-                        put("description", description.takeIf { it.value.isNotBlank() } ?: getEventDescription())
+                        put("description", description.value.takeIf { it.isNotBlank() } ?: getEventDescription())
                         put("start_date", formatDateTime(startDate.value))
                         put("end_date", formatDateTime(endDate.value))
-                        put("location", location.takeIf { it.value.isNotBlank() } ?: getEventLocation())
+                        put("location", location.value.takeIf { it.isNotBlank() } ?: getEventLocation())
                     }
                     println(jsonObject.toString())
                     OutputStreamWriter(outputStream).use { it.write(jsonObject.toString()) }
@@ -143,6 +151,9 @@ class EditEventDetailsViewModel(private val userRepository: UserRepository): Vie
                 e.printStackTrace()
             }
             withContext(Dispatchers.Main) {
+                if (isEventAdded) {
+                    resetForm()
+                }
                 callback(isEventAdded)
             }
         }

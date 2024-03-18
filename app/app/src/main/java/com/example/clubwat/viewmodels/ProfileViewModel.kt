@@ -7,10 +7,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.auth0.jwt.JWT
 import com.example.clubwat.BuildConfig
-import com.example.clubwat.model.User
-import com.example.clubwat.model.UserProfile
 import com.example.clubwat.model.Interest
 import com.example.clubwat.model.InterestsResponse
+import com.example.clubwat.model.UserProfile
 import com.example.clubwat.repository.UserRepository
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
