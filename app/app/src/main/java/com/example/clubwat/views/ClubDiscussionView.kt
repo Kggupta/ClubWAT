@@ -1,10 +1,12 @@
 package com.example.clubwat.views
 
 //noinspection UsingMaterialAndMaterial3Libraries
+
 import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,12 +21,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.TopAppBar
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -38,11 +42,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -51,18 +57,20 @@ import com.example.clubwat.ui.theme.LightOrange
 import com.example.clubwat.ui.theme.LightYellow
 import com.example.clubwat.ui.theme.PurpleGrey80
 import com.example.clubwat.viewmodels.ClubDiscussionViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "SimpleDateFormat",
+@SuppressLint(
+    "UnusedMaterial3ScaffoldPaddingParameter", "SimpleDateFormat",
     "CoroutineCreationDuringComposition"
 )
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ClubDiscussionView(
-    viewModel: ClubDiscussionViewModel,
+    viewModel: ClubDiscussionViewModel = hiltViewModel(),
     navController: NavController,
     clubId: String?
 ) {
@@ -71,9 +79,9 @@ fun ClubDiscussionView(
     val state = rememberLazyListState()
 
     LaunchedEffect(Unit) {
-        clubId?.let { clubId ->
-            viewModel.fetchClubDetails(clubId)
-            viewModel.fetchUpdatedPosts(clubId)
+        clubId?.let {
+            viewModel.fetchClubDetails(it)
+            viewModel.fetchUpdatedPosts(it)
         }
     }
 
@@ -102,37 +110,48 @@ fun ClubDiscussionView(
             )
         },
         content = {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(it)
-                    .verticalScroll(enabled = false, state = rememberScrollState())
-            ) {
-                LazyColumn(
+            LoadingScreen(uiState.value.isLoading) {
+                Column(
                     modifier = Modifier
-                        .weight(1f),
-                    verticalArrangement = Arrangement.Bottom,
-                    userScrollEnabled = true,
-                    state = state
+                        .fillMaxSize()
+                        .padding(it)
+                        .verticalScroll(enabled = false, state = rememberScrollState())
                 ) {
-                    itemsIndexed(uiState.value.posts) { index, post ->
-                        val name =
-                            if (uiState.value.posts.getOrNull(index - 1)?.messageData?.user?.email == post.messageData.user.email || post.isMe)
-                                null
-                            else post.messageData.user.firstName
-                        val apiDateTime = LocalDateTime.parse(
-                            post.messageData.createDate,
-                            DateTimeFormatter.ISO_DATE_TIME
-                        )
-                        val formatter = DateTimeFormatter.ofPattern("MMM dd, hh:mm")
-                        val formattedDateTime = apiDateTime.format(formatter)
-                        MessageBubble(
-                            isMe = post.isMe,
-                            name = if (post.isMe.not()) name + " (${formattedDateTime})" else formattedDateTime,
-                            message = post.messageData.message
-                        )
-                        coroutineScope.launch {
-                            state.animateScrollToItem(uiState.value.posts.size -1)
+                    LazyColumn(
+                        modifier = Modifier
+                            .weight(1f),
+                        verticalArrangement = Arrangement.Bottom,
+                        userScrollEnabled = true,
+                        state = state
+                    ) {
+                        itemsIndexed(uiState.value.posts) { index, post ->
+                            val name =
+                                if (uiState.value.posts.getOrNull(index - 1)?.messageData?.user?.email == post.messageData.user.email || post.isMe)
+                                    null
+                                else post.messageData.user.firstName
+                            val apiDateTime = LocalDateTime.parse(
+                                post.messageData.createDate,
+                                DateTimeFormatter.ISO_DATE_TIME
+                            )
+                            val formatter = DateTimeFormatter.ofPattern("MMM dd, hh:mm")
+                            val formattedDateTime = apiDateTime.format(formatter)
+                            MessageBubble(
+                                isClubAdmin = uiState.value.clubDetails?.isClubAdmin ?: false,
+                                isMe = post.isMe,
+                                name = if (post.isMe.not()) name + " (${formattedDateTime})" else formattedDateTime,
+                                message = post.messageData.message,
+                                onDelete = {
+                                    if (clubId != null) {
+                                        viewModel.deleteMessage(
+                                            post.messageData.id,
+                                            uiState.value.clubDetails?.id
+                                        )
+                                    }
+                                }
+                            )
+                            coroutineScope.launch {
+                                state.animateScrollToItem(uiState.value.posts.size - 1)
+                            }
                         }
                     }
                 }
@@ -170,7 +189,35 @@ fun ClubDiscussionView(
 }
 
 @Composable
-fun MessageBubble(isMe: Boolean, name: String?, message: String) {
+fun MessageBubble(
+    isClubAdmin: Boolean,
+    isMe: Boolean,
+    name: String?,
+    message: String,
+    onDelete: () -> Unit
+) {
+
+    var showDelDialog by remember { mutableStateOf(false) }
+    if (showDelDialog) {
+        AlertDialog(
+            onDismissRequest = { showDelDialog = false },
+            title = { Text("Delete Message") },
+            text = { Text("Are you sure you want to delete this message?") },
+            confirmButton = {
+                TextButton(onClick = {
+                    onDelete()
+                    showDelDialog = false
+                }) {
+                    Text("Delete")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDelDialog = false }) {
+                    Text("Cancel")
+                }
+            }
+        )
+    }
     Column(
         horizontalAlignment = if (isMe) Alignment.End else Alignment.Start,
         modifier = Modifier
@@ -197,6 +244,15 @@ fun MessageBubble(isMe: Boolean, name: String?, message: String) {
                     )
                 )
                 .background(if (isMe) LightOrange else PurpleGrey80)
+                .pointerInput(Unit) {
+                    detectTapGestures(
+                        onLongPress = {
+                            if (isMe || isClubAdmin) {
+                                showDelDialog = true
+                            }
+                        }
+                    )
+                }
                 .padding(16.dp)
         ) {
             Text(
