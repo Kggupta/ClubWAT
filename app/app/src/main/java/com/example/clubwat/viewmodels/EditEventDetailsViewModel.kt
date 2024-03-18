@@ -113,9 +113,9 @@ class EditEventDetailsViewModel(private val userRepository: UserRepository): Vie
 
 
      fun formatDateTime(calendar: Calendar): String {
-        val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
-        formatter.timeZone = TimeZone.getTimeZone("UTC")
-        return formatter.format(calendar.time)
+         val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
+         formatter.timeZone = TimeZone.getTimeZone("UTC")
+         return formatter.format(calendar.time)
     }
 
     fun updateEvent(callback: (Boolean) -> Unit) {

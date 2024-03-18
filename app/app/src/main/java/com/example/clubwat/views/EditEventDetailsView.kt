@@ -85,9 +85,9 @@ fun EditEventDetailsView(
             ) {
                 Column() {
                     Spacer(modifier = Modifier.height(5.dp))
-                    Text(text = "Title", style = TextStyle(fontWeight = FontWeight.Bold))
                     OutlinedTextField(
                         value = viewModel.title.value,
+                        label = { Text("Title") },
                         onValueChange = { newValue: String -> viewModel.title.value = newValue },
                         placeholder = { Text(text = viewModel.getEventTitle()) },
                         modifier = Modifier
@@ -103,9 +103,9 @@ fun EditEventDetailsView(
                 }
 
                 Column() {
-                    Text(text = "Description", style = TextStyle(fontWeight = FontWeight.Bold))
                     OutlinedTextField(
                         value = viewModel.description.value,
+                        label = { Text("Description") },
                         onValueChange = { newValue: String -> viewModel.description.value = newValue },
                         placeholder = { Text(text = viewModel.getEventDescription()) },
                         modifier = Modifier
@@ -120,19 +120,9 @@ fun EditEventDetailsView(
                 }
 
                 Column() {
-                    Text(text = "Start Date", style = TextStyle(fontWeight = FontWeight.Bold))
-                    DateTimePickerView(dateTime = viewModel.startDate)
-                }
-
-                Column() {
-                    Text(text = "End Date", style = TextStyle(fontWeight = FontWeight.Bold))
-                    DateTimePickerView(dateTime = viewModel.endDate)
-                }
-
-                Column() {
-                    Text(text = "Location", style = TextStyle(fontWeight = FontWeight.Bold))
                     OutlinedTextField(
                         value = viewModel.location.value,
+                        label = { Text("Location") },
                         onValueChange = { newValue: String -> viewModel.location.value = newValue },
                         placeholder = { Text(text = viewModel.getEventLocation()) },
                         modifier = Modifier
@@ -147,11 +137,21 @@ fun EditEventDetailsView(
                     )
                 }
 
+                Column() {
+                    Text(text = "Start Date", style = TextStyle(fontWeight = FontWeight.Bold))
+                    DateTimePickerView(dateTime = viewModel.startDate)
+                }
+
+                Column() {
+                    Text(text = "End Date", style = TextStyle(fontWeight = FontWeight.Bold))
+                    DateTimePickerView(dateTime = viewModel.endDate)
+                }
+
                 Button(
                     onClick = {
-                        if (viewModel.title.value == "" &&
-                            viewModel.description.value == "" &&
-                            viewModel.location.value == "" &&
+                        if (viewModel.title.value.isBlank() &&
+                            viewModel.description.value.isBlank() &&
+                            viewModel.location.value.isBlank() &&
                             viewModel.formatDateTime(viewModel.startDate.value) == viewModel.getEventStartDate() &&
                             viewModel.formatDateTime(viewModel.endDate.value) == viewModel.getEventEndDate()) {
                             errorMessage = "Please fill in all values"
@@ -183,7 +183,6 @@ fun EditEventDetailsView(
                 Text(
                     text = viewModel.errorMessage.value,
                     style = TextStyle(
-                        fontWeight = FontWeight.Bold,
                         color = Color.Red,
                         fontSize = 16.sp,
                     ),

@@ -114,19 +114,22 @@ clubEventRoutes.post<EventsQuery, Event>(
         };
       });
 
-      await prisma.notification.createMany({
-        data: notificationData,
-      });
+      if (joinedUsers.length > 0) {
+        await prisma.notification.createMany({
+          data: notificationData,
+        });
 
-      await EmailService.newEventEmail(
-        joinedUsers.map((x) => x.email),
-        event,
-        club
-      );
+        await EmailService.newEventEmail(
+          joinedUsers.map((x) => x.email),
+          event,
+          club
+        );
+      }
 
       res.status(CREATED_CODE).json(event);
     } catch (error) {
       res.sendStatus(INTERNAL_ERROR_CODE);
+      console.log(error);
     }
   }
 );
