@@ -1,5 +1,6 @@
 package com.example.clubwat.views
 
+import DetailItem
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -19,14 +20,23 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.DataArray
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.DeleteForever
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Event
+import androidx.compose.material.icons.filled.Group
+import androidx.compose.material.icons.filled.Groups
+import androidx.compose.material.icons.filled.Interests
+import androidx.compose.material.icons.filled.Password
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.PersonAddAlt1
+import androidx.compose.material.icons.filled.VerifiedUser
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.AlertDialog
@@ -40,6 +50,7 @@ import androidx.compose.material3.InputChip
 import androidx.compose.material3.InputChipDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -79,85 +90,65 @@ fun ProfileView(
     var showEditInterests by remember { mutableStateOf(false) }
     var showEditProfile by remember { mutableStateOf(false) }
     var showEditFriends by remember { mutableStateOf(false) }
-
-
-    Box(modifier = Modifier.fillMaxSize()) {
-        Text(
-            text = "Logout",
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .clickable {
-                    viewModel.logout()
-                    navController.navigate("login")
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = "Profile",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp
+                    )
+                },
+                backgroundColor = LightYellow,
+                contentColor = Color.Black,
+                actions = {
+                    IconButton(onClick = {
+                        viewModel.logout()
+                        navController.navigate("login")
+                    }) {
+                        Icon(Icons.AutoMirrored.Filled.Logout, null)
+                    }
                 }
-                .padding(16.dp),
-            fontSize = 18.sp,
-        )
-    }
-    Column(
-        modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        androidx.compose.material.TopAppBar(title = {
-            Text(
-                text = "Profile",
-                modifier = Modifier.fillMaxWidth(),
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp
             )
-        }, actions = {
-            IconButton(onClick = {
-                viewModel.logout()
-                navController.navigate("login")
-            }) {
-                Icon(Icons.AutoMirrored.Filled.Logout, null)
+        },
+        content = {
+            Column(
+                modifier = Modifier
+                    .padding(it)
+                    .fillMaxSize()
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(14.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                DetailItem(text = "Edit Profile", icon = Icons.Filled.VerifiedUser,
+                    onClick = {
+                        navController.navigate("user")
+                    })
+                DetailItem(text = "Edit Interests", icon = Icons.Filled.Interests,
+                    onClick = {
+                        navController.navigate("interests")
+                    })
+                DetailItem(text = "Change Password", icon = Icons.Filled.Password,
+                    onClick = {
+                        navController.navigate("password")
+                    })
+                DetailItem(text = "Manage Friends", icon = Icons.Filled.Group,
+                    onClick = {
+                        navController.navigate("friends")
+                    })
+                DetailItem(text = "Download Data", icon = Icons.Filled.DataArray,
+                    onClick = {
+                        // TODO
+                    })
+                Spacer(modifier = Modifier.height(20.dp))
+                Text(text = "Danger Zone", fontWeight = FontWeight.Bold)
+                DetailItem(text = "Delete Account", icon = Icons.Filled.DeleteForever, onClick = {
+                        // TODO
+                    })
             }
-        }, backgroundColor = LightYellow, contentColor = Color.Black
-        )
-
-
-
-
-        Spacer(modifier = Modifier.height(16.dp))
-        Box(
-            contentAlignment = Alignment.Center, modifier = Modifier
-                .size(150.dp)
-                .padding(16.dp)
-        ) {
-            // get API to check if user has PP, if not, have an empty image
-            Image(
-                // change this to profile pic
-                painter = painterResource(id = R.drawable.waterloocirclelogo),
-                contentDescription = "Profile Picture",
-                modifier = Modifier.size(100.dp)
-            )
         }
-
-        val firstName = viewModel.firstName?.value ?: ""
-        val lastName = viewModel.lastName?.value ?: ""
-
-        if (firstName.isNotEmpty() && lastName.isNotEmpty()) {
-            Text(
-                text = "$firstName $lastName", fontWeight = FontWeight.Bold, fontSize = 24.sp
-            )
-        }
-
-        Spacer(modifier = Modifier.height(8.dp))
-        Divider()
-        Spacer(modifier = Modifier.height(20.dp))
-        TextWithIcon("Edit Interests", Icons.Default.Edit, onClick = {
-            showEditInterests = true
-
-        })
-        Spacer(modifier = Modifier.height(20.dp))
-        TextWithIcon("Edit Password", Icons.Default.Person, onClick = {
-            showEditProfile = true
-        })
-        Spacer(modifier = Modifier.height(20.dp))
-        TextWithIcon("Edit Friends", Icons.Default.PersonAddAlt1, onClick = {
-            showEditFriends = true
-        })
-    }
-
+    )
 
     if (showEditInterests) {
         viewModel.getUserInterests()
