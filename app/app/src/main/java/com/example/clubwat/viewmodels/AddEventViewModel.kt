@@ -28,7 +28,7 @@ class AddEventViewModel(private val userRepository: UserRepository) : ViewModel(
 
     private fun formatDateTime(calendar: Calendar): String {
         val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
-        formatter.timeZone = TimeZone.getTimeZone("UTC")
+        formatter.timeZone = TimeZone.getTimeZone("America/New_York")
         return formatter.format(calendar.time)
     }
 
