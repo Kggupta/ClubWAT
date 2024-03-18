@@ -46,10 +46,12 @@
 | 02/18/2024 |        |        | 3      |         |         |         | Fixed how we save data to the User class                    |
 | 02/18/2024 |        |        | 4      |         |         |         | Added bottom navigation bar                                 |
 | 02/19/2024 |        | 3      |        |         |         |         | Created Profile Page                                        |
+| 02/19/2024 |        |        |        | 6       |         |         | Refactoring overall frontend code                           |
 | 02/21/2024 |        |        | 3.5    |         |         |         | Added basic home page view with tab rows                    |
 | 02/21/2024 | 6      |        |        |         |         |         | Club browsing page backend + fe                             |
 | 02/21/2024 | 2      |        |        |         |         |         | Club detail view fe + backend                               |
 | 02/21/2024 | 2      |        |        |         |         |         | Club join/leave/request to join logic fe + backend          |
+| 02/21/2024 |        |        |        | 5       |         |         | Refactoring overall frontend code                           |
 | 02/22/2024 | 0.5    |        |        |         |         |         | Sorting club browsing, update club details look/feel        |
 | 02/22/2024 |        | 4      |        |         |         |         | Created User interests UI, edit password UI                 |
 | 02/25/2024 |        |        | 6      |         |         |         | Added all of the user's clubs on the home screen            |
@@ -61,11 +63,13 @@
 | 02/29/2024 |        |        |        |         |         | 1       | Full stack work to complete all of event browsing           |
 | 02/29/2024 |        | 3      |        |         |         |         | Created friends UI                                          |
 | 02/29/2024 | 1.1    |        |        |         |         |         | Handle user already exists and tries to register error      |
+| 02/29/2024 |        |        |        | 6       |         |         | Implement club discussions initial view and VM              |
 | 03/01/2024 | 3      |        |        |         |         |         | Endpoint to get the users 'my events' for the homepage      |
 | 03/03/2024 |        |        | 5      |         |         |         | Added Events to the Home Page                               |
 | 03/03/2024 |        |        |        |         | 3       |         | Completed component diagram and reviewed D3 submission      |
 | 03/04/2024 | 2      |        |        |         |         |         | Cleanup UI nav bars and flows in time for prototype demo    |
 | 03/07/2024 | 3      |        |        |         |         |         | For you backend, database modifications, sql query building |
+| 03/07/2024 |        |        |        | 8       |         |         | Implement club discussions GET messages and SEND messages   |
 | 03/08/2024 | 4      |        |        |         |         |         | Add event list to club details, update club detail actions  |
 | 03/08/2024 | 3      |        |        |         |         |         | Share backend + notifications, emails                       |
 | 03/08/2024 |        |        | 1      |         |         |         | Reviewed Frontend PRs                                       |
@@ -87,6 +91,7 @@
 | 03/12/2024 |        | 6      |        |         |         | 2       | Added APIs for password change and friends                  |
 | 03/12/2024 | 0.1    |        |        |         |         |         | Added all logic for private event handling in the backend   |
 | 03/12/2024 |        |        |        |         |         | 7       | Completed implementing event creation by club admins        |
+| 03/13/2024 |        |        |        | 5       |         |         | Implement club discussions user and admin DEL messages      |
 | 03/13/2024 | 4      |        |        |         |         |         | Spotlight for club fairs on application startup             |
 | 03/13/2024 |        |        | 7      |         |         |         | Worked on allow club admins to edit clubs                   |
 | 03/13/2024 |        |        | 0.5    |         |         |         | Reviewed PRs and organized tickets                          |
@@ -95,4 +100,6 @@
 | 03/16/2024 | 1      |        |        |         |         |         | Notifications to club members when event created            |
 | 03/17/2024 | 3      |        |        |         |         |         | Download user data, delete user ui/api                      |
 | 03/18/2024 | 9      |        |        |         |         |         | Enable/disable emails, edit profile ui/ux improvements      |
+| 03/18/2024 | 1      |        |        |         |         |         | edit user interests improvements                            |
 | 03/15/2024 | 3      |        |        |         |         |         | D4 work on client-server                                    |
+| 03/18/2024 |        |        |        | 9       |         |         | Investigate and implement VM dependency injection           |
