@@ -20,6 +20,7 @@ model User {
   first_name           String
   last_name            String
   admin_flag           Boolean
+  notification_flag    Boolean @default(true)
   admins               ClubAdmin[]
   club_discussions     ClubDiscussion[]
   club_members         ClubMember[]

@@ -40,7 +40,8 @@ import com.example.clubwat.viewmodels.AddEventViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun AddEventView(viewModel: AddEventViewModel, navController: NavController, clubId: String?) {
+fun AddEventView(viewModel: AddEventViewModel, navController: NavController,
+                 clubId: String?, type: String?) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -168,7 +169,7 @@ fun AddEventView(viewModel: AddEventViewModel, navController: NavController, clu
 
                 Button(
                     onClick = {
-                        viewModel.addEvent(clubId) { isAdded ->
+                        viewModel.addEvent(clubId, type) { isAdded ->
                             if (isAdded) {
                                 navController.popBackStack()
                             }

@@ -11,5 +11,7 @@ data class UserProfile(
     val id: Int,
     @SerializedName("last_name")
     val lastName: String,
-    val password: String
+    val password: String,
+    @SerializedName("notification_flag")
+    val notificationFlag: Boolean
 )

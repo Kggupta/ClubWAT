@@ -34,6 +34,7 @@ export default class EmailService {
     content: string,
     title: string
   ) {
+    if (emails.length === 0) return;
     await transporter.sendMail({
       from: {
         name: "ClubWAT",
@@ -42,6 +43,19 @@ export default class EmailService {
       bcc: emails,
       subject: title,
       text: content,
+    });
+  }
+
+  static async sendDownloadDataEmail(user: User) {
+    await transporter.sendMail({
+      from: {
+        name: "ClubWAT",
+        address: process.env.EMAIL as string,
+      },
+      to: user.email,
+      subject: "Downloaded Data",
+      text: "Attached is your user data file.",
+      attachments: [{ filename: "Data.json", content: JSON.stringify(user) }],
     });
   }
 

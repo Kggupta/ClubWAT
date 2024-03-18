@@ -30,11 +30,13 @@ router.put("/club", authenticateToken, async (req, res) => {
   const sharedClub = await prisma.club.findFirst({ where: { id: clubId } });
   if (!sharedClub) return res.sendStatus(NOT_FOUND_CODE);
 
-  await EmailService.sendClubShareEmail(
-    destinationUser.email,
-    sharedClub,
-    sourceUser
-  );
+  if (destinationUser.notification_flag) {
+    await EmailService.sendClubShareEmail(
+      destinationUser.email,
+      sharedClub,
+      sourceUser
+    );
+  }
 
   await prisma.notification.create({
     data: {
@@ -67,11 +69,13 @@ router.put("/event", authenticateToken, async (req, res) => {
   const sharedEvent = await prisma.event.findFirst({ where: { id: eventId } });
   if (!sharedEvent) return res.sendStatus(NOT_FOUND_CODE);
 
-  await EmailService.sendEventShareEmail(
-    destinationUser.email,
-    sharedEvent,
-    sourceUser
-  );
+  if (destinationUser.notification_flag) {
+    await EmailService.sendEventShareEmail(
+      destinationUser.email,
+      sharedEvent,
+      sourceUser
+    );
+  }
 
   await prisma.notification.create({
     data: {

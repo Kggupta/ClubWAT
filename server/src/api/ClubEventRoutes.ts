@@ -119,7 +119,7 @@ clubEventRoutes.post<EventsQuery, Event>(
       });
 
       await EmailService.newEventEmail(
-        joinedUsers.map((x) => x.email),
+        joinedUsers.filter((x) => x.notification_flag).map((x) => x.email),
         event,
         club
       );

@@ -45,6 +45,7 @@ router.post<LoginRequest, LoginResponse>("/login", async (req, res) => {
 
     res.json({ data: token });
   } catch (error) {
+    console.log(error);
     res.sendStatus(UNAUTHORIZED_CODE);
   }
 });
@@ -132,7 +133,6 @@ router.put("/change-password", authenticateToken, async (req, res) => {
     updatedUser,
     process.env.ACCESS_TOKEN_SECRET as string
   );
-  
 
   res.status(OK_CODE).json({ data: token });
 });
@@ -231,6 +231,60 @@ router.get<UserRequest, UserDetailsResponse>(
     }
 
     res.status(OK_CODE).json(user);
+  }
+);
+
+router.get("/profile/self", authenticateToken, async (req, res) => {
+  return res.status(OK_CODE).json(
+    await prisma.user.findFirst({
+      where: { id: req.body.user.id },
+    })
+  );
+});
+
+router.put(
+  "/profile/self/notification",
+  authenticateToken,
+  async (req, res) => {
+    await prisma.user.update({
+      where: { id: req.body.user.id },
+      data: { notification_flag: req.body.notificationFlag },
+    });
+
+    return res.status(OK_CODE).json(
+      await prisma.user.findFirst({
+        where: { id: req.body.user.id },
+      })
+    );
+  }
+);
+
+router.get(
+  "/profile/self/download-data",
+  authenticateToken,
+  async (req, res) => {
+    const user: User | null = await prisma.user.findFirst({
+      where: { id: req.body.user.id },
+      include: {
+        club_discussions: true,
+        club_members: true,
+        destination_friend: true,
+        source_friend: true,
+        source_notifications: true,
+        notifications: true,
+        event_attendance: true,
+        event_bookmarks: true,
+        interests: true,
+      },
+    });
+
+    if (!user) return res.sendStatus(NOT_FOUND_CODE);
+
+    user.password = "REDACTED";
+
+    await EmailService.sendDownloadDataEmail(user);
+
+    res.sendStatus(OK_CODE);
   }
 );
 
