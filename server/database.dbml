@@ -15,13 +15,14 @@ Table User {
   club_members ClubMember [not null]
   event_attendance EventAttendance [not null]
   event_bookmarks EventBookmark [not null]
-  event_feedback EventFeedback [not null]
   destination_friend Friend [not null]
   source_friend Friend [not null]
   notifications Notification [not null]
   source_notifications Notification [not null]
   interests UserInterest [not null]
   userReadSpotlights UserReadSpotlight [not null]
+  eventLikes EventLike [not null]
+  clubLikes ClubLike [not null]
 }
 
 Table UserEmailVerification {
@@ -42,6 +43,7 @@ Table Club {
   club_members ClubMember [not null]
   events Event [not null]
   notifications Notification [not null]
+  likes ClubLike [not null]
 }
 
 Table Category {
@@ -93,8 +95,8 @@ Table Event {
   club Club [not null]
   event_attendance EventAttendance [not null]
   event_bookmark EventBookmark [not null]
-  event_feedback EventFeedback [not null]
   notifications Notification [not null]
+  likes EventLike [not null]
 }
 
 Table EventAttendance {
@@ -109,16 +111,6 @@ Table EventBookmark {
   id Int [pk, increment]
   user_id Int [not null]
   event_id Int [not null]
-  event Event [not null]
-  user User [not null]
-}
-
-Table EventFeedback {
-  id Int [pk, increment]
-  event_id Int [not null]
-  feedback String [not null]
-  created DateTime [not null]
-  user_email String [not null]
   event Event [not null]
   user User [not null]
 }
@@ -175,6 +167,22 @@ Table UserReadSpotlight {
   user User [not null]
 }
 
+Table EventLike {
+  id Int [pk, increment]
+  user_id Int [not null]
+  event_id Int [not null]
+  event Event [not null]
+  user User [not null]
+}
+
+Table ClubLike {
+  id Int [pk, increment]
+  user_id Int [not null]
+  club_id Int [not null]
+  club Club [not null]
+  user User [not null]
+}
+
 Enum AdminType {
   Owner
   Admin
@@ -202,10 +210,6 @@ Ref: EventBookmark.event_id > Event.id [delete: Cascade]
 
 Ref: EventBookmark.user_id > User.id [delete: Cascade]
 
-Ref: EventFeedback.event_id > Event.id [delete: Cascade]
-
-Ref: EventFeedback.user_email > User.email [delete: Cascade]
-
 Ref: ClubMember.club_id > Club.id [delete: Cascade]
 
 Ref: ClubMember.user_id > User.id [delete: Cascade]
@@ -229,3 +233,11 @@ Ref: Friend.source_friend_id > User.id [delete: Cascade]
 Ref: UserReadSpotlight.event_id > Event.id [delete: Cascade]
 
 Ref: UserReadSpotlight.user_id > User.id [delete: Cascade]
+
+Ref: EventLike.event_id > Event.id [delete: Cascade]
+
+Ref: EventLike.user_id > User.id [delete: Cascade]
+
+Ref: ClubLike.club_id > Club.id [delete: Cascade]
+
+Ref: ClubLike.user_id > User.id [delete: Cascade]

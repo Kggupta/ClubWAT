@@ -26,13 +26,14 @@ model User {
   club_members         ClubMember[]
   event_attendance     EventAttendance[]
   event_bookmarks      EventBookmark[]
-  event_feedback       EventFeedback[]
   destination_friend   Friend[]            @relation("destination_friend_id")
   source_friend        Friend[]            @relation("source_friend_id")
   notifications        Notification[]      @relation("destination_user")
   source_notifications Notification[]      @relation("source_user")
   interests            UserInterest[]
   userReadSpotlights   UserReadSpotlight[]
+  eventLikes EventLike[]
+  clubLikes ClubLike[]
 }
 
 model UserEmailVerification {
@@ -53,6 +54,7 @@ model Club {
   club_members   ClubMember[]
   events         Event[]
   notifications  Notification[]
+  likes ClubLike[]
 }
 
 model Category {
@@ -104,8 +106,8 @@ model Event {
   club             Club              @relation(fields: [club_id], references: [id], onDelete: Cascade)
   event_attendance EventAttendance[]
   event_bookmark   EventBookmark[]
-  event_feedback   EventFeedback[]
   notifications    Notification[]
+  likes EventLike[]
 }
 
 model EventAttendance {
@@ -122,16 +124,6 @@ model EventBookmark {
   event_id Int
   event    Event @relation(fields: [event_id], references: [id], onDelete: Cascade)
   user     User  @relation(fields: [user_id], references: [id], onDelete: Cascade)
-}
-
-model EventFeedback {
-  id         Int      @id @default(autoincrement())
-  event_id   Int
-  feedback   String
-  created    DateTime
-  user_email String
-  event      Event    @relation(fields: [event_id], references: [id], onDelete: Cascade)
-  user       User     @relation(fields: [user_email], references: [email], onDelete: Cascade)
 }
 
 model ClubMember {
@@ -182,6 +174,22 @@ model UserReadSpotlight {
   event_id Int
   event    Event @relation(fields: [event_id], references: [id], onDelete: Cascade)
   user         User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+model EventLike {
+  id Int @id @default(autoincrement())
+  user_id Int
+  event_id Int
+  event Event @relation(fields: [event_id], references: [id], onDelete: Cascade)
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+model ClubLike {
+  id Int @id @default(autoincrement())
+  user_id Int
+  club_id Int
+  club Club @relation(fields: [club_id], references: [id], onDelete: Cascade)
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
 
 enum AdminType {

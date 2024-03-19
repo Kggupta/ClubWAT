@@ -66,6 +66,32 @@ class ClubDetailsViewModel(private val userRepository: UserRepository) : ViewMod
         }
     }
 
+    fun likeClub() {
+        if (_club.value == null) return
+        viewModelScope.launch(Dispatchers.IO) {
+            val url = URL(BuildConfig.FEEDBACK_URL + "/club/${_club.value!!.id}/${if (_club.value!!.isClientLikedClub) "unlike" else "like"}")
+            (url.openConnection() as HttpURLConnection).apply {
+                requestMethod = "PUT"
+                doOutput = true
+                setRequestProperty("Content-Type", "application/json")
+                setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value!!.userId )
+
+                val responseCode = responseCode
+                if (responseCode != HttpURLConnection.HTTP_OK) {
+                    println("Error Response: $responseCode")
+                } else if (_club.value!!.isClientLikedClub) {
+                    _club.update {
+                        it!!.copy(isClientLikedClub = false, likeCount = it.likeCount - 1)
+                    }
+                } else {
+                    _club.update {
+                        it!!.copy(isClientLikedClub = true, likeCount = it.likeCount + 1)
+                    }
+                }
+            }
+        }
+    }
+
     fun getFriends() {
         viewModelScope.launch(Dispatchers.IO) {
             try {

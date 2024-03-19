@@ -12,6 +12,7 @@ import shareRoutes from "./ShareRoutes";
 import friendRoutes from "./FriendRoutes";
 import userInterestRoutes from "./UserInterestRoutes";
 import spotlightRoutes from "./SpotlightRoutes";
+import feedbackRoutes from "./FeedbackRoutes";
 
 const router = express.Router();
 
@@ -32,5 +33,6 @@ router.use("/event", eventRoutes);
 router.use("/share", shareRoutes);
 router.use("/friend", friendRoutes);
 router.use("/spotlight", spotlightRoutes);
+router.use("/feedback", feedbackRoutes);
 
 export default router;

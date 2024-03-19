@@ -18,6 +18,7 @@ import kotlinx.coroutines.launch
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
+import java.text.NumberFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -39,6 +40,16 @@ class EventDetailsViewModel(private val userRepository: UserRepository) : ViewMo
     fun getEventDescription(): String {
         if (_event.value == null) return ""
         return _event.value!!.description
+    }
+
+    fun getLikeCount(): String {
+        if (_event.value == null) return ""
+
+        val formatInteger = NumberFormat.getNumberInstance()
+        formatInteger.minimumFractionDigits = 0
+        formatInteger.maximumFractionDigits = 0
+
+        return formatInteger.format(event.value!!.likeCount)
     }
 
     fun attendEvent() {
@@ -141,6 +152,32 @@ class EventDetailsViewModel(private val userRepository: UserRepository) : ViewMo
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
+            }
+        }
+    }
+
+    fun likeEvent() {
+        if (_event.value == null) return
+        viewModelScope.launch(Dispatchers.IO) {
+            val url = URL(BuildConfig.FEEDBACK_URL + "/event/${_event.value!!.id}/${if (_event.value!!.isClientLikedEvent) "unlike" else "like"}")
+            (url.openConnection() as HttpURLConnection).apply {
+                requestMethod = "PUT"
+                doOutput = true
+                setRequestProperty("Content-Type", "application/json")
+                setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value!!.userId )
+
+                val responseCode = responseCode
+                if (responseCode != HttpURLConnection.HTTP_OK) {
+                    println("Error Response: $responseCode")
+                } else if (_event.value!!.isClientLikedEvent) {
+                    _event.update {
+                        it!!.copy(isClientLikedEvent = false, likeCount = it.likeCount - 1)
+                    }
+                } else {
+                    _event.update {
+                        it!!.copy(isClientLikedEvent = true, likeCount = it.likeCount + 1)
+                    }
+                }
             }
         }
     }

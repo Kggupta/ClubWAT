@@ -83,23 +83,28 @@ fun ProfileView(
                 verticalArrangement = Arrangement.spacedBy(14.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                DetailItem(text = "Edit Profile", icon = Icons.Filled.VerifiedUser,
+                DetailItem(
+                    text = "Edit Profile", icon = Icons.Filled.VerifiedUser,
                     onClick = {
                         navController.navigate("editprofile")
                     })
-                DetailItem(text = "Edit Interests", icon = Icons.Filled.Interests,
+                DetailItem(
+                    text = "Edit Interests", icon = Icons.Filled.Interests,
                     onClick = {
                         navController.navigate("interests")
                     })
-                DetailItem(text = "Change Password", icon = Icons.Filled.Password,
+                DetailItem(
+                    text = "Change Password", icon = Icons.Filled.Password,
                     onClick = {
                         navController.navigate("password")
                     })
-                DetailItem(text = "Manage Friends", icon = Icons.Filled.Group,
+                DetailItem(
+                    text = "Manage Friends", icon = Icons.Filled.Group,
                     onClick = {
                         navController.navigate("friends")
                     })
-                DetailItem(text = "Download Data", icon = Icons.Filled.DataArray,
+                DetailItem(
+                    text = "Download Data", icon = Icons.Filled.DataArray,
                     onClick = {
                         showDownloadData = true
                     })

@@ -12,7 +12,9 @@ data class ClubDetails(
     var isJoined: Boolean,
     var isJoinPending: Boolean,
     var isClubAdmin: Boolean = false,
-    var isCreator: Boolean = false
+    var isCreator: Boolean = false,
+    var likeCount: Int,
+    var isClientLikedClub: Boolean = false
 )
 
 data class Category(
