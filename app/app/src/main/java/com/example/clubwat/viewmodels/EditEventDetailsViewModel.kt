@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.clubwat.BuildConfig
 import com.example.clubwat.model.Event
-import com.example.clubwat.repository.DiscussionRepository
 import com.example.clubwat.repository.UserRepository
 import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
