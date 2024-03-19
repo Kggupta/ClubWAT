@@ -1,5 +1,7 @@
 package com.example.clubwat.views
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -36,6 +38,7 @@ import com.example.clubwat.ui.theme.LightYellow
 import com.example.clubwat.ui.theme.Orange
 import com.example.clubwat.viewmodels.EditEventDetailsViewModel
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun EditEventDetailsView(
     viewModel: EditEventDetailsViewModel,
@@ -149,11 +152,26 @@ fun EditEventDetailsView(
 
                 Button(
                     onClick = {
+                        println("hi")
+                        println(viewModel.formatDateTime(viewModel.startDate.value))
+                        println(viewModel.getEventStartDate())
+                        println(viewModel.formatDateTime(viewModel.endDate.value))
+                        println(viewModel.getEventEndDate())
+
+                        val originalStartDate = viewModel.parseDateString(viewModel.getEventStartDate())
+                        val isStartDateUnchanged = originalStartDate?.let {
+                            viewModel.areCalendarsEqualIgnoringMilliseconds(viewModel.startDate.value, it)
+                        } ?: false
+
+                        val originalEndDate = viewModel.parseDateString(viewModel.getEventEndDate())
+                        val isEndDateUnchanged = originalEndDate?.let {
+                            viewModel.areCalendarsEqualIgnoringMilliseconds(viewModel.endDate.value, it)
+                        } ?: false
+
                         if (viewModel.title.value.isBlank() &&
                             viewModel.description.value.isBlank() &&
                             viewModel.location.value.isBlank() &&
-                            viewModel.formatDateTime(viewModel.startDate.value) == viewModel.getEventStartDate() &&
-                            viewModel.formatDateTime(viewModel.endDate.value) == viewModel.getEventEndDate()) {
+                            isStartDateUnchanged && isEndDateUnchanged) {
                             errorMessage = "Please fill in all values"
                         } else if (!(viewModel.startDate.value.time.before(viewModel.endDate.value.time))) {
                             errorMessage = "Start date must be earlier than end date!"
@@ -193,3 +211,5 @@ fun EditEventDetailsView(
         }
     )
 }
+
+

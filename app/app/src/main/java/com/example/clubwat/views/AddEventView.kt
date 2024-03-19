@@ -76,9 +76,9 @@ fun AddEventView(viewModel: AddEventViewModel, navController: NavController, clu
                 if (clubId == null) return@Scaffold
                 Column() {
                     Spacer(modifier = Modifier.height(5.dp))
-                    Text(text = "Title", style = TextStyle(fontWeight = FontWeight.Bold))
                     OutlinedTextField(
                         value = viewModel.title.value,
+                        label = { Text("Title") },
                         onValueChange = { newValue: String -> viewModel.title.value = newValue },
                         modifier = Modifier
                             .padding(vertical = 8.dp)
@@ -93,9 +93,9 @@ fun AddEventView(viewModel: AddEventViewModel, navController: NavController, clu
                 }
 
                 Column() {
-                    Text(text = "Description", style = TextStyle(fontWeight = FontWeight.Bold))
                     OutlinedTextField(
                         value = viewModel.description.value,
+                        label = { Text("Description") },
                         onValueChange = { newValue: String -> viewModel.description.value = newValue },
                         modifier = Modifier
                             .padding(vertical = 8.dp)
@@ -109,19 +109,9 @@ fun AddEventView(viewModel: AddEventViewModel, navController: NavController, clu
                 }
 
                 Column() {
-                    Text(text = "Start Date", style = TextStyle(fontWeight = FontWeight.Bold))
-                    DateTimePickerView(dateTime = viewModel.startDateTime)
-                }
-
-                Column() {
-                    Text(text = "End Date", style = TextStyle(fontWeight = FontWeight.Bold))
-                    DateTimePickerView(dateTime = viewModel.endDateTime)
-                }
-
-                Column() {
-                    Text(text = "Location", style = TextStyle(fontWeight = FontWeight.Bold))
                     OutlinedTextField(
                         value = viewModel.location.value,
+                        label = { Text("Location") },
                         onValueChange = { newValue: String -> viewModel.location.value = newValue },
                         modifier = Modifier
                             .padding(vertical = 8.dp)
@@ -133,6 +123,16 @@ fun AddEventView(viewModel: AddEventViewModel, navController: NavController, clu
                         ),
                         singleLine = true
                     )
+                }
+
+                Column() {
+                    Text(text = "Start Date", style = TextStyle(fontWeight = FontWeight.Bold))
+                    DateTimePickerView(dateTime = viewModel.startDateTime)
+                }
+
+                Column() {
+                    Text(text = "End Date", style = TextStyle(fontWeight = FontWeight.Bold))
+                    DateTimePickerView(dateTime = viewModel.endDateTime)
                 }
 
                 Column() {

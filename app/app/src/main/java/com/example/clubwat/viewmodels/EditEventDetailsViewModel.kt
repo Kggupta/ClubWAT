@@ -98,12 +98,22 @@ class EditEventDetailsViewModel(private val userRepository: UserRepository): Vie
         }
     }
 
-    private fun parseDateString(dateString: String): Calendar? {
+    fun areCalendarsEqualIgnoringMilliseconds(cal1: Calendar, cal2: Calendar): Boolean {
+        return cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
+                cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR) &&
+                cal1.get(Calendar.HOUR_OF_DAY) == cal2.get(Calendar.HOUR_OF_DAY) &&
+                cal1.get(Calendar.MINUTE) == cal2.get(Calendar.MINUTE) &&
+                cal1.get(Calendar.SECOND) == cal2.get(Calendar.SECOND)
+    }
+
+
+    fun parseDateString(dateString: String): Calendar? {
         val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
-        formatter.timeZone = TimeZone.getDefault()
+        formatter.timeZone = TimeZone.getTimeZone("UTC")
         val calendar = Calendar.getInstance()
         try {
             calendar.time = formatter.parse(dateString) ?: return null
+            calendar.set(Calendar.MILLISECOND, 0) // Clear milliseconds
         } catch (e: ParseException) {
             e.printStackTrace()
             return null
@@ -111,10 +121,10 @@ class EditEventDetailsViewModel(private val userRepository: UserRepository): Vie
         return calendar
     }
 
-     fun formatDateTime(calendar: Calendar): String {
-         val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
-         formatter.timeZone = TimeZone.getTimeZone("America/New_York")
-         return formatter.format(calendar.time)
+    fun formatDateTime(calendar: Calendar): String {
+        val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
+        formatter.timeZone = TimeZone.getTimeZone("UTC") // Format back to UTC to match the input
+        return formatter.format(calendar.time)
     }
 
     fun updateEvent(callback: (Boolean) -> Unit) {
