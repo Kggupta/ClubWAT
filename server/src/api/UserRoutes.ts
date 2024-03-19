@@ -275,6 +275,8 @@ router.get(
         event_attendance: true,
         event_bookmarks: true,
         interests: true,
+        clubLikes: true,
+        eventLikes: true,
       },
     });
 

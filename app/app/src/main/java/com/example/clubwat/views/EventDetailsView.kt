@@ -24,6 +24,8 @@ import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Group
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Button
@@ -108,6 +110,7 @@ fun EventDetailsView(
             )
         },
         content = {
+            if (event == null) return@Scaffold
             Column(
                 modifier = Modifier
                     .padding(it)
@@ -119,47 +122,45 @@ fun EventDetailsView(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    if (event != null) {
-                        Button(onClick = {
-                                if (event?.isAttending == false) {
-                                    showCalendarConfirmation = true
-                                }
-                                viewModel.attendEvent()
-                            }, colors = ButtonDefaults.buttonColors(
-                            containerColor = if (!event!!.isAttending) LightOrange else Color.LightGray,
-                            contentColor = if (!event!!.isAttending) Color.White else Color.Black)) {
-                            Icon(if (event!!.isAttending) {
-                                Icons.AutoMirrored.Filled.ExitToApp
-                            } else {
-                                Icons.Filled.Add
-                            }, contentDescription = "Attend Event")
-                        }
-                        Spacer(modifier = Modifier.width(16.dp))
-                        Button(onClick = {
-                            viewModel.bookmarkEvent()
-                        }, colors = ButtonDefaults.buttonColors(
-                            containerColor = if (!event!!.isBookmarked) LightOrange else Color.LightGray,
-                            contentColor = if (!event!!.isBookmarked) Color.White else Color.Black)) {
-                            Icon(Icons.Filled.Bookmark, contentDescription = "Bookmark")
-                        }
-                        Spacer(modifier = Modifier.width(16.dp))
-                        if (event?.privateFlag == false) {
-                            Button(onClick = {
-                                showShareView = true
-                            }, colors = ButtonDefaults.buttonColors(
-                                containerColor = LightOrange
-                            )) {
-                                Icon(Icons.AutoMirrored.Filled.Send, contentDescription = "Send")
+                    Button(onClick = {
+                            if (event?.isAttending == false) {
+                                showCalendarConfirmation = true
                             }
-                            Spacer(modifier = Modifier.width(16.dp))
-                        }
+                            viewModel.attendEvent()
+                        }, colors = ButtonDefaults.buttonColors(
+                        containerColor = if (!event!!.isAttending) LightOrange else Color.LightGray,
+                        contentColor = if (!event!!.isAttending) Color.White else Color.Black)) {
+                        Icon(if (event!!.isAttending) {
+                            Icons.AutoMirrored.Filled.ExitToApp
+                        } else {
+                            Icons.Filled.Add
+                        }, contentDescription = "Attend Event")
+                    }
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Button(onClick = {
+                        viewModel.bookmarkEvent()
+                    }, colors = ButtonDefaults.buttonColors(
+                        containerColor = if (!event!!.isBookmarked) LightOrange else Color.LightGray,
+                        contentColor = if (!event!!.isBookmarked) Color.White else Color.Black)) {
+                        Icon(Icons.Filled.Bookmark, contentDescription = "Bookmark")
+                    }
+                    Spacer(modifier = Modifier.width(16.dp))
+                    if (event?.privateFlag == false) {
                         Button(onClick = {
-                            navController.navigate("club/${event!!.clubId}")
+                            showShareView = true
                         }, colors = ButtonDefaults.buttonColors(
                             containerColor = LightOrange
                         )) {
-                            Icon(Icons.Filled.Group, contentDescription = "Club")
+                            Icon(Icons.AutoMirrored.Filled.Send, contentDescription = "Send")
                         }
+                        Spacer(modifier = Modifier.width(16.dp))
+                    }
+                    Button(onClick = {
+                        navController.navigate("club/${event!!.clubId}")
+                    }, colors = ButtonDefaults.buttonColors(
+                        containerColor = LightOrange
+                    )) {
+                        Icon(Icons.Filled.Group, contentDescription = "Club")
                     }
                 }
                 Spacer(modifier = Modifier.height(16.dp))
@@ -182,6 +183,11 @@ fun EventDetailsView(
                     DetailItem(text = viewModel.getLocation(), icon = Icons.Filled.LocationOn)
                     DetailItem(text = viewModel.getStartDate(), icon = Icons.Filled.AccessTime)
                     DetailItem(text = viewModel.getEndDate(), icon = Icons.Filled.AccessTime)
+                    DetailItem(text = viewModel.getLikeCount(),
+                        icon = if (event!!.isClientLikedEvent) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                        onClick = {
+                            viewModel.likeEvent()
+                        })
                 }
             }
         }

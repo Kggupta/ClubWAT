@@ -103,3 +103,4 @@
 | 03/18/2024 | 9      |        |        |         |         |         | Enable/disable emails, edit profile ui/ux improvements      |
 | 03/18/2024 | 1      |        |        |         |         |         | edit user interests improvements                            |
 | 03/18/2024 |        |        |        | 9       |         |         | Investigate and implement VM dependency injection           |
+| 03/18/2024 | 1      |        |        |         |         |         | Club and event feedback                                     |

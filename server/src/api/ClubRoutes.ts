@@ -1,15 +1,7 @@
 import express from "express";
 import { prisma } from "../lib/prisma";
+import { AdminType, Club, ClubMember, Prisma } from "@prisma/client";
 import {
-  AdminType,
-  Club,
-  ClubAdmin,
-  ClubCategory,
-  ClubMember,
-  Prisma,
-} from "@prisma/client";
-import {
-  CONFLICT_CODE,
   INTERNAL_ERROR_CODE,
   INVALID_REQUEST_CODE,
   NOT_FOUND_CODE,
@@ -266,6 +258,7 @@ router.get("/:id", authenticateToken, async (req, res) => {
       admins: true,
       club_members: true,
       events: true,
+      likes: true,
       categories: {
         select: {
           category: {
@@ -309,6 +302,8 @@ router.get("/:id", authenticateToken, async (req, res) => {
     isClubAdmin: club.admins.some((x) => x.user_id === req.body.user.id),
     adminIds: club.admins.map((x) => x.user_id),
     categories: categories,
+    likeCount: club.likes.length,
+    isClientLikedClub: club.likes.some((x) => x.user_id === req.body.user.id),
     isJoined,
     isJoinPending,
     isCreator: club.admins.some(

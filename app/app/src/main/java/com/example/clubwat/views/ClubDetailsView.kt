@@ -27,6 +27,8 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AttachMoney
 import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.ChatBubble
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -176,7 +178,22 @@ fun ClubDetailsView(
                     val format = NumberFormat.getNumberInstance()
                     format.minimumFractionDigits = 2
                     format.maximumFractionDigits = 2
-                    DetailItem(text = format.format(club!!.membershipFee), icon = Icons.Filled.AttachMoney)
+
+                    val formatInteger = NumberFormat.getNumberInstance()
+                    formatInteger.minimumFractionDigits = 0
+                    formatInteger.maximumFractionDigits = 0
+
+                    Row (Modifier.fillMaxWidth()) {
+                        DetailItem(text = format.format(club!!.membershipFee),
+                            icon = Icons.Filled.AttachMoney,
+                            modifier = Modifier.fillMaxWidth(0.5f))
+                        Spacer(modifier = Modifier.width(8.dp))
+                        DetailItem(text = formatInteger.format(club!!.likeCount),
+                            icon = if (club!!.isClientLikedClub) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                            onClick = {
+                                viewModel.likeClub()
+                            })
+                    }
                 }
                 Spacer(modifier = Modifier.height(16.dp))
 
