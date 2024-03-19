@@ -85,7 +85,6 @@ class MainActivity : ComponentActivity() {
                 val addEventViewModel: AddEventViewModel by viewModels { AddEventViewModelFactory(userRepository) }
                 val editClubDetailsViewModel: EditClubDetailsViewModel by viewModels { EditClubDetailsViewModelFactory(userRepository) }
 
-
                 Scaffold(
                     bottomBar = {
                         if (currentUser?.userId != null) {
@@ -151,6 +150,11 @@ class MainActivity : ComponentActivity() {
                             }
                             composable("event/{eventId}") {backStackEntry ->
                                 EventDetailsView(viewModel = eventDetailsViewModel,
+                                    navController = navController,
+                                    eventId = backStackEntry.arguments?.getString("eventId"))
+                            }
+                            composable("event/{eventId}/eventDetails") {backStackEntry ->
+                                EditEventDetailsView(
                                     navController = navController,
                                     eventId = backStackEntry.arguments?.getString("eventId"))
                             }
