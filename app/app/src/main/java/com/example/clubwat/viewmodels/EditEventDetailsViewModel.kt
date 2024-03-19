@@ -5,8 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.clubwat.BuildConfig
 import com.example.clubwat.model.Event
+import com.example.clubwat.repository.DiscussionRepository
 import com.example.clubwat.repository.UserRepository
 import com.google.gson.Gson
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -21,8 +23,12 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 import java.util.TimeZone
+import javax.inject.Inject
 
-class EditEventDetailsViewModel(private val userRepository: UserRepository): ViewModel() {
+@HiltViewModel
+class EditEventDetailsViewModel @Inject constructor(
+    val userRepository: UserRepository,
+) : ViewModel() {
     private var _event = MutableStateFlow<Event?>(null)
     var event = _event.asStateFlow()
 

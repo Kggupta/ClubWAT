@@ -39,7 +39,6 @@ import com.example.clubwat.viewmodels.factories.ClubManagementViewModelFactory
 import com.example.clubwat.viewmodels.factories.ClubUserManagementViewModelFactory
 import com.example.clubwat.viewmodels.factories.CodeVerificationViewModelFactory
 import com.example.clubwat.viewmodels.factories.EditClubDetailsViewModelFactory
-import com.example.clubwat.viewmodels.factories.EditEventDetailsViewModelFactory
 import com.example.clubwat.viewmodels.factories.EventDetailsViewModelFactory
 import com.example.clubwat.viewmodels.factories.ForYouViewModelFactory
 import com.example.clubwat.viewmodels.factories.HomeViewModelFactory
@@ -86,7 +85,7 @@ class MainActivity : ComponentActivity() {
                 val clubUserManagementViewModel: ClubUserManagementViewModel by viewModels { ClubUserManagementViewModelFactory(userRepository) }
                 val addEventViewModel: AddEventViewModel by viewModels { AddEventViewModelFactory(userRepository) }
                 val editClubDetailsViewModel: EditClubDetailsViewModel by viewModels { EditClubDetailsViewModelFactory(userRepository) }
-                val editEventDetailsViewModel: EditEventDetailsViewModel by viewModels { EditEventDetailsViewModelFactory(userRepository) }
+                val editEventDetailsViewModel = EditEventDetailsViewModel(userRepository)
 
                 Scaffold(
                     bottomBar = {

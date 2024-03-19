@@ -32,6 +32,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.clubwat.R
 import com.example.clubwat.ui.theme.LightYellow
@@ -41,7 +42,7 @@ import com.example.clubwat.viewmodels.EditEventDetailsViewModel
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun EditEventDetailsView(
-    viewModel: EditEventDetailsViewModel,
+    viewModel: EditEventDetailsViewModel = hiltViewModel(),
     navController: NavController,
     eventId: String?
 ) {
@@ -152,12 +153,6 @@ fun EditEventDetailsView(
 
                 Button(
                     onClick = {
-                        println("hi")
-                        println(viewModel.formatDateTime(viewModel.startDate.value))
-                        println(viewModel.getEventStartDate())
-                        println(viewModel.formatDateTime(viewModel.endDate.value))
-                        println(viewModel.getEventEndDate())
-
                         val originalStartDate = viewModel.parseDateString(viewModel.getEventStartDate())
                         val isStartDateUnchanged = originalStartDate?.let {
                             viewModel.areCalendarsEqualIgnoringMilliseconds(viewModel.startDate.value, it)
