@@ -118,6 +118,10 @@ android {
             buildConfigField("String", "PASSWORD_CHANGE", passwordChange)
         }
 
+        val editEvent = properties["EDIT_EVENT_URL"]?.toString()
+        if (editEvent != null) {
+            buildConfigField("String", "EDIT_EVENT_URL", editEvent)
+        }
         val getUserProfile = properties["GET_OWN_PROFILE"]?.toString()
         if (getUserProfile != null) {
             buildConfigField("String", "GET_OWN_PROFILE", getUserProfile)
@@ -197,13 +201,13 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     implementation("androidx.navigation:navigation-compose:2.7.7")
-    implementation("androidx.compose.material:material-icons-core:1.6.1")
-    implementation("androidx.compose.material:material-icons-extended:1.6.1")
+    implementation("androidx.compose.material:material-icons-core:1.6.3")
+    implementation("androidx.compose.material:material-icons-extended:1.6.3")
     implementation("com.auth0:java-jwt:3.18.2")
-    implementation("androidx.compose.material3:material3:1.2.0")
-    implementation("androidx.compose.material3:material3-window-size-class:1.2.0")
-    implementation("androidx.compose.material:material:1.6.2")
-    implementation("com.google.dagger:hilt-android:2.48")
+    implementation("androidx.compose.material3:material3:1.2.1")
+    implementation("androidx.compose.material3:material3-window-size-class:1.2.1")
+    implementation("androidx.compose.material:material:1.6.3")
+    implementation("com.google.dagger:hilt-android:2.49")
     kapt("com.google.dagger:hilt-android-compiler:2.48")
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 }

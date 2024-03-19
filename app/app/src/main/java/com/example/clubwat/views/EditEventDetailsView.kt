@@ -1,9 +1,9 @@
 package com.example.clubwat.views
 
-import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.RadioButton
-import androidx.compose.material.RadioButtonDefaults
 import androidx.compose.material.TopAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -23,7 +21,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -32,16 +32,29 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.clubwat.R
 import com.example.clubwat.ui.theme.LightYellow
 import com.example.clubwat.ui.theme.Orange
-import com.example.clubwat.viewmodels.AddEventViewModel
+import com.example.clubwat.viewmodels.EditEventDetailsViewModel
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun AddEventView(viewModel: AddEventViewModel, navController: NavController,
-                 clubId: String?, type: String?) {
+fun EditEventDetailsView(
+    viewModel: EditEventDetailsViewModel = hiltViewModel(),
+    navController: NavController,
+    eventId: String?
+) {
+
+    var errorMessage by viewModel.errorMessage
+
+    LaunchedEffect(Unit) {
+        if (eventId != null) {
+            viewModel.getEvent(eventId)
+        }
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -56,7 +69,7 @@ fun AddEventView(viewModel: AddEventViewModel, navController: NavController,
                 },
                 title = {
                     Text(
-                        text = "Add Event",
+                        text = "Edit Event",
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp
                     )
@@ -65,7 +78,7 @@ fun AddEventView(viewModel: AddEventViewModel, navController: NavController,
                 contentColor = Color.Black
             )
         },
-        content = {
+        content = { it ->
             Column(
                 modifier = Modifier
                     .padding(it)
@@ -74,13 +87,13 @@ fun AddEventView(viewModel: AddEventViewModel, navController: NavController,
                     .verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(7.dp)
             ) {
-                if (clubId == null) return@Scaffold
                 Column() {
                     Spacer(modifier = Modifier.height(5.dp))
                     OutlinedTextField(
                         value = viewModel.title.value,
                         label = { Text("Title") },
                         onValueChange = { newValue: String -> viewModel.title.value = newValue },
+                        placeholder = { Text(text = viewModel.getEventTitle()) },
                         modifier = Modifier
                             .padding(vertical = 8.dp)
                             .fillMaxWidth(),
@@ -98,6 +111,7 @@ fun AddEventView(viewModel: AddEventViewModel, navController: NavController,
                         value = viewModel.description.value,
                         label = { Text("Description") },
                         onValueChange = { newValue: String -> viewModel.description.value = newValue },
+                        placeholder = { Text(text = viewModel.getEventDescription()) },
                         modifier = Modifier
                             .padding(vertical = 8.dp)
                             .fillMaxWidth(),
@@ -105,7 +119,7 @@ fun AddEventView(viewModel: AddEventViewModel, navController: NavController,
                             focusedIndicatorColor = Orange,
                             unfocusedContainerColor = Color.Transparent,
                             focusedContainerColor = Color.Transparent
-                        )
+                        ),
                     )
                 }
 
@@ -114,6 +128,7 @@ fun AddEventView(viewModel: AddEventViewModel, navController: NavController,
                         value = viewModel.location.value,
                         label = { Text("Location") },
                         onValueChange = { newValue: String -> viewModel.location.value = newValue },
+                        placeholder = { Text(text = viewModel.getEventLocation()) },
                         modifier = Modifier
                             .padding(vertical = 8.dp)
                             .fillMaxWidth(),
@@ -128,50 +143,38 @@ fun AddEventView(viewModel: AddEventViewModel, navController: NavController,
 
                 Column() {
                     Text(text = "Start Date", style = TextStyle(fontWeight = FontWeight.Bold))
-                    DateTimePickerView(dateTime = viewModel.startDateTime)
+                    DateTimePickerView(dateTime = viewModel.startDate)
                 }
 
                 Column() {
                     Text(text = "End Date", style = TextStyle(fontWeight = FontWeight.Bold))
-                    DateTimePickerView(dateTime = viewModel.endDateTime)
-                }
-
-                Column() {
-                    Text(text = "Privacy", style = TextStyle(fontWeight = FontWeight.Bold))
-                    Row(
-                        modifier = Modifier.padding(horizontal = 16.dp)
-                    ) {
-                        RadioButton(
-                            selected = !viewModel.isPrivate.value,
-                            colors = RadioButtonDefaults.colors(selectedColor = Orange),
-                            onClick = {
-                                viewModel.isPrivate.value = false
-                            }
-                        )
-                        Text(
-                            text = "Public",
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
-                        Spacer(modifier = Modifier.padding(20.dp))
-                        RadioButton(
-                            selected = viewModel.isPrivate.value,
-                            colors = RadioButtonDefaults.colors(selectedColor = Orange),
-                            onClick = {
-                                viewModel.isPrivate.value = true
-                            }
-                        )
-                        Text(
-                            text = "Private",
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
-                    }
+                    DateTimePickerView(dateTime = viewModel.endDate)
                 }
 
                 Button(
                     onClick = {
-                        viewModel.addEvent(clubId, type) { isAdded ->
-                            if (isAdded) {
-                                navController.popBackStack()
+                        val originalStartDate = viewModel.parseDateString(viewModel.getEventStartDate())
+                        val isStartDateUnchanged = originalStartDate?.let {
+                            viewModel.areCalendarsEqualIgnoringMilliseconds(viewModel.startDate.value, it)
+                        } ?: false
+
+                        val originalEndDate = viewModel.parseDateString(viewModel.getEventEndDate())
+                        val isEndDateUnchanged = originalEndDate?.let {
+                            viewModel.areCalendarsEqualIgnoringMilliseconds(viewModel.endDate.value, it)
+                        } ?: false
+
+                        if (viewModel.title.value.isBlank() &&
+                            viewModel.description.value.isBlank() &&
+                            viewModel.location.value.isBlank() &&
+                            isStartDateUnchanged && isEndDateUnchanged) {
+                            errorMessage = "Please fill in all values"
+                        } else if (!(viewModel.startDate.value.time.before(viewModel.endDate.value.time))) {
+                            errorMessage = "Start date must be earlier than end date!"
+                        } else {
+                            viewModel.updateEvent { isAdded ->
+                                if (isAdded) {
+                                    navController.popBackStack()
+                                }
                             }
                         }
                     },
@@ -193,7 +196,6 @@ fun AddEventView(viewModel: AddEventViewModel, navController: NavController,
                 Text(
                     text = viewModel.errorMessage.value,
                     style = TextStyle(
-                        fontWeight = FontWeight.Bold,
                         color = Color.Red,
                         fontSize = 16.sp,
                     ),
@@ -204,3 +206,5 @@ fun AddEventView(viewModel: AddEventViewModel, navController: NavController,
         }
     )
 }
+
+
