@@ -7,7 +7,11 @@ import {
   NOT_FOUND_CODE,
   OK_CODE,
 } from "../lib/StatusCodes";
-import { authenticateToken, verifyIsClubAdmin } from "../middlewares";
+import {
+  authenticateToken,
+  verifyIsClubAdmin,
+  verifyIsSuperAdmin,
+} from "../middlewares";
 
 const router = express.Router();
 
@@ -193,6 +197,48 @@ router.get("/my-clubs", authenticateToken, async (req, res) => {
 
   res.status(OK_CODE).json(clubs);
 });
+
+router.get(
+  "/unapproved-clubs",
+  authenticateToken,
+  verifyIsSuperAdmin,
+  async (req, res) => {
+    const clubs: Club[] = await prisma.club.findMany({
+      where: {
+        is_approved: false,
+      },
+    });
+
+    res.status(OK_CODE).json(clubs);
+  }
+);
+
+router.put(
+  "/:id/approval-status/:status",
+  authenticateToken,
+  verifyIsSuperAdmin,
+  async (req, res) => {
+    const { id, status } = req.params;
+    if ((!id || isNaN(Number(id)), !status))
+      return res.sendStatus(INVALID_REQUEST_CODE);
+
+    if (status !== "approve" && status !== "delete")
+      return res.sendStatus(INVALID_REQUEST_CODE);
+
+    if (status === "approve") {
+      await prisma.club.update({
+        where: { id: Number(id) },
+        data: { is_approved: true },
+      });
+    } else {
+      await prisma.club.delete({
+        where: { id: Number(id) },
+      });
+    }
+
+    res.sendStatus(OK_CODE);
+  }
+);
 
 router.put("/:id/manage-membership", authenticateToken, async (req, res) => {
   const clubId = parseInt(req.params.id, 10);
