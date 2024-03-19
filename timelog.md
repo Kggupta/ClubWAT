@@ -111,3 +111,4 @@
 | 03/16/2024 |        |        | 3.5    |         |         |         | D4 Writeup about MVVM                                       |
 | 03/17/2024 |        |        | 8      |         |         |         | Worked on allow club admins to edit events                  |
 | 03/19/2024 |        |        | 7      |         |         |         | Debugged DateTime Picker                                    |
+| 03/19/2024 | 1      |        |        |         |         |         | Create Club APIs for super admins                           |
