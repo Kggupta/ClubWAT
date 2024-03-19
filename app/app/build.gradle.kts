@@ -122,6 +122,25 @@ android {
         if (editEvent != null) {
             buildConfigField("String", "EDIT_EVENT_URL", editEvent)
         }
+        val getUserProfile = properties["GET_OWN_PROFILE"]?.toString()
+        if (getUserProfile != null) {
+            buildConfigField("String", "GET_OWN_PROFILE", getUserProfile)
+        }
+
+        val userRoute = properties["USER_ROUTE"]?.toString()
+        if (userRoute != null) {
+            buildConfigField("String", "USER_ROUTE", userRoute)
+        }
+
+        val wusaClubId = properties["WUSA_CLUB_ID"]?.toString()
+        if (wusaClubId != null) {
+            buildConfigField("String", "WUSA_CLUB_ID", wusaClubId)
+        }
+
+        val addSpotlightUrl = properties["ADD_SPOTLIGHT_URL"]?.toString()
+        if (addSpotlightUrl != null) {
+            buildConfigField("String", "ADD_SPOTLIGHT_URL", addSpotlightUrl)
+        }
     }
 
     buildTypes {

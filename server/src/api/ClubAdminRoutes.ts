@@ -92,10 +92,12 @@ router.put(
       },
     });
 
-    await EmailService.sendClubJoinRequestApprovedEmail(
-      member.user.email,
-      member.club
-    );
+    if (member.user.notification_flag) {
+      await EmailService.sendClubJoinRequestApprovedEmail(
+        member.user.email,
+        member.club
+      );
+    }
 
     await prisma.notification.create({
       data: {

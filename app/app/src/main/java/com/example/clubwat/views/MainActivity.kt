@@ -136,6 +136,18 @@ class MainActivity : ComponentActivity() {
                                     clubId = backStackEntry.arguments?.getString("clubId")
                                 )
                             }
+                            composable("editprofile") {
+                                EditProfileView(navController = navController)
+                            }
+                            composable("password") {
+                                ChangePasswordView(navController = navController)
+                            }
+                            composable("friends") {
+                                ManageFriendsView(navController = navController)
+                            }
+                            composable("interests") {
+                                UserInterestsView(navController = navController)
+                            }
                             composable("inbox") {
                                 InboxView(viewModel = inboxViewModel, navController = navController)
                             }
@@ -149,10 +161,11 @@ class MainActivity : ComponentActivity() {
                                     navController = navController,
                                     eventId = backStackEntry.arguments?.getString("eventId"))
                             }
-                            composable("club/{clubId}/event/new") {backStackEntry ->
+                            composable("club/{clubId}/event/new/{type}") {backStackEntry ->
                                 AddEventView(viewModel = addEventViewModel,
                                     navController = navController,
-                                    clubId = backStackEntry.arguments?.getString("clubId"))
+                                    clubId = backStackEntry.arguments?.getString("clubId"),
+                                    type = backStackEntry.arguments?.getString("type"))
                             }
                             composable("club/{clubId}/management") {backStackEntry ->
                                 ClubManagementView(viewModel = clubManagementViewModel,

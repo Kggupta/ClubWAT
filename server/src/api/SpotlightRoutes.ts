@@ -25,9 +25,9 @@ router.get("", authenticateToken, async (req, res) => {
 });
 
 router.post("", authenticateToken, verifyIsSuperAdmin, async (req, res) => {
-  const { title, description, startDate, endDate, location } = req.body;
+  const { title, description, start_date, end_date, location } = req.body;
 
-  if (!title || !description || !startDate || !endDate || !location)
+  if (!title || !description || !start_date || !end_date || !location)
     return res.sendStatus(INVALID_REQUEST_CODE);
 
   try {
@@ -40,10 +40,11 @@ router.post("", authenticateToken, verifyIsSuperAdmin, async (req, res) => {
         club_id: parseInt(process.env.WUSA_CLUB_ID as unknown as string),
         title: title,
         description,
-        start_date: startDate,
-        end_date: endDate,
+        start_date: start_date,
+        end_date: end_date,
         location,
         spotlight_flag: true,
+        private_flag: false,
       },
     });
 

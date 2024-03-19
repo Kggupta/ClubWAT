@@ -90,7 +90,11 @@
 | 03/13/2024 |        |        | 7      |         |         |         | Worked on allow club admins to edit clubs                   |
 | 03/13/2024 |        |        | 0.5    |         |         |         | Reviewed PRs and organized tickets                          |
 | 03/16/2024 | 1      |        |        |         |         |         | Notifications to club members when event created            |
+| 03/17/2024 | 3      |        |        |         |         |         | Download user data, delete user ui/api                      |
+| 03/18/2024 | 9      |        |        |         |         |         | Enable/disable emails, edit profile ui/ux improvements      |
+| 03/18/2024 | 1      |        |        |         |         |         | edit user interests improvements                            |
+| 03/15/2024 | 3      |        |        |         |         |         | D4 work on client-server                                    |
 | 03/16/2024 |        |        | 0.5    |         |         |         | Reviewed PRs                                                |
 | 03/16/2024 |        |        | 3.5    |         |         |         | D4 Writeup about MVVM                                       |
 | 03/17/2024 |        |        | 8      |         |         |         | Worked on allow club admins to edit events                  |
-| 03/18/2024 |        |        | 7      |         |         |         | Debugged DateTime Picker                                    |
+| 03/19/2024 |        |        | 7      |         |         |         | Debugged DateTime Picker                                    |
