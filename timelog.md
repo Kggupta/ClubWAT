@@ -44,13 +44,14 @@
 | 02/15/2024 |        |        |        |         |         | 0.5     | Minor Backend Enhancements                                  |
 | 02/16/2024 |        |        |        | 6       |         |         | Implemented club discussions backend                        |
 | 02/16/2024 |        |        |        | 1       |         |         | Reviewed D2 writeup                                         |
+| 02/16/2024 |        |        | 1      |         |         |         | Reviewed D2 writeup                                         |
 | 02/16/2024 | 1      |        |        |         |         |         | Debug club discussions backend                              |
 | 02/18/2024 |        |        | 3      |         |         |         | Fixed how we save data to the User class                    |
 | 02/18/2024 |        |        | 4      |         |         |         | Added bottom navigation bar                                 |
 | 02/19/2024 |        | 3      |        |         |         |         | Created Profile Page                                        |
 | 02/19/2024 |        |        |        | 6       |         |         | Refactoring overall frontend code                           |
 | 02/21/2024 |        |        |        | 5       |         |         | Refactoring overall frontend code                           |
-| 02/21/2024 |        |        | 3.5    |         |         |         | Added basic home page view with tab rows                    |
+| 02/21/2024 |        |        | 4.5    |         |         |         | Added basic home page view with tab rows                    |
 | 02/21/2024 | 6      |        |        |         |         |         | Club browsing page backend + fe                             |
 | 02/21/2024 | 2      |        |        |         |         |         | Club detail view fe + backend                               |
 | 02/21/2024 | 2      |        |        |         |         |         | Club join/leave/request to join logic fe + backend          |
@@ -112,3 +113,4 @@
 | 03/17/2024 |        |        | 8      |         |         |         | Worked on allow club admins to edit events                  |
 | 03/19/2024 |        |        | 7      |         |         |         | Debugged DateTime Picker                                    |
 | 03/19/2024 | 1      |        |        |         |         |         | Create Club APIs for super admins                           |
+| 03/20/2024 |        |        | 1      |         |         |         | Proof read D4                                               |
