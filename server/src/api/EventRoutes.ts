@@ -207,4 +207,41 @@ eventRoutes.get<void, MyEventResponse>(
   }
 );
 
+eventRoutes.delete("/delete/:eventId", async (req, res) => {
+  const eventId = parseInt(req.params.eventId);
+  const userId = req.body.user.id;
+
+  try {
+    const event = await prisma.event.findUnique({
+      where: { id: eventId },
+    });
+
+    if (!event) {
+      return res.status(404).send("Event not found");
+    }
+
+    const isClubAdmin = await prisma.clubAdmin.findFirst({
+      where: {
+        club_id: event.club_id,
+        user_id: userId,
+      },
+    });
+
+    if (!isClubAdmin) {
+      return res
+        .status(403)
+        .send("User is not authorized to delete this event");
+    }
+
+    await prisma.event.delete({
+      where: { id: eventId },
+    });
+
+    res.status(200).send("Event deleted successfully");
+  } catch (error) {
+    console.error("Failed to delete event:", error);
+    res.sendStatus(500);
+  }
+});
+
 export default eventRoutes;
