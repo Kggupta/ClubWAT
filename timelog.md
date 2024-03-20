@@ -41,6 +41,7 @@
 | 02/15/2024 |        |        |        | 0.5     |         |         | Modified club discussions in the database schemma           |
 | 02/16/2024 |        |        |        | 6       |         |         | Implemented club discussions backend                        |
 | 02/16/2024 |        |        |        | 1       |         |         | Reviewed D2 writeup                                         |
+| 02/16/2024 |        |        | 1      |         |         |         | Reviewed D2 writeup                                         |
 | 02/16/2024 | 1      |        |        |         |         |         | Debug club discussions backend                              |
 | 02/15/2024 | 0.5    |        |        |         |         |         | Delete user endpoint                                        |
 | 02/15/2024 | 2      |        |        |         |         |         | Password hashing and salting for security                   |
@@ -50,7 +51,7 @@
 | 02/19/2024 |        | 3      |        |         |         |         | Created Profile Page                                        |
 | 02/19/2024 |        |        |        | 6       |         |         | Refactoring overall frontend code                           |
 | 02/21/2024 |        |        |        | 5       |         |         | Refactoring overall frontend code                           |
-| 02/21/2024 |        |        | 3.5    |         |         |         | Added basic home page view with tab rows                    |
+| 02/21/2024 |        |        | 4.5    |         |         |         | Added basic home page view with tab rows                    |
 | 02/21/2024 | 6      |        |        |         |         |         | Club browsing page backend + fe                             |
 | 02/21/2024 | 2      |        |        |         |         |         | Club detail view fe + backend                               |
 | 02/21/2024 | 2      |        |        |         |         |         | Club join/leave/request to join logic fe + backend          |
@@ -108,3 +109,4 @@
 | 03/16/2024 |        |        | 3.5    |         |         |         | D4 Writeup about MVVM                                       |
 | 03/17/2024 |        |        | 8      |         |         |         | Worked on allow club admins to edit events                  |
 | 03/19/2024 |        |        | 7      |         |         |         | Debugged DateTime Picker                                    |
+| 03/20/2024 |        |        | 1      |         |         |         | Proof read D4                                               |
