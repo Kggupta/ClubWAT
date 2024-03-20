@@ -54,12 +54,14 @@ eventRoutes.get("/:eventId/details", authenticateToken, async (req, res) => {
 
   const event = await prisma.event.findUnique({
     where: { id: eventId },
-    include: { event_attendance: true, event_bookmark: true },
+    include: { event_attendance: true, event_bookmark: true, likes: true },
   });
 
   if (!event) return res.sendStatus(NOT_FOUND_CODE);
 
   res.status(OK_CODE).json({
+    likeCount: event.likes.length,
+    isClientLikedEvent: event.likes.some((x) => x.user_id === req.body.user.id),
     isAttending: event.event_attendance.some(
       (x) => x.user_id === req.body.user.id
     ),

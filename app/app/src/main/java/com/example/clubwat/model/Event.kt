@@ -25,7 +25,9 @@ data class Event(
     @SerializedName("private_flag")
     var privateFlag: Boolean,
     var isAttending: Boolean = false,
-    var isBookmarked: Boolean = false
+    var isBookmarked: Boolean = false,
+    var likeCount: Int,
+    var isClientLikedEvent: Boolean
 )
 
 enum class EventType(val value: Int) {

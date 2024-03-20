@@ -141,6 +141,11 @@ android {
         if (addSpotlightUrl != null) {
             buildConfigField("String", "ADD_SPOTLIGHT_URL", addSpotlightUrl)
         }
+
+        val feedbackUrl = properties["FEEDBACK_URL"]?.toString()
+        if (feedbackUrl != null) {
+            buildConfigField("String", "FEEDBACK_URL", feedbackUrl)
+        }
     }
 
     buildTypes {
