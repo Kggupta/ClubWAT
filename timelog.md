@@ -39,10 +39,6 @@
 | 02/14/2024 | 1      |        |        |         |         |         | Dev DB setup research and implementation                    |
 | 02/14/2024 | 4      |        |        |         |         |         | D2 writeup + auto format code                               |
 | 02/15/2024 |        |        |        | 0.5     |         |         | Modified club discussions in the database schemma           |
-| 02/16/2024 |        |        |        | 6       |         |         | Implemented club discussions backend                        |
-| 02/16/2024 |        |        |        | 1       |         |         | Reviewed D2 writeup                                         |
-| 02/16/2024 |        |        | 1      |         |         |         | Reviewed D2 writeup                                         |
-| 02/16/2024 | 1      |        |        |         |         |         | Debug club discussions backend                              |
 | 02/15/2024 | 0.5    |        |        |         |         |         | Delete user endpoint                                        |
 | 02/15/2024 | 2      |        |        |         |         |         | Password hashing and salting for security                   |
 | 02/15/2024 |        |        |        |         |         | 0.5     | Minor Backend Enhancements                                  |
