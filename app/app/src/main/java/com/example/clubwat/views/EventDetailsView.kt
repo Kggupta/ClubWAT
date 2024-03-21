@@ -24,6 +24,8 @@ import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.DeleteForever
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Edit
@@ -86,6 +88,7 @@ fun EventDetailsView(
     var showCalendarEvent by remember { mutableStateOf(false) }
     var showShareView by remember { mutableStateOf(false) }
     var showCalendarConfirmation by remember { mutableStateOf(false) }
+    var showDeleteEvent by remember { mutableStateOf(false) }
     Scaffold(
         topBar = {
             TopAppBar(
@@ -107,6 +110,14 @@ fun EventDetailsView(
                     )
                 },
                 actions = {
+                    IconButton(onClick = {
+                        showDeleteEvent = true
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = "Delete"
+                        )
+                    }
                     IconButton(onClick = { navController.navigate("event/${eventId}/eventDetails") }) {
                         Icon(
                             imageVector = Icons.Default.Edit,
@@ -214,6 +225,30 @@ fun EventDetailsView(
             Calendar(event = it1)
             showCalendarEvent = false
         }
+    }
+
+    if (showDeleteEvent) {
+        androidx.compose.material3.AlertDialog(title = {
+            Text(text = "Delete The Event?")
+        }, onDismissRequest = {
+            showDeleteEvent= false
+        }, confirmButton = {
+            TextButton(onClick = {
+                if (eventId != null) {
+                    viewModel.deleteEvent(eventId)
+                }
+                navController.navigate("home")
+                showDeleteEvent = false
+            }) {
+                Text("Confirm")
+            }
+        }, dismissButton = {
+            TextButton(onClick = {
+                showDeleteEvent = false
+            }) {
+                Text("Close")
+            }
+        })
     }
 
     if (showCalendarConfirmation) {

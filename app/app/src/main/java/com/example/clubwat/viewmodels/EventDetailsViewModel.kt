@@ -203,4 +203,26 @@ class EventDetailsViewModel(private val userRepository: UserRepository) : ViewMo
             }
         }
     }
+
+    fun deleteEvent(eventID: String) {
+        val id: Int = eventID.toInt()
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val obj = URL(BuildConfig.GET_EVENT_URL + "/delete" + "/$id")
+                val con = obj.openConnection() as HttpURLConnection
+                con.requestMethod = "DELETE"
+                con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+
+                val responseCode = con.responseCode
+                println("Response Code :: $responseCode")
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    println("h")
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+
 }
