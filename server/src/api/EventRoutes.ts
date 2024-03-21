@@ -1,5 +1,5 @@
 import express from "express";
-import { authenticateToken, verifyIsClubAdmin } from "../middlewares";
+import { authenticateToken } from "../middlewares";
 import {
   INTERNAL_ERROR_CODE,
   INVALID_REQUEST_CODE,
@@ -206,3 +206,5 @@ eventRoutes.get<void, MyEventResponse>(
     }
   }
 );
+
+export default eventRoutes;
