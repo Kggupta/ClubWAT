@@ -208,7 +208,7 @@ eventRoutes.get<void, MyEventResponse>(
 );
 
 eventRoutes.delete(
-  "/delete/:eventId",
+  "/:eventId",
   authenticateToken,
   verifyIsClubAdmin,
   async (req, res) => {
