@@ -1,5 +1,4 @@
 package com.example.clubwat.views
-import LoginViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -36,13 +35,15 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.clubwat.R
 import com.example.clubwat.ui.theme.LightOrange
+import com.example.clubwat.viewmodels.LoginViewModel
 
 @Composable
 fun LoginView(
-    viewModel: LoginViewModel,
+    viewModel: LoginViewModel = hiltViewModel(),
     navController: NavController
 ) {
     LaunchedEffect(Unit) {

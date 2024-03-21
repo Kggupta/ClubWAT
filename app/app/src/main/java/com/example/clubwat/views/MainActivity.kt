@@ -1,9 +1,5 @@
 package com.example.clubwat.views
 
-import HomeViewModel
-import LoginViewModel
-import SearchViewModel
-import SignUpViewModel
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.WindowManager
@@ -22,10 +18,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.clubwat.repository.UserRepository
 import com.example.clubwat.ui.theme.ClubWATTheme
-import com.example.clubwat.viewmodels.factories.HomeViewModelFactory
-import com.example.clubwat.viewmodels.factories.LoginViewModelFactory
-import com.example.clubwat.viewmodels.factories.SearchViewModelFactory
-import com.example.clubwat.viewmodels.factories.SignUpViewModelFactory
 import com.example.clubwat.views.NavigationBar.NavBar
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -49,11 +41,6 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 val currentUser by userRepository.currentUser
 
-                val homeViewModel: HomeViewModel by viewModels { HomeViewModelFactory(userRepository) }
-                val searchViewModel: SearchViewModel by viewModels { SearchViewModelFactory(userRepository) }
-                val signUpViewModel: SignUpViewModel by viewModels { SignUpViewModelFactory(userRepository) }
-                val loginViewModel: LoginViewModel by viewModels { LoginViewModelFactory(userRepository) }
-
                 Scaffold(
                     bottomBar = {
                         if (currentUser?.userId != null) {
@@ -69,17 +56,16 @@ class MainActivity : ComponentActivity() {
                     ) {
                         NavHost(navController = navController, startDestination = "login") {
                             composable("signup") {
-                                SignUpView(viewModel = signUpViewModel, navController = navController)
+                                SignUpView(navController = navController)
                             }
                             composable("login") {
-                                LoginView(viewModel = loginViewModel, navController = navController)
+                                LoginView(navController = navController)
                             }
                             composable("verification") {
                                 CodeVerificationView(navController = navController)
                             }
                             composable("home") {
-                                HomeView(viewModel = homeViewModel,
-                                    navController = navController)
+                                HomeView(navController = navController)
                             }
                             composable("forYou") {
                                 ForYouView(navController = navController)
@@ -88,7 +74,7 @@ class MainActivity : ComponentActivity() {
                                 ProfileView(navController = navController)
                             }
                             composable("search") {
-                                SearchView(viewModel = searchViewModel, navController = navController)
+                                SearchView(navController = navController)
                             }
                             composable("club/{clubId}") { backStackEntry ->
                                 ClubDetailsView(

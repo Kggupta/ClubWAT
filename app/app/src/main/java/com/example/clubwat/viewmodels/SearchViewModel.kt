@@ -1,3 +1,5 @@
+package com.example.clubwat.viewmodels
+
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
@@ -8,14 +10,19 @@ import com.example.clubwat.model.Event
 import com.example.clubwat.repository.UserRepository
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.net.HttpURLConnection
 import java.net.URL
+import javax.inject.Inject
 
-class SearchViewModel(private val userRepository: UserRepository) : ViewModel() {
+@HiltViewModel
+class SearchViewModel @Inject constructor(
+    val userRepository: UserRepository,
+) : ViewModel() {
     private val _searchQuery = MutableStateFlow("")
     val searchQuery = _searchQuery.asStateFlow()
 
