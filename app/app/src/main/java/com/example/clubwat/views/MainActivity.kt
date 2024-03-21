@@ -34,6 +34,7 @@ class MainActivity : ComponentActivity() {
 
     @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContent {
             ClubWATTheme {

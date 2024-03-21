@@ -27,7 +27,8 @@ data class Event(
     var isAttending: Boolean = false,
     var isBookmarked: Boolean = false,
     var likeCount: Int,
-    var isClientLikedEvent: Boolean
+    var isClientLikedEvent: Boolean,
+    var isClientClubAdmin: Boolean = false
 )
 
 enum class EventType(val value: Int) {

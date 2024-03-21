@@ -90,7 +90,7 @@ fun EventDetailsView(
     var showShareView by remember { mutableStateOf(false) }
     var showCalendarConfirmation by remember { mutableStateOf(false) }
     var showDeleteEvent by remember { mutableStateOf(false) }
-    val profile = viewModel.profile.collectAsState()
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -112,25 +112,22 @@ fun EventDetailsView(
                     )
                 },
                 actions = {
-                    profile.value?.let { profileValue ->
-                        if (profileValue.adminFlag) {
-                            IconButton(onClick = {
-                                showDeleteEvent = true
-                            }) {
-                                Icon(
-                                    imageVector = Icons.Default.Delete,
-                                    contentDescription = "Delete"
-                                )
-                            }
-                            IconButton(onClick = { navController.navigate("event/${eventId}/eventDetails") }) {
-                                Icon(
-                                    imageVector = Icons.Default.Edit,
-                                    contentDescription = "Edit"
-                                )
-                            }
+                    if (event != null && event!!.isClientClubAdmin) {
+                        IconButton(onClick = {
+                            showDeleteEvent = true
+                        }) {
+                            Icon(
+                                imageVector = Icons.Default.Delete,
+                                contentDescription = "Delete"
+                            )
+                        }
+                        IconButton(onClick = { navController.navigate("event/${eventId}/eventDetails") }) {
+                            Icon(
+                                imageVector = Icons.Default.Edit,
+                                contentDescription = "Edit"
+                            )
                         }
                     }
-
                 },
                 backgroundColor = LightYellow,
                 contentColor = Color.Black
@@ -242,7 +239,7 @@ fun EventDetailsView(
         }, confirmButton = {
             TextButton(onClick = {
                 if (eventId != null) {
-                    viewModel.deleteEvent(eventId)
+                    viewModel.deleteEvent()
                 }
                 navController.navigate("home")
                 showDeleteEvent = false
