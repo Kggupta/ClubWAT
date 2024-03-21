@@ -206,22 +206,3 @@ eventRoutes.get<void, MyEventResponse>(
     }
   }
 );
-
-eventRoutes.delete(
-  "/:eventId",
-  authenticateToken,
-  verifyIsClubAdmin,
-  async (req, res) => {
-    try {
-      const eventId = Number(req.params.eventId);
-      await prisma.event.delete({
-        where: { id: eventId },
-      });
-      res.sendStatus(OK_CODE);
-    } catch (error) {
-      res.sendStatus(INTERNAL_ERROR_CODE);
-    }
-  }
-);
-
-export default eventRoutes;
