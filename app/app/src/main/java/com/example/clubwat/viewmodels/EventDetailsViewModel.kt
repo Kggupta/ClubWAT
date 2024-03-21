@@ -213,7 +213,7 @@ class EventDetailsViewModel @Inject constructor(
         val id: Int = eventID.toInt()
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val obj = URL(BuildConfig.GET_EVENT_URL + "/delete" + "/$id")
+                val obj = URL(BuildConfig.GET_EVENT_URL + "delete" + "/$id")
                 val con = obj.openConnection() as HttpURLConnection
                 con.requestMethod = "DELETE"
                 con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
