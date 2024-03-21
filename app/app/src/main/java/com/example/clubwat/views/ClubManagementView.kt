@@ -22,6 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.clubwat.R
 import com.example.clubwat.ui.theme.LightYellow
@@ -30,7 +31,7 @@ import com.example.clubwat.viewmodels.ClubManagementViewModel
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ClubManagementView(
-    viewModel: ClubManagementViewModel,
+    viewModel: ClubManagementViewModel = hiltViewModel(),
     navController: NavController,
     clubId: String?
 ) {

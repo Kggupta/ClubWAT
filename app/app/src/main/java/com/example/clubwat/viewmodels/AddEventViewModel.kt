@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.clubwat.BuildConfig
 import com.example.clubwat.repository.UserRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -16,8 +17,12 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 import java.util.TimeZone
+import javax.inject.Inject
 
-class AddEventViewModel(private val userRepository: UserRepository) : ViewModel() {
+@HiltViewModel
+class AddEventViewModel @Inject constructor(
+    val userRepository: UserRepository,
+) : ViewModel() {
     var title = mutableStateOf("")
     var description = mutableStateOf("")
     var errorMessage = mutableStateOf("")

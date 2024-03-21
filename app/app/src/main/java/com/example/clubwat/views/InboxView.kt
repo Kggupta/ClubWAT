@@ -35,6 +35,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.clubwat.R
 import com.example.clubwat.model.Notification
@@ -48,7 +49,7 @@ import kotlin.math.abs
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun InboxView(
-    viewModel: InboxViewModel,
+    viewModel: InboxViewModel = hiltViewModel(),
     navController: NavController
 ) {
     LaunchedEffect(Unit) {

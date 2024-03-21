@@ -18,7 +18,6 @@ import java.net.HttpURLConnection
 import java.net.URL
 import javax.inject.Inject
 
-
 @HiltViewModel
 class ManageFriendsViewModel @Inject constructor(
     val userRepository: UserRepository

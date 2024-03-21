@@ -1,5 +1,4 @@
 package com.example.clubwat.views
-import HomeViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -18,7 +17,6 @@ import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Inbox
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -41,23 +39,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.clubwat.R
 import com.example.clubwat.model.EventWrapper
 import com.example.clubwat.ui.theme.LightYellow
+import com.example.clubwat.viewmodels.HomeViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeView(
-    viewModel: HomeViewModel,
+    viewModel: HomeViewModel = hiltViewModel(),
     navController: NavController
 ) {
-    LaunchedEffect(key1 = true) {
-        viewModel.getSpotlight()
-    }
-
     val spotlight by viewModel.spotlight.collectAsState()
-
     var showClubFairView by remember { mutableStateOf(true) }
     var selectedTabIndex by remember { mutableIntStateOf(0) }
 
@@ -82,6 +76,9 @@ fun HomeView(
             )
         },
         content = { innerPadding ->
+            LaunchedEffect(key1 = true) {
+                viewModel.getSpotlight()
+            }
             Column(
                 modifier = Modifier
                     .padding(innerPadding)

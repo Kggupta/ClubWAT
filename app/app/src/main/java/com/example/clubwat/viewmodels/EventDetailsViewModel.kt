@@ -10,6 +10,7 @@ import com.example.clubwat.model.UserProfile
 import com.example.clubwat.repository.UserRepository
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -21,8 +22,12 @@ import java.net.URL
 import java.text.NumberFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import javax.inject.Inject
 
-class EventDetailsViewModel(private val userRepository: UserRepository) : ViewModel() {
+@HiltViewModel
+class EventDetailsViewModel @Inject constructor(
+    val userRepository: UserRepository,
+) : ViewModel() {
     private var _event = MutableStateFlow<Event?>(null)
     var event = _event.asStateFlow()
 

@@ -25,6 +25,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.clubwat.R
 import com.example.clubwat.ui.theme.LightOrange
@@ -33,7 +34,7 @@ import com.example.clubwat.viewmodels.ClubUserManagementViewModel
 
 @Composable
 fun ClubUserManagementView(
-    viewModel: ClubUserManagementViewModel,
+    viewModel: ClubUserManagementViewModel = hiltViewModel(),
     navController: NavController,
     clubId: String?
 ) {
