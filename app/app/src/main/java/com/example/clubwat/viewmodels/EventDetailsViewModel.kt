@@ -36,6 +36,12 @@ class EventDetailsViewModel @Inject constructor(
 
     @RequiresApi(Build.VERSION_CODES.O)
     private val formatter = DateTimeFormatter.ofPattern("MMM dd, h:mma")
+    private var _profile = MutableStateFlow<UserProfile?>(null)
+    var profile = _profile.asStateFlow()
+
+    init {
+        getUserProfile()
+    }
 
     fun getEventTitle(): String {
         if (_event.value == null) return ""
@@ -220,8 +226,26 @@ class EventDetailsViewModel @Inject constructor(
 
                 val responseCode = con.responseCode
                 println("Response Code :: $responseCode")
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+
+
+    fun getUserProfile() {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val obj = URL(BuildConfig.GET_OWN_PROFILE)
+                val con = obj.openConnection() as HttpURLConnection
+                con.requestMethod = "GET"
+                con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+                val responseCode = con.responseCode
+                println("Response Code :: $responseCode")
                 if (responseCode == HttpURLConnection.HTTP_OK) {
-                    println("h")
+                    val response = con.inputStream.bufferedReader().use { it.readText() }
+                    _profile.value = Gson().fromJson(response, UserProfile::class.java)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()

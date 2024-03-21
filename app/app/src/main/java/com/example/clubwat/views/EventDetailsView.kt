@@ -90,6 +90,7 @@ fun EventDetailsView(
     var showShareView by remember { mutableStateOf(false) }
     var showCalendarConfirmation by remember { mutableStateOf(false) }
     var showDeleteEvent by remember { mutableStateOf(false) }
+    val profile = viewModel.profile.collectAsState()
     Scaffold(
         topBar = {
             TopAppBar(
@@ -111,20 +112,25 @@ fun EventDetailsView(
                     )
                 },
                 actions = {
-                    IconButton(onClick = {
-                        showDeleteEvent = true
-                    }) {
-                        Icon(
-                            imageVector = Icons.Default.Delete,
-                            contentDescription = "Delete"
-                        )
+                    profile.value?.let { profileValue ->
+                        if (profileValue.adminFlag) {
+                            IconButton(onClick = {
+                                showDeleteEvent = true
+                            }) {
+                                Icon(
+                                    imageVector = Icons.Default.Delete,
+                                    contentDescription = "Delete"
+                                )
+                            }
+                            IconButton(onClick = { navController.navigate("event/${eventId}/eventDetails") }) {
+                                Icon(
+                                    imageVector = Icons.Default.Edit,
+                                    contentDescription = "Edit"
+                                )
+                            }
+                        }
                     }
-                    IconButton(onClick = { navController.navigate("event/${eventId}/eventDetails") }) {
-                        Icon(
-                            imageVector = Icons.Default.Edit,
-                            contentDescription = "Edit"
-                        )
-                    }
+
                 },
                 backgroundColor = LightYellow,
                 contentColor = Color.Black
