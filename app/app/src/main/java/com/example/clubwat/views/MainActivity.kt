@@ -54,8 +54,6 @@ class MainActivity : ComponentActivity() {
                 val signUpViewModel: SignUpViewModel by viewModels { SignUpViewModelFactory(userRepository) }
                 val loginViewModel: LoginViewModel by viewModels { LoginViewModelFactory(userRepository) }
 
-
-
                 Scaffold(
                     bottomBar = {
                         if (currentUser?.userId != null) {
