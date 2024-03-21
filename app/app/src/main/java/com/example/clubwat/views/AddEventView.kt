@@ -32,6 +32,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.clubwat.R
 import com.example.clubwat.ui.theme.LightYellow
@@ -40,7 +41,8 @@ import com.example.clubwat.viewmodels.AddEventViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun AddEventView(viewModel: AddEventViewModel, navController: NavController,
+fun AddEventView(viewModel: AddEventViewModel = hiltViewModel(),
+                 navController: NavController,
                  clubId: String?, type: String?) {
     Scaffold(
         topBar = {

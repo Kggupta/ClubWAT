@@ -32,6 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.clubwat.R
 import com.example.clubwat.model.Category
@@ -41,7 +42,7 @@ import com.example.clubwat.viewmodels.EditClubDetailsViewModel
 
 @Composable
 fun EditClubDetailsView(
-    viewModel: EditClubDetailsViewModel,
+    viewModel: EditClubDetailsViewModel = hiltViewModel(),
     navController: NavController,
     clubId: String?
 ) {

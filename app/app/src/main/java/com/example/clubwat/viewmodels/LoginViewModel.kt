@@ -1,9 +1,12 @@
+package com.example.clubwat.viewmodels
+
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.auth0.jwt.JWT
 import com.example.clubwat.BuildConfig
 import com.example.clubwat.repository.UserRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -11,8 +14,12 @@ import org.json.JSONObject
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
+import javax.inject.Inject
 
-class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
+@HiltViewModel
+class LoginViewModel @Inject constructor(
+    val userRepository: UserRepository,
+) : ViewModel() {
     var firstName = mutableStateOf("")
     var lastName = mutableStateOf("")
     var email = mutableStateOf("")

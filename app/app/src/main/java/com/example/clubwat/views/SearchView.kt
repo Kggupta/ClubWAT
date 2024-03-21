@@ -1,5 +1,4 @@
 package com.example.clubwat.views
-import SearchViewModel
 import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -38,16 +37,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.clubwat.model.EventWrapper
 import com.example.clubwat.ui.theme.LightYellow
+import com.example.clubwat.viewmodels.SearchViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun SearchView(
-    viewModel: SearchViewModel,
+    viewModel: SearchViewModel = hiltViewModel(),
     navController: NavController
 ) {
     LaunchedEffect(Unit) {
@@ -88,7 +89,9 @@ fun SearchView(
                 }
             }
             SearchBar(
-                modifier = Modifier.fillMaxWidth().padding(14.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(14.dp),
                 query = text,
                 onQueryChange = { viewModel.onSearchQueryChanged(it, selectedTabIndex == 0) },
                 onSearch = {
@@ -123,7 +126,9 @@ fun SearchView(
                             Row(modifier = Modifier.clickable {
                                 navController.navigate("club/${club.id}")
                             }){
-                                Text(text=club.title, modifier=Modifier.fillMaxWidth().padding(14.dp))
+                                Text(text=club.title, modifier= Modifier
+                                    .fillMaxWidth()
+                                    .padding(14.dp))
                             }
                         }
                     } else {
@@ -132,7 +137,9 @@ fun SearchView(
                                 // change later when building event details view
                                 navController.navigate("club/${event.clubId}")
                             }){
-                                Text(text=event.title, modifier=Modifier.fillMaxWidth().padding(14.dp))
+                                Text(text=event.title, modifier= Modifier
+                                    .fillMaxWidth()
+                                    .padding(14.dp))
                             }
                         }
                     }

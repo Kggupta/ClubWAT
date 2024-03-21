@@ -114,3 +114,5 @@
 | 03/19/2024 |        |        | 7      |         |         |         | Debugged DateTime Picker                                    |
 | 03/19/2024 | 1      |        |        |         |         |         | Create Club APIs for super admins                           |
 | 03/20/2024 |        |        | 1      |         |         |         | Proof read D4                                               |
+| 03/21/2024 |        |        | 5      |         |         |         | Re-factored whole codebase to include dependency injection  |
+| 03/21/2024 | 2      |        |        |         |         |         | Added dependency injection to last problematic views/vms    |

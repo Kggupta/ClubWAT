@@ -23,7 +23,8 @@ import com.example.clubwat.model.EventType
 import com.example.clubwat.model.EventWrapper
 
 @Composable
-fun EventItem(eventWrapper: EventWrapper, navController: NavController) {
+fun EventItem(eventWrapper: EventWrapper,
+              navController: NavController) {
     val event = eventWrapper.event
     val type = eventWrapper.type
     Card(

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.clubwat.BuildConfig
 import com.example.clubwat.repository.UserRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -12,8 +13,12 @@ import org.json.JSONObject
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
+import javax.inject.Inject
 
-class CodeVerificationViewModel(private val userRepository: UserRepository): ViewModel() {
+@HiltViewModel
+class CodeVerificationViewModel @Inject constructor(
+    val userRepository: UserRepository,
+) : ViewModel() {
     private var firstName = userRepository.currentUser.value?.firstName
     private var lastName = userRepository.currentUser.value?.lastName
     private var email = userRepository.currentUser.value?.email
