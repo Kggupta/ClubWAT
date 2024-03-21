@@ -7,13 +7,18 @@ import com.example.clubwat.model.Club
 import com.example.clubwat.repository.UserRepository
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.net.HttpURLConnection
 import java.net.URL
+import javax.inject.Inject
 
-class ForYouViewModel(private val userRepository: UserRepository) : ViewModel() {
+@HiltViewModel
+class ForYouViewModel @Inject constructor(
+    val userRepository: UserRepository,
+) : ViewModel() {
     val allClubs = MutableStateFlow<List<Club>>(emptyList())
 
     fun getAllRecommendedClubs() {

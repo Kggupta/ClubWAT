@@ -36,6 +36,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.clubwat.BuildConfig
 import com.example.clubwat.ui.theme.LightYellow
@@ -43,7 +44,8 @@ import com.example.clubwat.viewmodels.ProfileViewModel
 
 @Composable
 fun ProfileView(
-    viewModel: ProfileViewModel, navController: NavController
+    viewModel: ProfileViewModel = hiltViewModel(),
+    navController: NavController
 ) {
     LaunchedEffect(Unit) {
         viewModel.getUserProfile()

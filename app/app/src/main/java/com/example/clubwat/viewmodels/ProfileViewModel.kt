@@ -6,14 +6,19 @@ import com.example.clubwat.BuildConfig
 import com.example.clubwat.model.UserProfile
 import com.example.clubwat.repository.UserRepository
 import com.google.gson.Gson
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.net.HttpURLConnection
 import java.net.URL
+import javax.inject.Inject
 
-class ProfileViewModel(private val userRepository: UserRepository) : ViewModel() {
+@HiltViewModel
+class ProfileViewModel @Inject constructor(
+    val userRepository: UserRepository,
+) : ViewModel() {
     private var _profile = MutableStateFlow<UserProfile?>(null)
     var profile = _profile.asStateFlow()
 

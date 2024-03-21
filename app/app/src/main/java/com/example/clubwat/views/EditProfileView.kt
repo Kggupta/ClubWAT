@@ -35,7 +35,8 @@ import com.example.clubwat.viewmodels.EditProfileViewModel
 @OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun EditProfileView(
-    viewModel: EditProfileViewModel  = hiltViewModel(), navController: NavController
+    viewModel: EditProfileViewModel  = hiltViewModel(),
+    navController: NavController
 ) {
     LaunchedEffect(Unit) {
         viewModel.getUserProfile()

@@ -56,6 +56,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.clubwat.R
 import com.example.clubwat.model.Event
@@ -69,7 +70,7 @@ import java.time.format.DateTimeFormatter
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun EventDetailsView(
-    viewModel: EventDetailsViewModel,
+    viewModel: EventDetailsViewModel = hiltViewModel(),
     navController: NavController,
     eventId: String?
 ) {

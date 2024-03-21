@@ -40,7 +40,8 @@ import com.example.clubwat.viewmodels.ManageFriendsViewModel
 @OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun ManageFriendsView(
-    viewModel: ManageFriendsViewModel  = hiltViewModel(), navController: NavController
+    viewModel: ManageFriendsViewModel  = hiltViewModel(),
+    navController: NavController
 ) {
     LaunchedEffect(Unit) {
         viewModel.getFriends()

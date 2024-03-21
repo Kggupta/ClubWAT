@@ -7,14 +7,19 @@ import com.example.clubwat.model.ClubMemberData
 import com.example.clubwat.model.ClubMemberList
 import com.example.clubwat.repository.UserRepository
 import com.google.gson.Gson
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.net.HttpURLConnection
 import java.net.URL
+import javax.inject.Inject
 
-class ClubUserManagementViewModel(private val userRepository: UserRepository) : ViewModel() {
+@HiltViewModel
+class ClubUserManagementViewModel @Inject constructor(
+    val userRepository: UserRepository,
+) : ViewModel() {
     private val _members: MutableStateFlow<MutableList<ClubMemberData>> = MutableStateFlow(arrayListOf())
     var members = _members.asStateFlow()
 
