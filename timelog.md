@@ -116,3 +116,5 @@
 | 03/20/2024 |        |        | 1      |         |         |         | Proof read D4                                               |
 | 03/21/2024 |        |        | 5      |         |         |         | Re-factored whole codebase to include dependency injection  |
 | 03/21/2024 | 2      |        |        |         |         |         | Added dependency injection to last problematic views/vms    |
+| 03/21/2024 |        | 3      |        |         |         |         | D5                                                          |
+| 03/21/2024 |        | 3      |        |         |         |         | Delete button                                               |

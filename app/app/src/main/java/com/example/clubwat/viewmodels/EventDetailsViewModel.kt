@@ -208,4 +208,21 @@ class EventDetailsViewModel @Inject constructor(
             }
         }
     }
+
+    fun deleteEvent() {
+        if (event.value == null) return
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val obj = URL(BuildConfig.EDIT_EVENT_URL.format(event.value!!.clubId, event.value!!.id))
+                val con = obj.openConnection() as HttpURLConnection
+                con.requestMethod = "DELETE"
+                con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+
+                val responseCode = con.responseCode
+                println("Response Code :: $responseCode")
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
 }

@@ -59,8 +59,16 @@ eventRoutes.get("/:eventId/details", authenticateToken, async (req, res) => {
 
   if (!event) return res.sendStatus(NOT_FOUND_CODE);
 
+  const club = await prisma.club.findUnique({
+    where: { id: event.club_id },
+    include: { admins: true },
+  });
+
+  if (!club) return res.sendStatus(NOT_FOUND_CODE);
+
   res.status(OK_CODE).json({
     likeCount: event.likes.length,
+    isClientClubAdmin: club.admins.some((x) => x.user_id == req.body.user.id),
     isClientLikedEvent: event.likes.some((x) => x.user_id === req.body.user.id),
     isAttending: event.event_attendance.some(
       (x) => x.user_id === req.body.user.id
