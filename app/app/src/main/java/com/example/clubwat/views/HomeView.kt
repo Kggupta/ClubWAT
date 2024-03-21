@@ -1,5 +1,4 @@
 package com.example.clubwat.views
-import com.example.clubwat.viewmodels.HomeViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -45,6 +44,7 @@ import androidx.navigation.NavController
 import com.example.clubwat.R
 import com.example.clubwat.model.EventWrapper
 import com.example.clubwat.ui.theme.LightYellow
+import com.example.clubwat.viewmodels.HomeViewModel
 
 @Composable
 fun HomeView(
