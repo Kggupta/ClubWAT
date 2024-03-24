@@ -68,6 +68,11 @@ android {
             buildConfigField("String", "CLUB_DISCUSSION_URL", clubDiscussion)
         }
 
+        val approveClub = properties["GET_UNAPPROVED_CLUBS_URL"]?.toString()
+        if (approveClub != null) {
+            buildConfigField("String", "GET_UNAPPROVED_CLUBS_URL", approveClub)
+        }
+
         val getNotifications = properties["GET_NOTIFICATIONS_URL"]?.toString()
         if (getNotifications != null) {
             buildConfigField("String", "GET_NOTIFICATIONS_URL", getNotifications)
