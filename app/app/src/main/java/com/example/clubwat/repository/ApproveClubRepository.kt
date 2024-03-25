@@ -1,7 +1,6 @@
 package com.example.clubwat.repository
 
 import com.example.clubwat.BuildConfig
-import com.example.clubwat.model.ApproveClub
 import com.example.clubwat.model.ApproveClubRequest
 import com.example.clubwat.model.Club
 import com.example.clubwat.model.NetworkResult

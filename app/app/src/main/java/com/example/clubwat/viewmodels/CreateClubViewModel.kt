@@ -3,12 +3,9 @@ package com.example.clubwat.viewmodels
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.clubwat.BuildConfig
-import com.example.clubwat.model.Categories
 import com.example.clubwat.model.Category
 import com.example.clubwat.model.CreateClubRequest
 import com.example.clubwat.model.NetworkResult
-import com.example.clubwat.model.SendDiscussionMessageRequest
 import com.example.clubwat.repository.CreateClubRepository
 import com.example.clubwat.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,15 +13,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import org.json.JSONObject
-import java.io.OutputStreamWriter
-import java.net.HttpURLConnection
-import java.net.URL
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
-import java.util.TimeZone
 import javax.inject.Inject
 
 @HiltViewModel

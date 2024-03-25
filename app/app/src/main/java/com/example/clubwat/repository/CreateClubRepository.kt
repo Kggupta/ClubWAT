@@ -1,18 +1,11 @@
 package com.example.clubwat.repository
 
-import androidx.lifecycle.viewModelScope
 import com.example.clubwat.BuildConfig
-import com.example.clubwat.model.ApproveClub
-import com.example.clubwat.model.ApproveClubRequest
-import com.example.clubwat.model.Categories
 import com.example.clubwat.model.Category
-import com.example.clubwat.model.ClubDetails
 import com.example.clubwat.model.CreateClubRequest
 import com.example.clubwat.model.NetworkResult
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.OutputStreamWriter
