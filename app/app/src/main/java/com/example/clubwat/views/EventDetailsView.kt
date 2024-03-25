@@ -241,7 +241,7 @@ fun EventDetailsView(
                 if (eventId != null) {
                     viewModel.deleteEvent()
                 }
-                navController.navigate("home")
+                navController.popBackStack()
                 showDeleteEvent = false
             }) {
                 Text("Confirm")

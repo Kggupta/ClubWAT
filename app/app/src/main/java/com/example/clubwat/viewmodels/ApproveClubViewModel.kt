@@ -49,11 +49,11 @@ class ApproveClubViewModel @Inject constructor(
         }
     }
 
-    fun approveClub(clubId: Int) {
+    fun updateClub(clubId: Int, approval: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
             when (val response = approveClubRepository.updateClubApprovalStatus(ApproveClubRequest(
                 clubId,
-                "approve"
+                if (approval) "approve" else "delete"
             ),
                 userRepository.currentUser.value?.userId?.toString() ?: ""
             )) {

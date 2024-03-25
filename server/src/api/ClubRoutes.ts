@@ -53,8 +53,7 @@ router.post<ClubDetails, void>("/", authenticateToken, async (req, res) => {
       !req.body.title ||
       !req.body.description ||
       (!req.body.membership_fee && req.body.membership_fee !== 0) ||
-      !req.body.categories ||
-      !req.body.position
+      !req.body.categories
     ) {
       return res.sendStatus(INVALID_REQUEST_CODE);
     }
@@ -175,6 +174,7 @@ router.get("/search", authenticateToken, async (req, res) => {
   const clubs: Club[] = await prisma.club.findMany({
     where: {
       title: { startsWith: "%" + query, mode: "insensitive" },
+      is_approved: true,
     },
     orderBy: { title: "asc" },
   });
@@ -193,7 +193,9 @@ router.get("/my-clubs", authenticateToken, async (req, res) => {
       include: { club: true },
       orderBy: { club: { title: "asc" } },
     })
-  ).map((x) => x.club);
+  )
+    .map((x) => x.club)
+    .filter((x) => x.is_approved);
 
   res.status(OK_CODE).json(clubs);
 });
@@ -282,7 +284,7 @@ router.get<void, ClubForYouItem[]>(
     FROM "public"."Club" c 
     JOIN "public"."ClubCategory" cc ON c.id = cc.club_id 
     JOIN "public"."UserInterest" ui ON cc.category_id = ui.category_id 
-    WHERE ui.user_id = ${userId} 
+    WHERE ui.user_id = ${userId} AND c.is_approved
     GROUP BY c.id, c.title 
     ORDER BY COUNT(cc.category_id) DESC
     LIMIT 15;`

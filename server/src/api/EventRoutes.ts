@@ -21,6 +21,7 @@ eventRoutes.get<void, Event[]>(
       let events: Event[] = await prisma.event.findMany({
         where: {
           title: { startsWith: "%" + query, mode: "insensitive" },
+          club: { is_approved: true },
         },
         orderBy: { title: "asc" },
       });
