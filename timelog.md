@@ -35,9 +35,12 @@
 | 02/11/2024 |        |        |        |         | 2       |         | Reviewed ClubAdmin + Club APIs                              |
 | 02/11/2024 |        |        |        |         | 1       |         | Scoped club approval, club admin config and events CRUD     |
 | 02/13/2024 |        |        |        |         | 5       |         | Implemented Club approval + Categories endpoints            |
+| 02/13/2024 |        |        |        | 5       |         |         | Authentication refactoring                                  |
+| 02/13/2024 |        |        |        | 8       |         |         | Refactoring application architecture                        |
 | 02/14/2024 | 0.5    |        |        |         |         |         | GET endpoint for user by ID                                 |
 | 02/14/2024 | 1      |        |        |         |         |         | Dev DB setup research and implementation                    |
 | 02/14/2024 | 4      |        |        |         |         |         | D2 writeup + auto format code                               |
+| 02/13/2024 |        |        |        | 7       |         |         | Refactor API request handling and usage                     |
 | 02/15/2024 |        |        |        | 0.5     |         |         | Modified club discussions in the database schemma           |
 | 02/15/2024 | 0.5    |        |        |         |         |         | Delete user endpoint                                        |
 | 02/15/2024 | 2      |        |        |         |         |         | Password hashing and salting for security                   |
@@ -74,6 +77,7 @@
 | 03/06/2024 |        |        |        |         | 5       |         | Component Diagram + D3 Review                               |
 | 03/07/2024 | 3      |        |        |         |         |         | For you backend, database modifications, sql query building |
 | 03/07/2024 |        |        |        | 8       |         |         | Implement club discussions GET messages and SEND messages   |
+| 03/08/2024 |        |        |        | 2       |         |         | Reviewed PRs                                                |
 | 03/08/2024 | 4      |        |        |         |         |         | Add event list to club details, update club detail actions  |
 | 03/08/2024 | 3      |        |        |         |         |         | Share backend + notifications, emails                       |
 | 03/08/2024 |        |        | 1      |         |         |         | Reviewed Frontend PRs                                       |
@@ -107,14 +111,18 @@
 | 03/18/2024 | 9      |        |        |         |         |         | Enable/disable emails, edit profile ui/ux improvements      |
 | 03/18/2024 | 1      |        |        |         |         |         | edit user interests improvements                            |
 | 03/18/2024 | 1      |        |        |         |         |         | Club and event feedback                                     |
-| 03/18/2024 |        |        |        | 9       |         |         | Investigate and implement VM dependency injection           |
+| 03/18/2024 |        |        |        | 10      |         |         | Investigate and implement VM dependency injection           |
 | 03/16/2024 |        |        | 0.5    |         |         |         | Reviewed PRs                                                |
 | 03/16/2024 |        |        | 3.5    |         |         |         | D4 Writeup about MVVM                                       |
 | 03/17/2024 |        |        | 8      |         |         |         | Worked on allow club admins to edit events                  |
 | 03/19/2024 |        |        | 7      |         |         |         | Debugged DateTime Picker                                    |
 | 03/19/2024 | 1      |        |        |         |         |         | Create Club APIs for super admins                           |
+| 03/19/2024 |        |        |        | 4       |         |         | D4 implicit invocation writeup                              |
 | 03/20/2024 |        |        | 1      |         |         |         | Proof read D4                                               |
 | 03/21/2024 |        |        | 5      |         |         |         | Re-factored whole codebase to include dependency injection  |
 | 03/21/2024 | 2      |        |        |         |         |         | Added dependency injection to last problematic views/vms    |
 | 03/21/2024 |        | 3      |        |         |         |         | D5                                                          |
 | 03/21/2024 |        | 3      |        |         |         |         | Delete button                                               |
+| 03/21/2024 |        |        |        | 1       |         |         | Proof read D4                                               |
+| 03/22/2024 |        |        |        | 8       |         |         | Implemented club approval frontend for superadmins          |
+| 03/24/2024 |        |        |        | 10      |         |         | Implemented create club flow for all users                  |
