@@ -59,12 +59,16 @@ class SearchViewModel @Inject constructor(
                 val obj = URL(query)
                 val con = obj.openConnection() as HttpURLConnection
                 con.requestMethod = "GET"
-                con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+                con.setRequestProperty(
+                    "Authorization",
+                    "Bearer " + userRepository.currentUser.value?.userId.toString()
+                )
                 val responseCode = con.responseCode
                 println("Response Code :: $responseCode")
                 if (responseCode == HttpURLConnection.HTTP_OK) {
                     val response = con.inputStream.bufferedReader().use { it.readText() }
-                    val clubs: MutableList<Club> = Gson().fromJson(response, object : TypeToken<List<Club>>() {}.type)
+                    val clubs: MutableList<Club> =
+                        Gson().fromJson(response, object : TypeToken<List<Club>>() {}.type)
 
                     _clubs.value = clubs
                 }
@@ -85,11 +89,15 @@ class SearchViewModel @Inject constructor(
                 val obj = URL(query)
                 val con = obj.openConnection() as HttpURLConnection
                 con.requestMethod = "GET"
-                con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+                con.setRequestProperty(
+                    "Authorization",
+                    "Bearer " + userRepository.currentUser.value?.userId.toString()
+                )
                 val responseCode = con.responseCode
                 if (responseCode == HttpURLConnection.HTTP_OK) {
                     val response = con.inputStream.bufferedReader().use { it.readText() }
-                    val events: MutableList<Event> = Gson().fromJson(response, object : TypeToken<List<Event>>() {}.type)
+                    val events: MutableList<Event> =
+                        Gson().fromJson(response, object : TypeToken<List<Event>>() {}.type)
 
                     _events.value = events
                 }

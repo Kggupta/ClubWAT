@@ -31,13 +31,14 @@ class SignUpViewModel @Inject constructor(
 
     fun validatePasswordAndSignUp(password: String) {
         if (!isValidPassword(password)) {
-            passwordError.value = "Please ensure password is 8 characters long, contains one symbol, and has both uppercase and lowercase letters."
+            passwordError.value =
+                "Please ensure password is 8 characters long, contains one symbol, and has both uppercase and lowercase letters."
         } else {
             passwordError.value = null
         }
     }
 
-    fun areAllValuesFilled(firstName: String, lastName: String, email: String, password:String) {
+    fun areAllValuesFilled(firstName: String, lastName: String, email: String, password: String) {
         if (firstName != "" && lastName != "" && email != "" && password != "") {
             allValuesError.value = null
         } else {

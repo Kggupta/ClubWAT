@@ -51,15 +51,17 @@ class ApproveClubViewModel @Inject constructor(
 
     fun updateClub(clubId: Int, approval: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
-            when (val response = approveClubRepository.updateClubApprovalStatus(ApproveClubRequest(
-                clubId,
-                if (approval) "approve" else "delete"
-            ),
+            when (val response = approveClubRepository.updateClubApprovalStatus(
+                ApproveClubRequest(
+                    clubId,
+                    if (approval) "approve" else "delete"
+                ),
                 userRepository.currentUser.value?.userId?.toString() ?: ""
             )) {
                 is NetworkResult.Success -> {
                     val clubToDelete = _uiState.value.clubs.find { it.id.toInt() == clubId }
-                    val updatedState = _uiState.value.clubs.toMutableList().apply { this.remove(clubToDelete) }
+                    val updatedState =
+                        _uiState.value.clubs.toMutableList().apply { this.remove(clubToDelete) }
 
                     _uiState.emit(
                         _uiState.value.copy(
@@ -67,12 +69,14 @@ class ApproveClubViewModel @Inject constructor(
                         )
                     )
                 }
+
                 is NetworkResult.Error -> {
                     // Can be used to handle errors in future...
                 }
             }
         }
     }
+
     data class ApproveClubUiState(
         val clubs: List<Club>,
         val isLoading: Boolean,

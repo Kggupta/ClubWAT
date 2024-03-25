@@ -26,7 +26,8 @@ class ClubDetailsViewModel @Inject constructor(
     private var _club = MutableStateFlow<ClubDetails?>(null)
     var club = _club.asStateFlow()
 
-    private val _friends: MutableStateFlow<MutableList<UserProfile>> = MutableStateFlow(arrayListOf())
+    private val _friends: MutableStateFlow<MutableList<UserProfile>> =
+        MutableStateFlow(arrayListOf())
     var friends = _friends.asStateFlow()
 
     fun getClubTitle(): String {
@@ -47,7 +48,10 @@ class ClubDetailsViewModel @Inject constructor(
                 requestMethod = "PUT"
                 doOutput = true
                 setRequestProperty("Content-Type", "application/json")
-                setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value!!.userId )
+                setRequestProperty(
+                    "Authorization",
+                    "Bearer " + userRepository.currentUser.value!!.userId
+                )
 
                 val responseCode = responseCode
                 if (responseCode != HttpURLConnection.HTTP_OK) {
@@ -74,12 +78,16 @@ class ClubDetailsViewModel @Inject constructor(
     fun likeClub() {
         if (_club.value == null) return
         viewModelScope.launch(Dispatchers.IO) {
-            val url = URL(BuildConfig.FEEDBACK_URL + "/club/${_club.value!!.id}/${if (_club.value!!.isClientLikedClub) "unlike" else "like"}")
+            val url =
+                URL(BuildConfig.FEEDBACK_URL + "/club/${_club.value!!.id}/${if (_club.value!!.isClientLikedClub) "unlike" else "like"}")
             (url.openConnection() as HttpURLConnection).apply {
                 requestMethod = "PUT"
                 doOutput = true
                 setRequestProperty("Content-Type", "application/json")
-                setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value!!.userId )
+                setRequestProperty(
+                    "Authorization",
+                    "Bearer " + userRepository.currentUser.value!!.userId
+                )
 
                 val responseCode = responseCode
                 if (responseCode != HttpURLConnection.HTTP_OK) {
@@ -103,12 +111,16 @@ class ClubDetailsViewModel @Inject constructor(
                 val obj = URL(BuildConfig.GET_FRIEND_URL)
                 val con = obj.openConnection() as HttpURLConnection
                 con.requestMethod = "GET"
-                con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+                con.setRequestProperty(
+                    "Authorization",
+                    "Bearer " + userRepository.currentUser.value?.userId.toString()
+                )
                 val responseCode = con.responseCode
                 println("Response Code :: $responseCode")
                 if (responseCode == HttpURLConnection.HTTP_OK) {
                     val response = con.inputStream.bufferedReader().use { it.readText() }
-                    val friends: MutableList<UserProfile> = Gson().fromJson(response, object : TypeToken<List<UserProfile>>() {}.type)
+                    val friends: MutableList<UserProfile> =
+                        Gson().fromJson(response, object : TypeToken<List<UserProfile>>() {}.type)
                     _friends.value = friends
                 }
             } catch (e: Exception) {
@@ -125,7 +137,10 @@ class ClubDetailsViewModel @Inject constructor(
                     requestMethod = "PUT"
                     doOutput = true
                     setRequestProperty("Content-Type", "application/json")
-                    setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+                    setRequestProperty(
+                        "Authorization",
+                        "Bearer " + userRepository.currentUser.value?.userId.toString()
+                    )
 
                     val body = """{"destinationUserId": $userId, "clubId": ${club.value!!.id}}"""
 
@@ -145,7 +160,10 @@ class ClubDetailsViewModel @Inject constructor(
                 val obj = URL(BuildConfig.GET_CLUB_URL + clubId)
                 val con = obj.openConnection() as HttpURLConnection
                 con.requestMethod = "GET"
-                con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+                con.setRequestProperty(
+                    "Authorization",
+                    "Bearer " + userRepository.currentUser.value?.userId.toString()
+                )
                 val responseCode = con.responseCode
                 println("Response Code :: $responseCode")
                 if (responseCode == HttpURLConnection.HTTP_OK) {

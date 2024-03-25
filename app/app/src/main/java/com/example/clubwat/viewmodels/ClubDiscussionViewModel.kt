@@ -49,6 +49,7 @@ class ClubDiscussionViewModel @Inject constructor(
             }
         }
     }
+
     private fun startPolling(clubId: String) {
         viewModelScope.launch {
             while (true) { // ONLY IN VM SCOPE
@@ -110,17 +111,21 @@ class ClubDiscussionViewModel @Inject constructor(
 
     fun deleteMessage(
         messageId: Int,
-        clubId: Int?) {
+        clubId: Int?
+    ) {
         viewModelScope.launch(Dispatchers.IO) {
-            when (val response = discussionRepository.deleteMessage(DeleteDiscussionMessageRequest(
-                clubId,
-                messageId
-            ),
+            when (val response = discussionRepository.deleteMessage(
+                DeleteDiscussionMessageRequest(
+                    clubId,
+                    messageId
+                ),
                 userRepository.currentUser.value?.userId?.toString() ?: ""
             )) {
                 is NetworkResult.Success -> {
-                    val messageToDelete = _uiState.value.posts.find { it.messageData.id == messageId }
-                    val updatedState = _uiState.value.posts.toMutableList().apply { this.remove(messageToDelete) }
+                    val messageToDelete =
+                        _uiState.value.posts.find { it.messageData.id == messageId }
+                    val updatedState =
+                        _uiState.value.posts.toMutableList().apply { this.remove(messageToDelete) }
 
                     _uiState.emit(
                         _uiState.value.copy(
@@ -128,6 +133,7 @@ class ClubDiscussionViewModel @Inject constructor(
                         )
                     )
                 }
+
                 is NetworkResult.Error -> {
                     // Can be used to handle errors in future...
                 }

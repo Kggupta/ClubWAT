@@ -1,4 +1,5 @@
 package com.example.clubwat.views
+
 import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -99,7 +100,7 @@ fun SearchView(
                     viewModel.onIsSearchingChanged(false)
                 },
                 active = active,
-                onActiveChange = {viewModel.onIsSearchingChanged(it)},
+                onActiveChange = { viewModel.onIsSearchingChanged(it) },
                 placeholder = {
                     if (selectedTabIndex == 0) {
                         Text("Search Clubs")
@@ -108,58 +109,63 @@ fun SearchView(
                     }
                 },
                 leadingIcon = {
-                    Icon(imageVector= Icons.Default.Search, contentDescription="Search")
+                    Icon(imageVector = Icons.Default.Search, contentDescription = "Search")
                 },
                 trailingIcon = {
-                    Icon(modifier = Modifier.clickable {
-                        viewModel.onSearchQueryChanged("", selectedTabIndex == 0)
-                        viewModel.onIsSearchingChanged(false)
-                    },
+                    Icon(
+                        modifier = Modifier.clickable {
+                            viewModel.onSearchQueryChanged("", selectedTabIndex == 0)
+                            viewModel.onIsSearchingChanged(false)
+                        },
                         imageVector = Icons.Default.Close,
                         contentDescription = "Close"
                     )
                 }
             ) {
-                LazyColumn(modifier=Modifier.fillMaxWidth()) {
+                LazyColumn(modifier = Modifier.fillMaxWidth()) {
                     if (selectedTabIndex == 0) {
-                        items(clubs) {club ->
+                        items(clubs) { club ->
                             Row(modifier = Modifier.clickable {
                                 navController.navigate("club/${club.id}")
-                            }){
-                                Text(text=club.title, modifier= Modifier
-                                    .fillMaxWidth()
-                                    .padding(14.dp))
+                            }) {
+                                Text(
+                                    text = club.title, modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(14.dp)
+                                )
                             }
                         }
                     } else {
-                        items(events) {event ->
+                        items(events) { event ->
                             Row(modifier = Modifier.clickable {
                                 // change later when building event details view
                                 navController.navigate("club/${event.clubId}")
-                            }){
-                                Text(text=event.title, modifier= Modifier
-                                    .fillMaxWidth()
-                                    .padding(14.dp))
+                            }) {
+                                Text(
+                                    text = event.title, modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(14.dp)
+                                )
                             }
                         }
                     }
                 }
             }
-            LazyColumn(modifier=Modifier.fillMaxWidth()) {
+            LazyColumn(modifier = Modifier.fillMaxWidth()) {
                 if (selectedTabIndex == 0) {
-                    items(clubs) {club ->
+                    items(clubs) { club ->
                         Row(modifier = Modifier.clickable {
                             navController.navigate("club/${club.id}")
-                        }){
+                        }) {
                             ClubItem(club = club, navController = navController)
                         }
                     }
                 } else {
-                    items(events) {event ->
+                    items(events) { event ->
                         Row(modifier = Modifier.clickable {
                             // change later when building event details view
                             navController.navigate("club/${event.clubId}")
-                        }){
+                        }) {
                             val eventWrapper = EventWrapper(event)
                             EventItem(eventWrapper = eventWrapper, navController = navController)
                         }
@@ -189,10 +195,11 @@ fun SearchTab(selectedTabIndex: Int, onTabSelected: (Int) -> Unit) {
             Tab(
                 selected = selectedTabIndex == index,
                 onClick = { onTabSelected(index) },
-                text = { Text(
-                    text = title,
-                    fontWeight = FontWeight.Bold,
-                )
+                text = {
+                    Text(
+                        text = title,
+                        fontWeight = FontWeight.Bold,
+                    )
                 }
             )
         }

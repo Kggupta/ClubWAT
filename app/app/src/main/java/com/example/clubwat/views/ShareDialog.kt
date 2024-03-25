@@ -1,4 +1,5 @@
 package com.example.clubwat.views
+
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -20,18 +21,23 @@ fun ShareDialog(
     chooseFriendCallback: (userId: Int) -> Unit
 ) {
     AlertDialog(
-        title = {Text("Select Friend", textAlign = TextAlign.Center)},
+        title = { Text("Select Friend", textAlign = TextAlign.Center) },
         text = {
             Column {
                 for (user in friends) {
-                    Card (onClick = {
-                        chooseFriendCallback(user.id)
-                    },
+                    Card(
+                        onClick = {
+                            chooseFriendCallback(user.id)
+                        },
                         modifier = Modifier
                             .padding(8.dp)
-                            .fillMaxWidth()) {
+                            .fillMaxWidth()
+                    ) {
                         Column {
-                            Text(text = "${user.firstName} ${user.lastName}", fontWeight = FontWeight.Bold)
+                            Text(
+                                text = "${user.firstName} ${user.lastName}",
+                                fontWeight = FontWeight.Bold
+                            )
                             Text(text = user.email, fontWeight = FontWeight.Light)
                         }
                     }

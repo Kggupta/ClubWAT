@@ -1,4 +1,5 @@
 package com.example.clubwat.views
+
 import DetailItem
 import android.content.Intent
 import android.os.Build
@@ -25,7 +26,6 @@ import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.DeleteForever
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
@@ -146,44 +146,56 @@ fun EventDetailsView(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    Button(onClick = {
+                    Button(
+                        onClick = {
                             if (event?.isAttending == false) {
                                 showCalendarConfirmation = true
                             }
                             viewModel.attendEvent()
                         }, colors = ButtonDefaults.buttonColors(
-                        containerColor = if (!event!!.isAttending) LightOrange else Color.LightGray,
-                        contentColor = if (!event!!.isAttending) Color.White else Color.Black)) {
-                        Icon(if (event!!.isAttending) {
-                            Icons.AutoMirrored.Filled.ExitToApp
-                        } else {
-                            Icons.Filled.Add
-                        }, contentDescription = "Attend Event")
+                            containerColor = if (!event!!.isAttending) LightOrange else Color.LightGray,
+                            contentColor = if (!event!!.isAttending) Color.White else Color.Black
+                        )
+                    ) {
+                        Icon(
+                            if (event!!.isAttending) {
+                                Icons.AutoMirrored.Filled.ExitToApp
+                            } else {
+                                Icons.Filled.Add
+                            }, contentDescription = "Attend Event"
+                        )
                     }
                     Spacer(modifier = Modifier.width(16.dp))
-                    Button(onClick = {
-                        viewModel.bookmarkEvent()
-                    }, colors = ButtonDefaults.buttonColors(
-                        containerColor = if (!event!!.isBookmarked) LightOrange else Color.LightGray,
-                        contentColor = if (!event!!.isBookmarked) Color.White else Color.Black)) {
+                    Button(
+                        onClick = {
+                            viewModel.bookmarkEvent()
+                        }, colors = ButtonDefaults.buttonColors(
+                            containerColor = if (!event!!.isBookmarked) LightOrange else Color.LightGray,
+                            contentColor = if (!event!!.isBookmarked) Color.White else Color.Black
+                        )
+                    ) {
                         Icon(Icons.Filled.Bookmark, contentDescription = "Bookmark")
                     }
                     Spacer(modifier = Modifier.width(16.dp))
                     if (event?.privateFlag == false) {
-                        Button(onClick = {
-                            showShareView = true
-                        }, colors = ButtonDefaults.buttonColors(
-                            containerColor = LightOrange
-                        )) {
+                        Button(
+                            onClick = {
+                                showShareView = true
+                            }, colors = ButtonDefaults.buttonColors(
+                                containerColor = LightOrange
+                            )
+                        ) {
                             Icon(Icons.AutoMirrored.Filled.Send, contentDescription = "Send")
                         }
                         Spacer(modifier = Modifier.width(16.dp))
                     }
-                    Button(onClick = {
-                        navController.navigate("club/${event!!.clubId}")
-                    }, colors = ButtonDefaults.buttonColors(
-                        containerColor = LightOrange
-                    )) {
+                    Button(
+                        onClick = {
+                            navController.navigate("club/${event!!.clubId}")
+                        }, colors = ButtonDefaults.buttonColors(
+                            containerColor = LightOrange
+                        )
+                    ) {
                         Icon(Icons.Filled.Group, contentDescription = "Club")
                     }
                 }
@@ -195,7 +207,7 @@ fun EventDetailsView(
                     )
                     .padding(16.dp),
                     text = AnnotatedString(viewModel.getEventDescription().take(75) + "..."),
-                    style= TextStyle(textAlign = TextAlign.Center),
+                    style = TextStyle(textAlign = TextAlign.Center),
                     onClick = {
                         showDetailsView = true
                     })
@@ -218,10 +230,13 @@ fun EventDetailsView(
     )
 
     if (showShareView) {
-        ShareDialog(friends = friends, dismissCallback = { showShareView = false }, chooseFriendCallback = {
-            showShareView = false
-            viewModel.shareEvent(it)
-        })
+        ShareDialog(
+            friends = friends,
+            dismissCallback = { showShareView = false },
+            chooseFriendCallback = {
+                showShareView = false
+                viewModel.shareEvent(it)
+            })
     }
 
     if (showCalendarEvent) {
@@ -235,7 +250,7 @@ fun EventDetailsView(
         androidx.compose.material3.AlertDialog(title = {
             Text(text = "Delete The Event?")
         }, onDismissRequest = {
-            showDeleteEvent= false
+            showDeleteEvent = false
         }, confirmButton = {
             TextButton(onClick = {
                 if (eventId != null) {
@@ -256,8 +271,8 @@ fun EventDetailsView(
     }
 
     if (showCalendarConfirmation) {
-        AlertDialog(title = {Text("Add To Phone Calendar?")},
-            onDismissRequest = {showCalendarConfirmation = false},
+        AlertDialog(title = { Text("Add To Phone Calendar?") },
+            onDismissRequest = { showCalendarConfirmation = false },
             dismissButton = {
                 TextButton(
                     onClick = {
@@ -320,13 +335,15 @@ fun Calendar(event: Event) {
         LocalDateTime.parse(
             event.startDate,
             DateTimeFormatter.ISO_DATE_TIME
-        ).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())
+        ).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+    )
     intent.putExtra(
         CalendarContract.EXTRA_EVENT_END_TIME,
         LocalDateTime.parse(
             event.endDate,
             DateTimeFormatter.ISO_DATE_TIME
-        ).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())
+        ).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+    )
     intent.putExtra(CalendarContract.Events.ALL_DAY, false)
     intent.putExtra(CalendarContract.Events.DESCRIPTION, event.description)
     ContextCompat.startActivity(LocalContext.current, intent, null)

@@ -36,7 +36,8 @@ class ChangePasswordViewModel @Inject constructor(
             passwordSuccess.value = null
             return false
         } else if (!isValidPassword(password)) {
-            passwordError.value = "Please ensure password is 8 characters long, contains one symbol, and has both uppercase and lowercase letters."
+            passwordError.value =
+                "Please ensure password is 8 characters long, contains one symbol, and has both uppercase and lowercase letters."
             return false
         } else {
             passwordError.value = null
@@ -54,7 +55,10 @@ class ChangePasswordViewModel @Inject constructor(
                     requestMethod = "PUT"
                     doOutput = true
                     setRequestProperty("Content-Type", "application/json")
-                    setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+                    setRequestProperty(
+                        "Authorization",
+                        "Bearer " + userRepository.currentUser.value?.userId.toString()
+                    )
 
                     val jsonBody = """{
                     "oldPassword": "$oldPassword",

@@ -31,7 +31,8 @@ class EventDetailsViewModel @Inject constructor(
     private var _event = MutableStateFlow<Event?>(null)
     var event = _event.asStateFlow()
 
-    private val _friends: MutableStateFlow<MutableList<UserProfile>> = MutableStateFlow(arrayListOf())
+    private val _friends: MutableStateFlow<MutableList<UserProfile>> =
+        MutableStateFlow(arrayListOf())
     var friends = _friends.asStateFlow()
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -63,7 +64,10 @@ class EventDetailsViewModel @Inject constructor(
                 val obj = URL(BuildConfig.GET_EVENT_URL + event.value?.id + "/manage-attendance")
                 val con = obj.openConnection() as HttpURLConnection
                 con.requestMethod = "PUT"
-                con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+                con.setRequestProperty(
+                    "Authorization",
+                    "Bearer " + userRepository.currentUser.value?.userId.toString()
+                )
                 val responseCode = con.responseCode
                 println("Response Code :: $responseCode")
                 if (responseCode == HttpURLConnection.HTTP_OK) {
@@ -83,7 +87,10 @@ class EventDetailsViewModel @Inject constructor(
                 val obj = URL(BuildConfig.GET_EVENT_URL + event.value?.id + "/manage-bookmark")
                 val con = obj.openConnection() as HttpURLConnection
                 con.requestMethod = "PUT"
-                con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+                con.setRequestProperty(
+                    "Authorization",
+                    "Bearer " + userRepository.currentUser.value?.userId.toString()
+                )
                 val responseCode = con.responseCode
                 println("Response Code :: $responseCode")
                 if (responseCode == HttpURLConnection.HTTP_OK) {
@@ -128,7 +135,10 @@ class EventDetailsViewModel @Inject constructor(
                 val obj = URL(BuildConfig.GET_EVENT_URL + eventId + "/details")
                 val con = obj.openConnection() as HttpURLConnection
                 con.requestMethod = "GET"
-                con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+                con.setRequestProperty(
+                    "Authorization",
+                    "Bearer " + userRepository.currentUser.value?.userId.toString()
+                )
                 val responseCode = con.responseCode
                 println("Response Code :: $responseCode")
                 if (responseCode == HttpURLConnection.HTTP_OK) {
@@ -147,12 +157,16 @@ class EventDetailsViewModel @Inject constructor(
                 val obj = URL(BuildConfig.GET_FRIEND_URL)
                 val con = obj.openConnection() as HttpURLConnection
                 con.requestMethod = "GET"
-                con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+                con.setRequestProperty(
+                    "Authorization",
+                    "Bearer " + userRepository.currentUser.value?.userId.toString()
+                )
                 val responseCode = con.responseCode
                 println("Response Code :: $responseCode")
                 if (responseCode == HttpURLConnection.HTTP_OK) {
                     val response = con.inputStream.bufferedReader().use { it.readText() }
-                    val friends: MutableList<UserProfile> = Gson().fromJson(response, object : TypeToken<List<UserProfile>>() {}.type)
+                    val friends: MutableList<UserProfile> =
+                        Gson().fromJson(response, object : TypeToken<List<UserProfile>>() {}.type)
                     _friends.value = friends
                 }
             } catch (e: Exception) {
@@ -164,12 +178,16 @@ class EventDetailsViewModel @Inject constructor(
     fun likeEvent() {
         if (_event.value == null) return
         viewModelScope.launch(Dispatchers.IO) {
-            val url = URL(BuildConfig.FEEDBACK_URL + "/event/${_event.value!!.id}/${if (_event.value!!.isClientLikedEvent) "unlike" else "like"}")
+            val url =
+                URL(BuildConfig.FEEDBACK_URL + "/event/${_event.value!!.id}/${if (_event.value!!.isClientLikedEvent) "unlike" else "like"}")
             (url.openConnection() as HttpURLConnection).apply {
                 requestMethod = "PUT"
                 doOutput = true
                 setRequestProperty("Content-Type", "application/json")
-                setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value!!.userId )
+                setRequestProperty(
+                    "Authorization",
+                    "Bearer " + userRepository.currentUser.value!!.userId
+                )
 
                 val responseCode = responseCode
                 if (responseCode != HttpURLConnection.HTTP_OK) {
@@ -195,7 +213,10 @@ class EventDetailsViewModel @Inject constructor(
                     requestMethod = "PUT"
                     doOutput = true
                     setRequestProperty("Content-Type", "application/json")
-                    setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+                    setRequestProperty(
+                        "Authorization",
+                        "Bearer " + userRepository.currentUser.value?.userId.toString()
+                    )
 
                     val body = """{"destinationUserId": $userId, "eventId": ${event.value!!.id}}"""
 
@@ -213,10 +234,14 @@ class EventDetailsViewModel @Inject constructor(
         if (event.value == null) return
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val obj = URL(BuildConfig.EDIT_EVENT_URL.format(event.value!!.clubId, event.value!!.id))
+                val obj =
+                    URL(BuildConfig.EDIT_EVENT_URL.format(event.value!!.clubId, event.value!!.id))
                 val con = obj.openConnection() as HttpURLConnection
                 con.requestMethod = "DELETE"
-                con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+                con.setRequestProperty(
+                    "Authorization",
+                    "Bearer " + userRepository.currentUser.value?.userId.toString()
+                )
 
                 val responseCode = con.responseCode
                 println("Response Code :: $responseCode")

@@ -10,8 +10,19 @@ class UserRepository {
     private val _currentUser = mutableStateOf<User?>(null)
     val currentUser: State<User?> get() = _currentUser
 
-    fun createUser(firstName: MutableState<String>, lastName: MutableState<String>, email: MutableState<String>, password: MutableState<String>) {
-        _currentUser.value = User(null, firstName = firstName, lastName = lastName, email = email, password = password)
+    fun createUser(
+        firstName: MutableState<String>,
+        lastName: MutableState<String>,
+        email: MutableState<String>,
+        password: MutableState<String>
+    ) {
+        _currentUser.value = User(
+            null,
+            firstName = firstName,
+            lastName = lastName,
+            email = email,
+            password = password
+        )
     }
 
     fun resetUser() {

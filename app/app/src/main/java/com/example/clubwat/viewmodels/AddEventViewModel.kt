@@ -75,7 +75,10 @@ class AddEventViewModel @Inject constructor(
                     requestMethod = "POST"
                     doOutput = true
                     setRequestProperty("Content-Type", "application/json")
-                    setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value!!.userId )
+                    setRequestProperty(
+                        "Authorization",
+                        "Bearer " + userRepository.currentUser.value!!.userId
+                    )
 
                     val jsonObject = JSONObject().apply {
                         put("title", title.value.trim())

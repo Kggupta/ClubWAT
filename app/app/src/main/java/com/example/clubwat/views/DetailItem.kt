@@ -19,7 +19,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun DetailItem(text: String?, icon: ImageVector, onClick: (() -> Unit)? = null, @SuppressLint("ModifierParameter") modifier: Modifier = Modifier.fillMaxWidth()) {
+fun DetailItem(
+    text: String?,
+    icon: ImageVector,
+    onClick: (() -> Unit)? = null,
+    @SuppressLint("ModifierParameter") modifier: Modifier = Modifier.fillMaxWidth()
+) {
     Card(onClick = { if (onClick != null) onClick() }, modifier = modifier) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(Modifier.fillMaxWidth()) {
@@ -33,9 +38,11 @@ fun DetailItem(text: String?, icon: ImageVector, onClick: (() -> Unit)? = null, 
                     fontWeight = FontWeight.Bold
                 )
                 if (onClick != null && icon != Icons.Filled.Favorite && icon != Icons.Filled.FavoriteBorder) {
-                    Column (Modifier.fillMaxWidth()){
-                        Icon(modifier= Modifier.align(Alignment.End),
-                            imageVector = Icons.Filled.ChevronRight, contentDescription = "Go")
+                    Column(Modifier.fillMaxWidth()) {
+                        Icon(
+                            modifier = Modifier.align(Alignment.End),
+                            imageVector = Icons.Filled.ChevronRight, contentDescription = "Go"
+                        )
                     }
                 }
             }

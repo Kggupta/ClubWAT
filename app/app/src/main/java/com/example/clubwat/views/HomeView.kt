@@ -1,4 +1,5 @@
 package com.example.clubwat.views
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -115,12 +116,15 @@ fun HomeView(
 
     if (spotlight != null && showClubFairView) {
         AlertDialog(
-            modifier= Modifier
+            modifier = Modifier
                 .fillMaxWidth(),
             title = {},
             text = {
                 Column {
-                    EventItem(eventWrapper = EventWrapper(spotlight!!), navController = navController)
+                    EventItem(
+                        eventWrapper = EventWrapper(spotlight!!),
+                        navController = navController
+                    )
                 }
             },
             onDismissRequest = {
@@ -166,9 +170,10 @@ fun CustomTabRow(selectedTabIndex: Int, onTabSelected: (Int) -> Unit) {
             Tab(
                 selected = selectedTabIndex == index,
                 onClick = { onTabSelected(index) },
-                text = { Text(
-                    text = title,
-                    fontWeight = FontWeight.Bold,
+                text = {
+                    Text(
+                        text = title,
+                        fontWeight = FontWeight.Bold,
                     )
                 }
             )

@@ -20,7 +20,8 @@ import javax.inject.Inject
 class ClubUserManagementViewModel @Inject constructor(
     val userRepository: UserRepository,
 ) : ViewModel() {
-    private val _members: MutableStateFlow<MutableList<ClubMemberData>> = MutableStateFlow(arrayListOf())
+    private val _members: MutableStateFlow<MutableList<ClubMemberData>> =
+        MutableStateFlow(arrayListOf())
     var members = _members.asStateFlow()
 
     private val _isClientClubCreator: MutableStateFlow<Boolean> = MutableStateFlow(false);
@@ -36,7 +37,10 @@ class ClubUserManagementViewModel @Inject constructor(
                 val obj = URL("${BuildConfig.CLUB_ADMIN_URL}${clubId}/members/$userId/approve")
                 val con = obj.openConnection() as HttpURLConnection
                 con.requestMethod = "PUT"
-                con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+                con.setRequestProperty(
+                    "Authorization",
+                    "Bearer " + userRepository.currentUser.value?.userId.toString()
+                )
                 val responseCode = con.responseCode
                 println("Response Code :: $responseCode")
                 if (responseCode == HttpURLConnection.HTTP_OK) {
@@ -55,7 +59,10 @@ class ClubUserManagementViewModel @Inject constructor(
                 val obj = URL("${BuildConfig.CLUB_ADMIN_URL}${clubId}/members/$userId/promote")
                 val con = obj.openConnection() as HttpURLConnection
                 con.requestMethod = "PUT"
-                con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+                con.setRequestProperty(
+                    "Authorization",
+                    "Bearer " + userRepository.currentUser.value?.userId.toString()
+                )
                 val responseCode = con.responseCode
                 println("Response Code :: $responseCode")
                 if (responseCode == HttpURLConnection.HTTP_OK) {
@@ -74,7 +81,10 @@ class ClubUserManagementViewModel @Inject constructor(
                 val obj = URL("${BuildConfig.CLUB_ADMIN_URL}${clubId}/members/$userId/demote")
                 val con = obj.openConnection() as HttpURLConnection
                 con.requestMethod = "PUT"
-                con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+                con.setRequestProperty(
+                    "Authorization",
+                    "Bearer " + userRepository.currentUser.value?.userId.toString()
+                )
                 val responseCode = con.responseCode
                 println("Response Code :: $responseCode")
                 if (responseCode == HttpURLConnection.HTTP_OK) {
@@ -93,7 +103,10 @@ class ClubUserManagementViewModel @Inject constructor(
                 val obj = URL("${BuildConfig.CLUB_ADMIN_URL}${clubId}/members/$userId")
                 val con = obj.openConnection() as HttpURLConnection
                 con.requestMethod = "DELETE"
-                con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+                con.setRequestProperty(
+                    "Authorization",
+                    "Bearer " + userRepository.currentUser.value?.userId.toString()
+                )
                 val responseCode = con.responseCode
                 println("Response Code :: $responseCode")
                 if (responseCode == HttpURLConnection.HTTP_OK) {
@@ -111,7 +124,10 @@ class ClubUserManagementViewModel @Inject constructor(
                 val obj = URL(BuildConfig.CLUB_ADMIN_URL + clubId + "/members")
                 val con = obj.openConnection() as HttpURLConnection
                 con.requestMethod = "GET"
-                con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+                con.setRequestProperty(
+                    "Authorization",
+                    "Bearer " + userRepository.currentUser.value?.userId.toString()
+                )
                 val responseCode = con.responseCode
                 println("Response Code :: $responseCode")
                 if (responseCode == HttpURLConnection.HTTP_OK) {

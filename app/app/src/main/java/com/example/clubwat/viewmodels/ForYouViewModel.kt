@@ -27,12 +27,16 @@ class ForYouViewModel @Inject constructor(
                 val obj = URL(BuildConfig.FOR_YOU_URL)
                 val con = obj.openConnection() as HttpURLConnection
                 con.requestMethod = "GET"
-                con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+                con.setRequestProperty(
+                    "Authorization",
+                    "Bearer " + userRepository.currentUser.value?.userId.toString()
+                )
                 val responseCode = con.responseCode
                 println("Response Code :: $responseCode")
                 if (responseCode == HttpURLConnection.HTTP_OK) {
                     val response = con.inputStream.bufferedReader().use { it.readText() }
-                    val clubsList: List<Club> = Gson().fromJson(response, object : TypeToken<List<Club>>() {}.type)
+                    val clubsList: List<Club> =
+                        Gson().fromJson(response, object : TypeToken<List<Club>>() {}.type)
                     allClubs.value = clubsList
                 }
             } catch (e: Exception) {

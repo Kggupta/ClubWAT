@@ -28,7 +28,10 @@ class ProfileViewModel @Inject constructor(
                 val obj = URL(BuildConfig.GET_OWN_PROFILE)
                 val con = obj.openConnection() as HttpURLConnection
                 con.requestMethod = "GET"
-                con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+                con.setRequestProperty(
+                    "Authorization",
+                    "Bearer " + userRepository.currentUser.value?.userId.toString()
+                )
                 val responseCode = con.responseCode
                 println("Response Code :: $responseCode")
                 if (responseCode == HttpURLConnection.HTTP_OK) {
@@ -47,7 +50,10 @@ class ProfileViewModel @Inject constructor(
                 val obj = URL(BuildConfig.USER_ROUTE)
                 val con = obj.openConnection() as HttpURLConnection
                 con.requestMethod = "DELETE"
-                con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+                con.setRequestProperty(
+                    "Authorization",
+                    "Bearer " + userRepository.currentUser.value?.userId.toString()
+                )
                 val responseCode = con.responseCode
                 if (responseCode == HttpURLConnection.HTTP_OK) {
                     logout()
@@ -64,7 +70,10 @@ class ProfileViewModel @Inject constructor(
                 val obj = URL(BuildConfig.USER_ROUTE + "/profile/self/download-data")
                 val con = obj.openConnection() as HttpURLConnection
                 con.requestMethod = "GET"
-                con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+                con.setRequestProperty(
+                    "Authorization",
+                    "Bearer " + userRepository.currentUser.value?.userId.toString()
+                )
                 val responseCode = con.responseCode
                 if (responseCode == HttpURLConnection.HTTP_OK) {
                     println("Downloaded data")

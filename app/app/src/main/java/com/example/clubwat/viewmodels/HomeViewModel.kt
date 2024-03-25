@@ -32,12 +32,16 @@ class HomeViewModel @Inject constructor(
                 val obj = URL(BuildConfig.GET_ALL_CLUBS_FOR_USER)
                 val con = obj.openConnection() as HttpURLConnection
                 con.requestMethod = "GET"
-                con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+                con.setRequestProperty(
+                    "Authorization",
+                    "Bearer " + userRepository.currentUser.value?.userId.toString()
+                )
                 val responseCode = con.responseCode
                 println("Response Code :: $responseCode")
                 if (responseCode == HttpURLConnection.HTTP_OK) {
                     val response = con.inputStream.bufferedReader().use { it.readText() }
-                    val clubsList: List<Club> = Gson().fromJson(response, object : TypeToken<List<Club>>() {}.type)
+                    val clubsList: List<Club> =
+                        Gson().fromJson(response, object : TypeToken<List<Club>>() {}.type)
                     allClubs.value = clubsList
                     println(clubsList)
                 }
@@ -53,12 +57,16 @@ class HomeViewModel @Inject constructor(
                 val obj = URL(BuildConfig.GET_ALL_EVENTS_FOR_USER)
                 val con = obj.openConnection() as HttpURLConnection
                 con.requestMethod = "GET"
-                con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+                con.setRequestProperty(
+                    "Authorization",
+                    "Bearer " + userRepository.currentUser.value?.userId.toString()
+                )
                 val responseCode = con.responseCode
                 println("Response Code :: $responseCode")
                 if (responseCode == HttpURLConnection.HTTP_OK) {
                     val response = con.inputStream.bufferedReader().use { it.readText() }
-                    val eventResponse: EventResponse = Gson().fromJson(response, EventResponse::class.java)
+                    val eventResponse: EventResponse =
+                        Gson().fromJson(response, EventResponse::class.java)
                     val eventWrappersList: List<EventWrapper> = eventResponse.data
                     allEvents.value = eventWrappersList
                 }
@@ -74,7 +82,10 @@ class HomeViewModel @Inject constructor(
                 val obj = URL(BuildConfig.GET_SPOTLIGHTS)
                 val con = obj.openConnection() as HttpURLConnection
                 con.requestMethod = "GET"
-                con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+                con.setRequestProperty(
+                    "Authorization",
+                    "Bearer " + userRepository.currentUser.value?.userId.toString()
+                )
                 val responseCode = con.responseCode
                 println("Response Code :: $responseCode")
                 if (responseCode == HttpURLConnection.HTTP_OK) {
@@ -96,7 +107,10 @@ class HomeViewModel @Inject constructor(
                 val obj = URL(BuildConfig.GET_SPOTLIGHTS + "/${spotlight.value!!.id}/dismiss")
                 val con = obj.openConnection() as HttpURLConnection
                 con.requestMethod = "PUT"
-                con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+                con.setRequestProperty(
+                    "Authorization",
+                    "Bearer " + userRepository.currentUser.value?.userId.toString()
+                )
                 val responseCode = con.responseCode
                 println("Response Code :: $responseCode")
                 if (responseCode == HttpURLConnection.HTTP_OK) {

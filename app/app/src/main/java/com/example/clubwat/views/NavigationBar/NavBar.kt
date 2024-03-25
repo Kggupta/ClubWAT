@@ -21,8 +21,9 @@ fun NavBar(navController: NavController) {
         NavBarItem.Profile
     )
 
-    NavigationBar (
-        containerColor = LightYellow){
+    NavigationBar(
+        containerColor = LightYellow
+    ) {
         items.forEach { item ->
             AddItem(
                 screen = item,
@@ -52,11 +53,27 @@ fun RowScope.AddItem(
         selected = true,
         alwaysShowLabel = true,
         onClick = {
-            if (name == "Home") { navController.navigate("home") }
-            if (name == "For You") { navController.navigate("forYou") }
-            if (name == "Search") { navController.navigate("search") }
-            if (name == "Profile") { navController.navigate("profile") }
+            if (name == "Home") {
+                navController.navigate("home")
+            }
+            if (name == "For You") {
+                navController.navigate("forYou")
+            }
+            if (name == "Search") {
+                navController.navigate("search")
+            }
+            if (name == "Profile") {
+                navController.navigate("profile")
+            }
         },
-        colors = NavigationBarItemColors(Color.Black, Color.Black, LightYellow, Color.Transparent, Color.Transparent, Color.Transparent, Color.Transparent)
+        colors = NavigationBarItemColors(
+            Color.Black,
+            Color.Black,
+            LightYellow,
+            Color.Transparent,
+            Color.Transparent,
+            Color.Transparent,
+            Color.Transparent
+        )
     )
 }

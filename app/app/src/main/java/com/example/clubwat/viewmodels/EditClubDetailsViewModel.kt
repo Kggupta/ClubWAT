@@ -38,7 +38,7 @@ class EditClubDetailsViewModel @Inject constructor(
 
     var allValuesError = mutableStateOf<String?>(null)
 
-    fun getClubTitle():String {
+    fun getClubTitle(): String {
         if (_club.value == null) return ""
         return _club.value!!.title
     }
@@ -64,12 +64,16 @@ class EditClubDetailsViewModel @Inject constructor(
                 val obj = URL(BuildConfig.GET_ALL_CATEGORIES)
                 val con = obj.openConnection() as HttpURLConnection
                 con.requestMethod = "GET"
-                con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+                con.setRequestProperty(
+                    "Authorization",
+                    "Bearer " + userRepository.currentUser.value?.userId.toString()
+                )
                 val responseCode = con.responseCode
                 println("Response Code :: $responseCode")
                 if (responseCode == HttpURLConnection.HTTP_OK) {
                     val response = con.inputStream.bufferedReader().use { it.readText() }
-                    val categoriesList: List<Category> = Gson().fromJson(response, object : TypeToken<List<Category>>() {}.type)
+                    val categoriesList: List<Category> =
+                        Gson().fromJson(response, object : TypeToken<List<Category>>() {}.type)
                     categories = categoriesList
                 }
             } catch (e: Exception) {
@@ -84,7 +88,10 @@ class EditClubDetailsViewModel @Inject constructor(
                 val obj = URL(BuildConfig.GET_CLUB_URL + clubId)
                 val con = obj.openConnection() as HttpURLConnection
                 con.requestMethod = "GET"
-                con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+                con.setRequestProperty(
+                    "Authorization",
+                    "Bearer " + userRepository.currentUser.value?.userId.toString()
+                )
                 val responseCode = con.responseCode
                 println("Response Code :: $responseCode")
                 if (responseCode == HttpURLConnection.HTTP_OK) {
@@ -104,7 +111,10 @@ class EditClubDetailsViewModel @Inject constructor(
                 (url.openConnection() as HttpURLConnection).apply {
                     requestMethod = "PUT"
                     doOutput = true
-                    setRequestProperty("Authorization", "Bearer ${userRepository.currentUser.value?.userId}")
+                    setRequestProperty(
+                        "Authorization",
+                        "Bearer ${userRepository.currentUser.value?.userId}"
+                    )
                     setRequestProperty("Content-Type", "application/json")
                     val categoriesJsonArray = JSONArray()
                     if (selectedCategories.value.isNotEmpty()) {
@@ -118,8 +128,13 @@ class EditClubDetailsViewModel @Inject constructor(
                     }
                     val body = JSONObject().apply {
                         put("title", title.takeIf { it.isNotBlank() } ?: getClubTitle())
-                        put("description", description.takeIf { it.isNotBlank() } ?: getClubDescription())
-                        put("membership_fee", membershipFee.toIntOrNull() ?: getClubMembershipFee().toDouble())
+                        put(
+                            "description",
+                            description.takeIf { it.isNotBlank() } ?: getClubDescription())
+                        put(
+                            "membership_fee",
+                            membershipFee.toIntOrNull() ?: getClubMembershipFee().toDouble()
+                        )
                         put("categories", categoriesJsonArray)
                     }.toString()
                     OutputStreamWriter(outputStream).use { it.write(body) }

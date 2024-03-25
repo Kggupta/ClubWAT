@@ -1,4 +1,5 @@
 package com.example.clubwat.views
+
 import DetailItem
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement

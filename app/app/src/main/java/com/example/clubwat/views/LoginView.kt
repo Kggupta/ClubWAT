@@ -1,4 +1,5 @@
 package com.example.clubwat.views
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -86,7 +87,8 @@ fun LoginView(
             label = { Text("Password") },
             visualTransformation = if (viewPassword) VisualTransformation.None else PasswordVisualTransformation(),
             trailingIcon = {
-                val image = if (viewPassword) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+                val image =
+                    if (viewPassword) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
                 val description = if (viewPassword) "Hide password" else "Show password"
                 IconButton(onClick = { viewPassword = !viewPassword }) {
                     Icon(imageVector = image, contentDescription = description)
@@ -105,8 +107,10 @@ fun LoginView(
                     if (isLoggedIn) {
                         navController.navigate("home")
                     }
-                } },
-            colors = ButtonDefaults.buttonColors(containerColor = LightOrange
+                }
+            },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = LightOrange
             ),
             modifier = Modifier
                 .width(300.dp)

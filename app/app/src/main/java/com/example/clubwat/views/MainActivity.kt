@@ -103,36 +103,42 @@ class MainActivity : ComponentActivity() {
                             composable("inbox") {
                                 InboxView(navController = navController)
                             }
-                            composable("event/{eventId}") {backStackEntry ->
+                            composable("event/{eventId}") { backStackEntry ->
                                 EventDetailsView(
                                     navController = navController,
-                                    eventId = backStackEntry.arguments?.getString("eventId"))
+                                    eventId = backStackEntry.arguments?.getString("eventId")
+                                )
                             }
-                            composable("event/{eventId}/eventDetails") {backStackEntry ->
+                            composable("event/{eventId}/eventDetails") { backStackEntry ->
                                 EditEventDetailsView(
                                     navController = navController,
-                                    eventId = backStackEntry.arguments?.getString("eventId"))
+                                    eventId = backStackEntry.arguments?.getString("eventId")
+                                )
                             }
-                            composable("club/{clubId}/event/new/{type}") {backStackEntry ->
+                            composable("club/{clubId}/event/new/{type}") { backStackEntry ->
                                 AddEventView(
                                     navController = navController,
                                     clubId = backStackEntry.arguments?.getString("clubId"),
-                                    type = backStackEntry.arguments?.getString("type"))
+                                    type = backStackEntry.arguments?.getString("type")
+                                )
                             }
-                            composable("club/{clubId}/management") {backStackEntry ->
+                            composable("club/{clubId}/management") { backStackEntry ->
                                 ClubManagementView(
                                     navController = navController,
-                                    clubId = backStackEntry.arguments?.getString("clubId"))
+                                    clubId = backStackEntry.arguments?.getString("clubId")
+                                )
                             }
-                            composable("club/{clubId}/management/users") {backStackEntry ->
+                            composable("club/{clubId}/management/users") { backStackEntry ->
                                 ClubUserManagementView(
                                     navController = navController,
-                                    clubId = backStackEntry.arguments?.getString("clubId"))
+                                    clubId = backStackEntry.arguments?.getString("clubId")
+                                )
                             }
-                            composable("club/{clubId}/management/clubDetails") {backStackEntry ->
+                            composable("club/{clubId}/management/clubDetails") { backStackEntry ->
                                 EditClubDetailsView(
                                     navController = navController,
-                                    clubId = backStackEntry.arguments?.getString("clubId"))
+                                    clubId = backStackEntry.arguments?.getString("clubId")
+                                )
                             }
                             composable("approveClub") {
                                 ApproveClubView(navController = navController)

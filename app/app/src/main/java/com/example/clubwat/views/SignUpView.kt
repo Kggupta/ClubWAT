@@ -1,4 +1,5 @@
 package com.example.clubwat.views
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -92,7 +93,8 @@ fun SignUpView(
             label = { Text("Password") },
             visualTransformation = if (viewPassword) VisualTransformation.None else PasswordVisualTransformation(),
             trailingIcon = {
-                val image = if (viewPassword) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+                val image =
+                    if (viewPassword) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
                 val description = if (viewPassword) "Hide password" else "Show password"
                 IconButton(onClick = { viewPassword = !viewPassword }) {
                     Icon(imageVector = image, contentDescription = description)
@@ -117,7 +119,8 @@ fun SignUpView(
                     viewModel.password.value
                 )
                 if (viewModel.allValuesError.value == null &&
-                    viewModel.passwordError.value == null) {
+                    viewModel.passwordError.value == null
+                ) {
                     viewModel.createUser()
                     viewModel.sendVerificationEmail { emailSent ->
                         if (!emailSent) return@sendVerificationEmail
@@ -125,7 +128,8 @@ fun SignUpView(
                     }
                 }
             },
-            colors = ButtonDefaults.buttonColors(containerColor = LightOrange
+            colors = ButtonDefaults.buttonColors(
+                containerColor = LightOrange
             ),
             modifier = Modifier
                 .width(300.dp)

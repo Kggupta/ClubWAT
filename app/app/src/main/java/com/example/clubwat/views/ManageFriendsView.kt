@@ -40,7 +40,7 @@ import com.example.clubwat.viewmodels.ManageFriendsViewModel
 @OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun ManageFriendsView(
-    viewModel: ManageFriendsViewModel  = hiltViewModel(),
+    viewModel: ManageFriendsViewModel = hiltViewModel(),
     navController: NavController
 ) {
     LaunchedEffect(Unit) {
@@ -88,74 +88,97 @@ fun ManageFriendsView(
                     OutlinedTextField(
                         value = viewModel.friendEmail.value,
                         label = { Text("Friend Email") },
-                        onValueChange = {
-                            value: String -> viewModel.friendEmail.value = value
+                        onValueChange = { value: String ->
+                            viewModel.friendEmail.value = value
                         })
-                    TextButton(modifier= Modifier
+                    TextButton(modifier = Modifier
                         .fillMaxWidth()
                         .padding(2.dp)
                         .align(Alignment.CenterVertically),
-                        onClick = { viewModel.sendFriendRequest(viewModel.friendEmail.value)}) {
+                        onClick = { viewModel.sendFriendRequest(viewModel.friendEmail.value) }) {
                         Text("Send Request")
                     }
                 }
                 if (viewModel.addFriendMessage.value.isNotEmpty()) {
                     Text(text = viewModel.addFriendMessage.value)
                 }
-                Column (Modifier.fillMaxSize()) {
-                    reqFriends.forEach{friend ->
-                        Card (
+                Column(Modifier.fillMaxSize()) {
+                    reqFriends.forEach { friend ->
+                        Card(
                             Modifier
                                 .fillMaxWidth()
-                                .padding(8.dp)){
-                            Column (Modifier.padding(8.dp)) {
+                                .padding(8.dp)
+                        ) {
+                            Column(Modifier.padding(8.dp)) {
                                 Row {
                                     Column {
                                         val name = "${friend.firstName} ${friend.lastName.first()}"
-                                        Text(if (name.length > 15) name.take(12) + "..." else "$name." , fontWeight = FontWeight.SemiBold)
+                                        Text(
+                                            if (name.length > 15) name.take(12) + "..." else "$name.",
+                                            fontWeight = FontWeight.SemiBold
+                                        )
                                         Text(friend.email.substringBefore("@"))
                                     }
 
-                                    Row (modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End){
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.End
+                                    ) {
                                         IconButton(onClick = {
                                             viewModel.acceptFriend(
                                                 friend.id
                                             )
                                         }) {
-                                            Icon(imageVector = Icons.Filled.Check, contentDescription = "Accept")
+                                            Icon(
+                                                imageVector = Icons.Filled.Check,
+                                                contentDescription = "Accept"
+                                            )
                                         }
                                         IconButton(onClick = {
                                             viewModel.deleteFriend(
                                                 friend.id
                                             )
                                         }) {
-                                            Icon(imageVector = Icons.Filled.Delete, contentDescription = "Delete")
+                                            Icon(
+                                                imageVector = Icons.Filled.Delete,
+                                                contentDescription = "Delete"
+                                            )
                                         }
                                     }
                                 }
                             }
                         }
                     }
-                    friends.forEach{friend ->
-                        Card (
+                    friends.forEach { friend ->
+                        Card(
                             Modifier
                                 .fillMaxWidth()
-                                .padding(8.dp)){
-                            Column (Modifier.padding(8.dp)) {
+                                .padding(8.dp)
+                        ) {
+                            Column(Modifier.padding(8.dp)) {
                                 Row {
                                     Column {
                                         val name = "${friend.firstName} ${friend.lastName.first()}"
-                                        Text(if (name.length > 15) name.take(12) + "..." else "$name." , fontWeight = FontWeight.SemiBold)
+                                        Text(
+                                            if (name.length > 15) name.take(12) + "..." else "$name.",
+                                            fontWeight = FontWeight.SemiBold
+                                        )
                                         Text(friend.email.substringBefore("@"))
                                     }
 
-                                    Row (modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End){
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.End
+                                    ) {
                                         IconButton(onClick = {
                                             viewModel.deleteFriend(
                                                 friend.id
                                             )
                                         }) {
-                                            Icon(imageVector = Icons.Filled.Delete, contentDescription = "Delete")
+                                            Icon(
+                                                imageVector = Icons.Filled.Delete,
+                                                contentDescription = "Delete"
+                                            )
                                         }
                                     }
                                 }
