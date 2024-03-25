@@ -71,6 +71,7 @@
 | 02/29/2024 |        |        |        | 6       |         |         | Implement club discussions initial view and VM              |
 | 02/29/2024 | 1.1    |        |        |         |         |         | Handle user already exists and tries to register error      |
 | 03/01/2024 | 3      |        |        |         |         |         | Endpoint to get the users 'my events' for the homepage      |
+| 03/01/2024 | 7      |        |        |         |         |         | Wrote D3 submission                                         |
 | 03/03/2024 |        |        | 5      |         |         |         | Added Events to the Home Page                               |
 | 03/03/2024 |        |        |        |         | 3       |         | Completed component diagram and reviewed D3 submission      |
 | 03/04/2024 | 2      |        |        |         |         |         | Cleanup UI nav bars and flows in time for prototype demo    |
