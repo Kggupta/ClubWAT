@@ -134,6 +134,12 @@ class MainActivity : ComponentActivity() {
                                     navController = navController,
                                     clubId = backStackEntry.arguments?.getString("clubId"))
                             }
+                            composable("approveClub") {
+                                ApproveClubView(navController = navController)
+                            }
+                            composable("createClub") {
+                                CreateClubView(navController = navController)
+                            }
                         }
                     }
                 }

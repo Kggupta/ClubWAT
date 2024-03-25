@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Logout
@@ -110,12 +111,20 @@ fun ProfileView(
                     onClick = {
                         showDownloadData = true
                     })
+                DetailItem(
+                    text = "Create Club", icon = Icons.Filled.Group,
+                    onClick = {
+                        navController.navigate("createClub")
+                    })
                 Spacer(modifier = Modifier.height(20.dp))
                 Text(text = "Danger Zone", fontWeight = FontWeight.Bold)
                 DetailItem(text = "Delete Account", icon = Icons.Filled.DeleteForever, onClick = {
                     showDeleteAccount = true
                 })
                 if (profile.value != null && profile.value!!.adminFlag) {
+                    DetailItem(text = "Approve Clubs", icon = Icons.Filled.Create, onClick = {
+                        navController.navigate("approveClub")
+                    })
                     DetailItem(text = "Create Club Fair", icon = Icons.Filled.Create, onClick = {
                         navController.navigate("club/${BuildConfig.WUSA_CLUB_ID}/event/new/spotlight")
                     })
