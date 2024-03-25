@@ -99,6 +99,7 @@ class CreateClubViewModel @Inject constructor(
         }
         _uiState.value = _uiState.value.copy(selectedCategoryIds = currentSelected)
     }
+
     fun fetchCategories() {
         viewModelScope.launch(Dispatchers.IO) {
             when (val response = createClubRepository.getCategories(

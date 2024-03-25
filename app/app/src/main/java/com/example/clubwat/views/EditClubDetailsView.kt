@@ -111,11 +111,11 @@ fun EditClubDetailsView(
                         viewModel.membershipFee = newText
                     },
                     label = { Text("New Membership Fee") },
-                    placeholder = { Text(viewModel.getClubMembershipFee())}
+                    placeholder = { Text(viewModel.getClubMembershipFee()) }
                 )
                 Spacer(Modifier.height(32.dp))
                 Text(
-                    text="New Categories",
+                    text = "New Categories",
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp
                 )
@@ -126,9 +126,10 @@ fun EditClubDetailsView(
                     onClick = {
                         if (clubId != null && (
                                     viewModel.title != "" ||
-                                    viewModel.description != "" ||
-                                    viewModel.membershipFee != "" ||
-                                    viewModel.selectedCategories.value.isNotEmpty())) {
+                                            viewModel.description != "" ||
+                                            viewModel.membershipFee != "" ||
+                                            viewModel.selectedCategories.value.isNotEmpty())
+                        ) {
                             viewModel.updateClub(clubId)
                             navController.popBackStack()
                         } else {
@@ -164,7 +165,9 @@ fun MultiSelectCategoryList(viewModel: EditClubDetailsViewModel) {
     }
 
     LazyColumn(
-        modifier = Modifier.padding(16.dp).height(200.dp),
+        modifier = Modifier
+            .padding(16.dp)
+            .height(200.dp),
     ) {
         items(viewModel.categories) { category ->
             CategoryItem(
@@ -178,7 +181,11 @@ fun MultiSelectCategoryList(viewModel: EditClubDetailsViewModel) {
 }
 
 @Composable
-fun CategoryItem(category: Category, isSelected: Boolean, onCategorySelected: (Int, Boolean) -> Unit) {
+fun CategoryItem(
+    category: Category,
+    isSelected: Boolean,
+    onCategorySelected: (Int, Boolean) -> Unit
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()

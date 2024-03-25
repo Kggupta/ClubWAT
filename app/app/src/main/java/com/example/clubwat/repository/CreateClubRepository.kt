@@ -19,7 +19,10 @@ interface CreateClubRepository {
 }
 
 class CreateClubRepositoryImpl : CreateClubRepository {
-    override suspend fun createClub(request: CreateClubRequest, userId: String): NetworkResult<Any> {
+    override suspend fun createClub(
+        request: CreateClubRequest,
+        userId: String
+    ): NetworkResult<Any> {
         try {
             val obj = URL(BuildConfig.GET_CLUB_URL)
             val con = obj.openConnection() as HttpURLConnection
@@ -56,6 +59,7 @@ class CreateClubRepositoryImpl : CreateClubRepository {
             message = "API response error",
         )
     }
+
     override suspend fun getCategories(userId: String): NetworkResult<List<Category>> {
         try {
             val obj = URL(BuildConfig.GET_ALL_CATEGORIES)

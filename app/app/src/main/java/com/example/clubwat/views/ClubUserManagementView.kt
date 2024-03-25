@@ -1,4 +1,5 @@
 package com.example.clubwat.views
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -81,23 +82,30 @@ fun ClubUserManagementView(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 if (clubId == null) return@LazyColumn
-                items(memberList) {member ->
-                    Card (
+                items(memberList) { member ->
+                    Card(
                         Modifier
                             .fillMaxWidth()
-                            .padding(8.dp)){
-                        Column (Modifier.padding(8.dp)) {
+                            .padding(8.dp)
+                    ) {
+                        Column(Modifier.padding(8.dp)) {
                             Row {
                                 Column {
                                     val name = "${member.firstName} ${member.lastName.first()}"
-                                    Text(if (name.length > 15) name.take(12) + "..." else "$name." , fontWeight = FontWeight.SemiBold)
+                                    Text(
+                                        if (name.length > 15) name.take(12) + "..." else "$name.",
+                                        fontWeight = FontWeight.SemiBold
+                                    )
                                     Text(member.email.substringBefore("@"))
                                 }
                                 if (!isClientClubAdmin) return@Row
                                 if (member.isClubCreator) return@Row
                                 if (member.isClubAdmin && !isClientClubCreator) return@Row
 
-                                Row (modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End){
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.End
+                                ) {
                                     if (!member.isApproved) {
                                         TextButton(onClick = {
                                             viewModel.approveUser(

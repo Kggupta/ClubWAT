@@ -35,7 +35,7 @@ import com.example.clubwat.viewmodels.EditProfileViewModel
 @OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun EditProfileView(
-    viewModel: EditProfileViewModel  = hiltViewModel(),
+    viewModel: EditProfileViewModel = hiltViewModel(),
     navController: NavController
 ) {
     LaunchedEffect(Unit) {
@@ -81,14 +81,17 @@ fun EditProfileView(
                     Column(modifier = Modifier.padding(16.dp)) {
                         Row(Modifier.fillMaxWidth()) {
                             Text(
-                                modifier=Modifier.align(Alignment.CenterVertically),
+                                modifier = Modifier.align(Alignment.CenterVertically),
                                 text = "Receive Emails",
                                 fontWeight = FontWeight.Bold
                             )
-                            Column (Modifier.fillMaxWidth()){
-                                Switch(modifier=Modifier.align(Alignment.End), checked = profile.value!!.notificationFlag, onCheckedChange = {value->
-                                    viewModel.updateNotificationPreferences(value)
-                                })
+                            Column(Modifier.fillMaxWidth()) {
+                                Switch(
+                                    modifier = Modifier.align(Alignment.End),
+                                    checked = profile.value!!.notificationFlag,
+                                    onCheckedChange = { value ->
+                                        viewModel.updateNotificationPreferences(value)
+                                    })
                             }
                         }
                     }

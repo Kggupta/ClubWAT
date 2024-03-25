@@ -78,7 +78,10 @@ class EditEventDetailsViewModel @Inject constructor(
                 val obj = URL(BuildConfig.GET_EVENT_URL + eventId + "/details")
                 val con = obj.openConnection() as HttpURLConnection
                 con.requestMethod = "GET"
-                con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+                con.setRequestProperty(
+                    "Authorization",
+                    "Bearer " + userRepository.currentUser.value?.userId.toString()
+                )
                 val responseCode = con.responseCode
                 println("Response Code :: $responseCode")
                 if (responseCode == HttpURLConnection.HTTP_OK) {
@@ -136,19 +139,32 @@ class EditEventDetailsViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             var isEventAdded = false
             try {
-                val url = URL(String.format(BuildConfig.EDIT_EVENT_URL, _event.value?.clubId, _event.value?.id))
+                val url = URL(
+                    String.format(
+                        BuildConfig.EDIT_EVENT_URL,
+                        _event.value?.clubId,
+                        _event.value?.id
+                    )
+                )
                 (url.openConnection() as HttpURLConnection).apply {
                     requestMethod = "PUT"
                     doOutput = true
                     setRequestProperty("Content-Type", "application/json")
-                    setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value!!.userId )
+                    setRequestProperty(
+                        "Authorization",
+                        "Bearer " + userRepository.currentUser.value!!.userId
+                    )
 
                     val jsonObject = JSONObject().apply {
                         put("title", title.value.takeIf { it.isNotBlank() } ?: getEventTitle())
-                        put("description", description.value.takeIf { it.isNotBlank() } ?: getEventDescription())
+                        put(
+                            "description",
+                            description.value.takeIf { it.isNotBlank() } ?: getEventDescription())
                         put("start_date", formatDateTime(startDate.value))
                         put("end_date", formatDateTime(endDate.value))
-                        put("location", location.value.takeIf { it.isNotBlank() } ?: getEventLocation())
+                        put(
+                            "location",
+                            location.value.takeIf { it.isNotBlank() } ?: getEventLocation())
                     }
                     println(jsonObject.toString())
                     OutputStreamWriter(outputStream).use { it.write(jsonObject.toString()) }

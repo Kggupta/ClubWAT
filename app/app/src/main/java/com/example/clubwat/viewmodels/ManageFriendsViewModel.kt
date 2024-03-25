@@ -23,10 +23,12 @@ class ManageFriendsViewModel @Inject constructor(
     val userRepository: UserRepository
 ) : ViewModel() {
 
-    private val _friends: MutableStateFlow<MutableList<UserProfile>> = MutableStateFlow(arrayListOf())
+    private val _friends: MutableStateFlow<MutableList<UserProfile>> =
+        MutableStateFlow(arrayListOf())
     var friends = _friends.asStateFlow()
 
-    private val _reqFriends: MutableStateFlow<MutableList<UserProfile>> = MutableStateFlow(arrayListOf())
+    private val _reqFriends: MutableStateFlow<MutableList<UserProfile>> =
+        MutableStateFlow(arrayListOf())
     var req_friends = _reqFriends.asStateFlow()
 
     var addFriendMessage = mutableStateOf("")
@@ -39,12 +41,16 @@ class ManageFriendsViewModel @Inject constructor(
                 val obj = URL(BuildConfig.GET_FRIEND_URL)
                 val con = obj.openConnection() as HttpURLConnection
                 con.requestMethod = "GET"
-                con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+                con.setRequestProperty(
+                    "Authorization",
+                    "Bearer " + userRepository.currentUser.value?.userId.toString()
+                )
                 val responseCode = con.responseCode
                 println("GET FRIENDS Response Code :: $responseCode")
                 if (responseCode == HttpURLConnection.HTTP_OK) {
                     val response = con.inputStream.bufferedReader().use { it.readText() }
-                    _friends.value = Gson().fromJson(response, object : TypeToken<List<UserProfile>>() {}.type)
+                    _friends.value =
+                        Gson().fromJson(response, object : TypeToken<List<UserProfile>>() {}.type)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -59,12 +65,16 @@ class ManageFriendsViewModel @Inject constructor(
                 val obj = URL(BuildConfig.GET_FRIEND_URL + "requests")
                 val con = obj.openConnection() as HttpURLConnection
                 con.requestMethod = "GET"
-                con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+                con.setRequestProperty(
+                    "Authorization",
+                    "Bearer " + userRepository.currentUser.value?.userId.toString()
+                )
                 val responseCode = con.responseCode
                 println("Response Code :: $responseCode")
                 if (responseCode == HttpURLConnection.HTTP_OK) {
                     val response = con.inputStream.bufferedReader().use { it.readText() }
-                    _reqFriends.value = Gson().fromJson(response, object : TypeToken<List<UserProfile>>() {}.type)
+                    _reqFriends.value =
+                        Gson().fromJson(response, object : TypeToken<List<UserProfile>>() {}.type)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -81,7 +91,10 @@ class ManageFriendsViewModel @Inject constructor(
                     requestMethod = "POST"
                     doOutput = true
                     setRequestProperty("Content-Type", "application/json")
-                    setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+                    setRequestProperty(
+                        "Authorization",
+                        "Bearer " + userRepository.currentUser.value?.userId.toString()
+                    )
 
 
                     val requestBody = """
@@ -119,7 +132,10 @@ class ManageFriendsViewModel @Inject constructor(
                 val obj = URL(BuildConfig.GET_FRIEND_URL + "$id")
                 val con = obj.openConnection() as HttpURLConnection
                 con.requestMethod = "DELETE"
-                con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+                con.setRequestProperty(
+                    "Authorization",
+                    "Bearer " + userRepository.currentUser.value?.userId.toString()
+                )
 
                 val responseCode = con.responseCode
                 println("Response Code :: $responseCode")
@@ -140,7 +156,10 @@ class ManageFriendsViewModel @Inject constructor(
                     requestMethod = "PUT"
                     doOutput = true
                     setRequestProperty("Content-Type", "application/json")
-                    setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+                    setRequestProperty(
+                        "Authorization",
+                        "Bearer " + userRepository.currentUser.value?.userId.toString()
+                    )
 
                     val jsonBody = """
                 {

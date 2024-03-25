@@ -11,7 +11,10 @@ import java.net.URL
 
 interface ApproveClubRepository {
     suspend fun getUnapprovedClubs(userId: String): NetworkResult<List<Club>>
-    suspend fun updateClubApprovalStatus(request: ApproveClubRequest, userId: String): NetworkResult<Any>
+    suspend fun updateClubApprovalStatus(
+        request: ApproveClubRequest,
+        userId: String
+    ): NetworkResult<Any>
 }
 
 class ApproveClubRepositoryImpl : ApproveClubRepository {
@@ -26,7 +29,7 @@ class ApproveClubRepositoryImpl : ApproveClubRepository {
             return if (responseCode == HttpURLConnection.HTTP_OK) {
                 val response = con.inputStream.bufferedReader().use { it.readText() }
                 NetworkResult.Success(
-                    Gson().fromJson(response, object: TypeToken<List<Club>>() {}.type)
+                    Gson().fromJson(response, object : TypeToken<List<Club>>() {}.type)
                 )
             } else {
                 NetworkResult.Error(
@@ -41,9 +44,13 @@ class ApproveClubRepositoryImpl : ApproveClubRepository {
         )
     }
 
-    override suspend fun updateClubApprovalStatus(request: ApproveClubRequest, userId: String): NetworkResult<Any> {
+    override suspend fun updateClubApprovalStatus(
+        request: ApproveClubRequest,
+        userId: String
+    ): NetworkResult<Any> {
         try {
-            val obj = URL(BuildConfig.GET_CLUB_URL + request.club_id + "/approval-status/" + request.approval_status)
+            val obj =
+                URL(BuildConfig.GET_CLUB_URL + request.club_id + "/approval-status/" + request.approval_status)
             val con = obj.openConnection() as HttpURLConnection
             con.doOutput = true
             con.requestMethod = "PUT"

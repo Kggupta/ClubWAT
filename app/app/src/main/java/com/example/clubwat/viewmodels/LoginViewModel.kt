@@ -27,7 +27,7 @@ class LoginViewModel @Inject constructor(
     var allValuesError = mutableStateOf<String?>(null)
     val loginError = mutableStateOf<String?>(null)
 
-    fun areAllValuesFilled(email: String, password:String) {
+    fun areAllValuesFilled(email: String, password: String) {
         if (email != "" && password != "") {
             allValuesError.value = null
         } else {

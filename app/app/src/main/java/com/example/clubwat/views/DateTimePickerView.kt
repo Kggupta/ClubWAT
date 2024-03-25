@@ -31,12 +31,18 @@ fun DateTimePickerView(dateTime: MutableState<Calendar>) {
     val context = LocalContext.current
     Button(
         onClick = { showDateTimePicker(context, dateTime) },
-        Modifier.padding(vertical = 8.dp).height(57.dp).fillMaxWidth(),
+        Modifier
+            .padding(vertical = 8.dp)
+            .height(57.dp)
+            .fillMaxWidth(),
         shape = RoundedCornerShape(10),
         border = BorderStroke(0.5.dp, Color.Black),
         colors = ButtonDefaults.buttonColors(Color.Transparent)
-    ){
-        Text(formatDateTimeView(dateTime.value), style = TextStyle(fontSize = 17.sp, color = Color.Black))
+    ) {
+        Text(
+            formatDateTimeView(dateTime.value),
+            style = TextStyle(fontSize = 17.sp, color = Color.Black)
+        )
     }
 }
 
@@ -59,7 +65,13 @@ fun showDateTimePicker(context: Context, dateTime: MutableState<Calendar>) {
             val timePickerDialog = TimePickerDialog(
                 context,
                 { _, selectedHour, selectedMinute ->
-                    calendar.set(selectedYear, selectedMonth, selectedDay, selectedHour, selectedMinute)
+                    calendar.set(
+                        selectedYear,
+                        selectedMonth,
+                        selectedDay,
+                        selectedHour,
+                        selectedMinute
+                    )
                     dateTime.value = calendar
                 },
                 currentHour,

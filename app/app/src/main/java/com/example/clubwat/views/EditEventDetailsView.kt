@@ -110,7 +110,9 @@ fun EditEventDetailsView(
                     OutlinedTextField(
                         value = viewModel.description.value,
                         label = { Text("Description") },
-                        onValueChange = { newValue: String -> viewModel.description.value = newValue },
+                        onValueChange = { newValue: String ->
+                            viewModel.description.value = newValue
+                        },
                         placeholder = { Text(text = viewModel.getEventDescription()) },
                         modifier = Modifier
                             .padding(vertical = 8.dp)
@@ -153,20 +155,28 @@ fun EditEventDetailsView(
 
                 Button(
                     onClick = {
-                        val originalStartDate = viewModel.parseDateString(viewModel.getEventStartDate())
+                        val originalStartDate =
+                            viewModel.parseDateString(viewModel.getEventStartDate())
                         val isStartDateUnchanged = originalStartDate?.let {
-                            viewModel.areCalendarsEqualIgnoringMilliseconds(viewModel.startDate.value, it)
+                            viewModel.areCalendarsEqualIgnoringMilliseconds(
+                                viewModel.startDate.value,
+                                it
+                            )
                         } ?: false
 
                         val originalEndDate = viewModel.parseDateString(viewModel.getEventEndDate())
                         val isEndDateUnchanged = originalEndDate?.let {
-                            viewModel.areCalendarsEqualIgnoringMilliseconds(viewModel.endDate.value, it)
+                            viewModel.areCalendarsEqualIgnoringMilliseconds(
+                                viewModel.endDate.value,
+                                it
+                            )
                         } ?: false
 
                         if (viewModel.title.value.isBlank() &&
                             viewModel.description.value.isBlank() &&
                             viewModel.location.value.isBlank() &&
-                            isStartDateUnchanged && isEndDateUnchanged) {
+                            isStartDateUnchanged && isEndDateUnchanged
+                        ) {
                             errorMessage = "Please fill in all values"
                         } else if (!(viewModel.startDate.value.time.before(viewModel.endDate.value.time))) {
                             errorMessage = "Start date must be earlier than end date!"

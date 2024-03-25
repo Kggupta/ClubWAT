@@ -1,4 +1,5 @@
 package com.example.clubwat.views
+
 import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -89,10 +90,10 @@ fun InboxView(
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                items(notifications) {notification ->
+                items(notifications) { notification ->
                     Row {
                         val state = rememberDismissState(
-                            confirmStateChange = {dismiss ->
+                            confirmStateChange = { dismiss ->
                                 if (dismiss == DismissValue.DismissedToStart) {
                                     viewModel.deleteNotification(notification.id)
                                 }
@@ -100,22 +101,30 @@ fun InboxView(
                             }
                         )
                         SwipeToDismiss(state = state, background = {
-                            Box(modifier = Modifier.fillMaxSize()
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
                                     .padding(8.dp)
-                                    .background(when (state.dismissDirection){
-                                    DismissDirection.EndToStart -> Color.LightGray
-                                    else -> Color.Transparent
-                                    })
+                                    .background(
+                                        when (state.dismissDirection) {
+                                            DismissDirection.EndToStart -> Color.LightGray
+                                            else -> Color.Transparent
+                                        }
+                                    )
                             ) {
-                                Icon(modifier=Modifier
+                                Icon(
+                                    modifier = Modifier
                                         .align(Alignment.CenterEnd)
                                         .padding(8.dp),
                                     imageVector = Icons.Filled.Close,
-                                    contentDescription = "Close")
+                                    contentDescription = "Close"
+                                )
                             }
                         }) {
-                            NotificationItem(notification = notification,
-                                navController = navController)
+                            NotificationItem(
+                                notification = notification,
+                                navController = navController
+                            )
                         }
                     }
                 }
@@ -134,9 +143,9 @@ fun NotificationItem(
     Card(
         onClick = {
             if (notification.clubId != null) {
-              navController.navigate("club/${notification.clubId}")
+                navController.navigate("club/${notification.clubId}")
             } else if (notification.eventId != null) {
-              navController.navigate("event/${notification.eventId}")
+                navController.navigate("event/${notification.eventId}")
             }
         },
         modifier = Modifier
@@ -150,21 +159,26 @@ fun NotificationItem(
             val days = duration.toDays()
             val hours = duration.toHours() % 24
             val minutes = duration.toMinutes() % 60
-            Box  {
+            Box {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth(),
                 ) {
-                    Box(modifier=Modifier.fillMaxWidth()) {
-                        Text(text = "${notification.sourceUser.firstName} ${notification.sourceUser.lastName}".take(50),
-                            fontWeight = FontWeight.Bold)
-                        Text(text = when {
-                            abs(days) > 0 -> "${abs(days)}d ago"
-                            abs(hours) > 0 -> "${abs(hours)}h ago"
-                            abs(minutes) >= 0 -> "${abs(minutes)}m ago"
-                            else -> "just now"
-                        }, fontWeight = FontWeight.Light,
-                            modifier=Modifier.align(Alignment.CenterEnd)
+                    Box(modifier = Modifier.fillMaxWidth()) {
+                        Text(
+                            text = "${notification.sourceUser.firstName} ${notification.sourceUser.lastName}".take(
+                                50
+                            ),
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text(
+                            text = when {
+                                abs(days) > 0 -> "${abs(days)}d ago"
+                                abs(hours) > 0 -> "${abs(hours)}h ago"
+                                abs(minutes) >= 0 -> "${abs(minutes)}m ago"
+                                else -> "just now"
+                            }, fontWeight = FontWeight.Light,
+                            modifier = Modifier.align(Alignment.CenterEnd)
                         )
                     }
                     Text(text = notification.content)

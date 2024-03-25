@@ -129,35 +129,44 @@ fun ClubDetailsView(
                 ) {
                     if (club != null) {
                         if (!club!!.isCreator) {
-                            Button(onClick = { viewModel.updateClubMembership() }, colors = ButtonDefaults.buttonColors(
-                                containerColor = if (!club!!.isJoinPending && !club!!.isJoined) LightOrange else Color.LightGray,
-                                contentColor = if (!club!!.isJoinPending && !club!!.isJoined) Color.White else Color.Black
-                            )) {
-                                Icon(if (club!!.isJoined) {
-                                    Icons.AutoMirrored.Filled.ExitToApp
-                                } else if (club!!.isJoinPending) {
-                                    Icons.Filled.Cancel
-                                } else {
-                                    Icons.Filled.Add
-                                }, contentDescription = "Leave Club")
+                            Button(
+                                onClick = { viewModel.updateClubMembership() },
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = if (!club!!.isJoinPending && !club!!.isJoined) LightOrange else Color.LightGray,
+                                    contentColor = if (!club!!.isJoinPending && !club!!.isJoined) Color.White else Color.Black
+                                )
+                            ) {
+                                Icon(
+                                    if (club!!.isJoined) {
+                                        Icons.AutoMirrored.Filled.ExitToApp
+                                    } else if (club!!.isJoinPending) {
+                                        Icons.Filled.Cancel
+                                    } else {
+                                        Icons.Filled.Add
+                                    }, contentDescription = "Leave Club"
+                                )
                             }
                             Spacer(modifier = Modifier.width(16.dp))
                         }
                         if (club!!.isJoined) {
-                            Button(onClick = {
-                                navController.navigate("discussion/${clubId}")
-                            }, colors = ButtonDefaults.buttonColors(
-                                containerColor = LightOrange
-                            )) {
+                            Button(
+                                onClick = {
+                                    navController.navigate("discussion/${clubId}")
+                                }, colors = ButtonDefaults.buttonColors(
+                                    containerColor = LightOrange
+                                )
+                            ) {
                                 Icon(Icons.Filled.ChatBubble, contentDescription = "Discussion")
                             }
                             Spacer(modifier = Modifier.width(16.dp))
                         }
-                        Button(onClick = {
-                            showShareView = true
-                        }, colors = ButtonDefaults.buttonColors(
-                            containerColor = LightOrange
-                        )) {
+                        Button(
+                            onClick = {
+                                showShareView = true
+                            }, colors = ButtonDefaults.buttonColors(
+                                containerColor = LightOrange
+                            )
+                        ) {
                             Icon(Icons.AutoMirrored.Filled.Send, contentDescription = "Share")
                         }
                     }
@@ -170,10 +179,10 @@ fun ClubDetailsView(
                     )
                     .padding(16.dp),
                     text = AnnotatedString(viewModel.getClubDescription().take(75) + "..."),
-                    style= TextStyle(textAlign = TextAlign.Center),
+                    style = TextStyle(textAlign = TextAlign.Center),
                     onClick = {
                         showClubDetailsView = true
-                })
+                    })
                 Spacer(modifier = Modifier.height(16.dp))
                 if (club != null) {
                     val format = NumberFormat.getNumberInstance()
@@ -184,10 +193,12 @@ fun ClubDetailsView(
                     formatInteger.minimumFractionDigits = 0
                     formatInteger.maximumFractionDigits = 0
 
-                    Row (Modifier.fillMaxWidth()) {
-                        DetailItem(text = format.format(club!!.membershipFee),
+                    Row(Modifier.fillMaxWidth()) {
+                        DetailItem(
+                            text = format.format(club!!.membershipFee),
                             icon = Icons.Filled.AttachMoney,
-                            modifier = Modifier.fillMaxWidth(0.5f))
+                            modifier = Modifier.fillMaxWidth(0.5f)
+                        )
                         Spacer(modifier = Modifier.width(8.dp))
                         DetailItem(text = formatInteger.format(club!!.likeCount),
                             icon = if (club!!.isClientLikedClub) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
@@ -198,9 +209,12 @@ fun ClubDetailsView(
                 }
                 Spacer(modifier = Modifier.height(16.dp))
 
-                Column(modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(fontWeight = FontWeight.Bold,
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        fontWeight = FontWeight.Bold,
                         fontSize = 20.sp,
                         text = "Club Events"
                     )
@@ -209,7 +223,10 @@ fun ClubDetailsView(
                             items(club!!.events) { event ->
                                 Row {
                                     val eventWrapper = EventWrapper(event)
-                                    EventItem(eventWrapper = eventWrapper, navController = navController)
+                                    EventItem(
+                                        eventWrapper = eventWrapper,
+                                        navController = navController
+                                    )
                                 }
                             }
                         }
@@ -220,10 +237,13 @@ fun ClubDetailsView(
     )
 
     if (showShareView) {
-        ShareDialog(friends = friends, dismissCallback = { showShareView = false }, chooseFriendCallback = {
-            showShareView = false
-            viewModel.shareClub(it)
-        })
+        ShareDialog(
+            friends = friends,
+            dismissCallback = { showShareView = false },
+            chooseFriendCallback = {
+                showShareView = false
+                viewModel.shareClub(it)
+            })
     }
 
     if (showClubDetailsView) {
@@ -235,9 +255,17 @@ fun ClubDetailsView(
                 Column {
                     Text(text = viewModel.getClubDescription())
                     Spacer(modifier = Modifier.padding(8.dp))
-                    FlowRow(modifier = Modifier.fillMaxWidth(),
-                        verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)) {
+                    FlowRow(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalArrangement = Arrangement.spacedBy(
+                            8.dp,
+                            Alignment.CenterVertically
+                        ),
+                        horizontalArrangement = Arrangement.spacedBy(
+                            8.dp,
+                            Alignment.CenterHorizontally
+                        )
+                    ) {
                         if (club != null) {
                             club!!.categories.forEach { category ->
                                 Text(

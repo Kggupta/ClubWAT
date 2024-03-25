@@ -41,9 +41,11 @@ import com.example.clubwat.viewmodels.AddEventViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun AddEventView(viewModel: AddEventViewModel = hiltViewModel(),
-                 navController: NavController,
-                 clubId: String?, type: String?) {
+fun AddEventView(
+    viewModel: AddEventViewModel = hiltViewModel(),
+    navController: NavController,
+    clubId: String?, type: String?
+) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -99,7 +101,9 @@ fun AddEventView(viewModel: AddEventViewModel = hiltViewModel(),
                     OutlinedTextField(
                         value = viewModel.description.value,
                         label = { Text("Description") },
-                        onValueChange = { newValue: String -> viewModel.description.value = newValue },
+                        onValueChange = { newValue: String ->
+                            viewModel.description.value = newValue
+                        },
                         modifier = Modifier
                             .padding(vertical = 8.dp)
                             .fillMaxWidth(),

@@ -31,7 +31,10 @@ class EditProfileViewModel @Inject constructor(
                 val obj = URL(BuildConfig.GET_OWN_PROFILE)
                 val con = obj.openConnection() as HttpURLConnection
                 con.requestMethod = "GET"
-                con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+                con.setRequestProperty(
+                    "Authorization",
+                    "Bearer " + userRepository.currentUser.value?.userId.toString()
+                )
                 val responseCode = con.responseCode
                 println("Response Code :: $responseCode")
                 if (responseCode == HttpURLConnection.HTTP_OK) {
@@ -52,7 +55,10 @@ class EditProfileViewModel @Inject constructor(
                     requestMethod = "PUT"
                     doOutput = true
                     setRequestProperty("Content-Type", "application/json")
-                    setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value!!.userId )
+                    setRequestProperty(
+                        "Authorization",
+                        "Bearer " + userRepository.currentUser.value!!.userId
+                    )
 
                     val jsonObject = JSONObject().apply {
                         put("notificationFlag", value)

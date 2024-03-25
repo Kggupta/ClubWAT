@@ -28,28 +28,31 @@ class UserInterestsViewModel @Inject constructor(
 
     // users interests
     private var _userFaculty = MutableStateFlow<Interest?>(null)
-    var userFaculty =_userFaculty.asStateFlow()
+    var userFaculty = _userFaculty.asStateFlow()
 
     private var _userEthnicity = MutableStateFlow<Interest?>(null)
-    var userEthnicity =_userEthnicity.asStateFlow()
+    var userEthnicity = _userEthnicity.asStateFlow()
 
     private var _userReligion = MutableStateFlow<Interest?>(null)
-    var userReligion =_userReligion.asStateFlow()
+    var userReligion = _userReligion.asStateFlow()
 
     private var _userProgram = MutableStateFlow<Interest?>(null)
-    var userProgram =_userProgram.asStateFlow()
+    var userProgram = _userProgram.asStateFlow()
 
     var selectedUserHobbies = mutableStateOf(setOf<Int>())
 
 
     // all categories
-    private val _faculties: MutableStateFlow<MutableList<Interest>> = MutableStateFlow(arrayListOf())
+    private val _faculties: MutableStateFlow<MutableList<Interest>> =
+        MutableStateFlow(arrayListOf())
     var faculties = _faculties.asStateFlow()
 
-    private val _ethnicities: MutableStateFlow<MutableList<Interest>> = MutableStateFlow(arrayListOf())
+    private val _ethnicities: MutableStateFlow<MutableList<Interest>> =
+        MutableStateFlow(arrayListOf())
     var ethnicities = _ethnicities.asStateFlow()
 
-    private val _religions: MutableStateFlow<MutableList<Interest>> = MutableStateFlow(arrayListOf())
+    private val _religions: MutableStateFlow<MutableList<Interest>> =
+        MutableStateFlow(arrayListOf())
     var religions = _religions.asStateFlow()
 
     private val _programs: MutableStateFlow<MutableList<Interest>> = MutableStateFlow(arrayListOf())
@@ -86,7 +89,10 @@ class UserInterestsViewModel @Inject constructor(
                 val obj = URL(BuildConfig.GET_INTERESTS + "/all")
                 val con = obj.openConnection() as HttpURLConnection
                 con.requestMethod = "GET"
-                con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+                con.setRequestProperty(
+                    "Authorization",
+                    "Bearer " + userRepository.currentUser.value?.userId.toString()
+                )
                 val responseCode = con.responseCode
                 println("GET INTERESTS Response Code :: $responseCode")
                 if (responseCode == HttpURLConnection.HTTP_OK) {
@@ -113,7 +119,10 @@ class UserInterestsViewModel @Inject constructor(
                 val obj = URL(BuildConfig.GET_INTERESTS)
                 val con = obj.openConnection() as HttpURLConnection
                 con.requestMethod = "GET"
-                con.setRequestProperty("Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString())
+                con.setRequestProperty(
+                    "Authorization",
+                    "Bearer " + userRepository.currentUser.value?.userId.toString()
+                )
                 val responseCode = con.responseCode
                 println("GET INTERESTS Response Code :: $responseCode")
                 if (responseCode == HttpURLConnection.HTTP_OK) {
@@ -126,7 +135,8 @@ class UserInterestsViewModel @Inject constructor(
                     _userEthnicity.value = interestsResponse.find { it.type == "ethnicity" }
                     _userReligion.value = interestsResponse.find { it.type == "religion" }
                     _userProgram.value = interestsResponse.find { it.type == "program" }
-                    selectedUserHobbies.value = interestsResponse.filter { it.type == "hobby" }.map { it.id }.toSet()
+                    selectedUserHobbies.value =
+                        interestsResponse.filter { it.type == "hobby" }.map { it.id }.toSet()
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -138,7 +148,8 @@ class UserInterestsViewModel @Inject constructor(
         if (userFaculty.value == null ||
             userEthnicity.value == null ||
             userReligion.value == null ||
-            userProgram.value == null) {
+            userProgram.value == null
+        ) {
             fillAllfields.value = "Fill All Interests"
         }
         viewModelScope.launch(Dispatchers.IO) {
@@ -159,7 +170,8 @@ class UserInterestsViewModel @Inject constructor(
                     doOutput = true
                     setRequestProperty("Content-Type", "application/json")
                     setRequestProperty(
-                        "Authorization", "Bearer " + userRepository.currentUser.value?.userId.toString()
+                        "Authorization",
+                        "Bearer " + userRepository.currentUser.value?.userId.toString()
                     )
 
                     OutputStreamWriter(outputStream).use { it.write(requestBodyString) }

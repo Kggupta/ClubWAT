@@ -134,7 +134,7 @@ fun ProfileView(
             }
         }
     )
-    
+
     if (showDownloadData) {
         AlertDialog(title = {
             Text(text = "Download Your Data?")
@@ -156,7 +156,7 @@ fun ProfileView(
             }
         })
     }
-    
+
     if (showDeleteAccount) {
         AlertDialog(title = {
             Text(text = "Delete Your Account?")

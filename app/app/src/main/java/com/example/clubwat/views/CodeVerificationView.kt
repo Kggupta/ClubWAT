@@ -58,11 +58,11 @@ import kotlinx.coroutines.launch
 fun CodeVerificationView(
     viewModel: CodeVerificationViewModel = hiltViewModel(),
     navController: NavController
-)
-{
+) {
     val codeLength = 6
     val verificationCode = remember { mutableStateListOf(*Array(codeLength) { "" }) }
-    val focusRequesters = List(codeLength) { FocusRequester() } // move focus to a specific composable
+    val focusRequesters =
+        List(codeLength) { FocusRequester() } // move focus to a specific composable
     val verificationError by viewModel.verificationError
     var isButtonEnabled by remember { mutableStateOf(false) }
     var timeLeft by remember { mutableStateOf(30) }
@@ -89,7 +89,13 @@ fun CodeVerificationView(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         TopAppBar(
-            colors = TopAppBarColors(Color.Transparent, Color.Transparent, Color.Transparent, Color.Transparent, Color.Black),
+            colors = TopAppBarColors(
+                Color.Transparent,
+                Color.Transparent,
+                Color.Transparent,
+                Color.Transparent,
+                Color.Black
+            ),
             title = { },
             navigationIcon = {
                 IconButton(onClick = { navController.navigateUp() }) {

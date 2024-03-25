@@ -22,6 +22,7 @@ data class Category(
     val type: String,
     val name: String
 )
+
 data class ClubMember(
     val userId: Int,
     val isApproved: Boolean

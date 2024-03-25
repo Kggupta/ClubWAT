@@ -17,9 +17,15 @@ interface DiscussionRepository {
 
     suspend fun getMessages(clubId: String, userId: String): NetworkResult<ClubDiscussion>
 
-    suspend fun sendMessage(request: SendDiscussionMessageRequest, bearer: String): NetworkResult<Any>
+    suspend fun sendMessage(
+        request: SendDiscussionMessageRequest,
+        bearer: String
+    ): NetworkResult<Any>
 
-    suspend fun deleteMessage(request: DeleteDiscussionMessageRequest, bearer: String): NetworkResult<Any>
+    suspend fun deleteMessage(
+        request: DeleteDiscussionMessageRequest,
+        bearer: String
+    ): NetworkResult<Any>
 }
 
 class DiscussionRepositoryImpl : DiscussionRepository {
@@ -49,7 +55,10 @@ class DiscussionRepositoryImpl : DiscussionRepository {
         )
     }
 
-    override suspend fun getMessages(clubId: String, userId: String): NetworkResult<ClubDiscussion> {
+    override suspend fun getMessages(
+        clubId: String,
+        userId: String
+    ): NetworkResult<ClubDiscussion> {
         try {
             val obj = URL(BuildConfig.CLUB_DISCUSSION_URL + clubId)
             val con = obj.openConnection() as HttpURLConnection
@@ -75,7 +84,10 @@ class DiscussionRepositoryImpl : DiscussionRepository {
         )
     }
 
-    override suspend fun sendMessage(request: SendDiscussionMessageRequest, bearer: String): NetworkResult<Any> {
+    override suspend fun sendMessage(
+        request: SendDiscussionMessageRequest,
+        bearer: String
+    ): NetworkResult<Any> {
         try {
             val obj = URL(BuildConfig.CLUB_DISCUSSION_URL + request.club_id)
             val con = obj.openConnection() as HttpURLConnection
@@ -112,9 +124,13 @@ class DiscussionRepositoryImpl : DiscussionRepository {
         )
     }
 
-    override suspend fun deleteMessage(request: DeleteDiscussionMessageRequest, bearer: String) : NetworkResult<Any> {
+    override suspend fun deleteMessage(
+        request: DeleteDiscussionMessageRequest,
+        bearer: String
+    ): NetworkResult<Any> {
         try {
-            val obj = URL(BuildConfig.CLUB_DISCUSSION_URL + request.club_id + "/" + request.message_id)
+            val obj =
+                URL(BuildConfig.CLUB_DISCUSSION_URL + request.club_id + "/" + request.message_id)
             val con = obj.openConnection() as HttpURLConnection
             con.requestMethod = "DELETE"
             con.setRequestProperty("Authorization", "Bearer $bearer")

@@ -23,8 +23,10 @@ import com.example.clubwat.model.EventType
 import com.example.clubwat.model.EventWrapper
 
 @Composable
-fun EventItem(eventWrapper: EventWrapper,
-              navController: NavController) {
+fun EventItem(
+    eventWrapper: EventWrapper,
+    navController: NavController
+) {
     val event = eventWrapper.event
     val type = eventWrapper.type
     Card(
@@ -62,9 +64,11 @@ fun getIcon(type: Int): ImageVector {
         EventType.ATTEND.value -> {
             Icons.Default.Done
         }
+
         EventType.BOOKMARK.value -> {
             Icons.Default.Bookmark
         }
+
         else -> {
             Icons.Default.Groups
         }

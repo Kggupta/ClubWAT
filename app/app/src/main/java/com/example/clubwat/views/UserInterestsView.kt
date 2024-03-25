@@ -99,27 +99,32 @@ fun UserInterestsView(
                     )
                 },
                 actions = {
-                      IconButton(onClick = {
+                    IconButton(onClick = {
                         viewModel.saveInterests()
-                      }) {
-                          Icon(imageVector = Icons.Filled.Save, contentDescription = "Save")
-                      }
+                    }) {
+                        Icon(imageVector = Icons.Filled.Save, contentDescription = "Save")
+                    }
                 },
                 backgroundColor = LightYellow,
                 contentColor = Color.Black
             )
         },
         content = {
-            Column (
+            Column(
                 Modifier
                     .padding(it)
                     .padding(16.dp)
                     .fillMaxSize()
-                    .fillMaxWidth()) {
+                    .fillMaxWidth()
+            ) {
                 fillAllFields?.let { showDialog = true }
-                Text(text = "Faculty", fontWeight = FontWeight.Bold, modifier=Modifier.padding(8.dp))
+                Text(
+                    text = "Faculty",
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(8.dp)
+                )
                 ExposedDropdownMenuBox(
-                    modifier=Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(),
                     expanded = expanded,
                     onExpandedChange = {
                         expanded = !expanded
@@ -153,9 +158,13 @@ fun UserInterestsView(
                     }
                 }
 
-                Text(text = "Ethnicity", fontWeight = FontWeight.Bold, modifier=Modifier.padding(8.dp))
+                Text(
+                    text = "Ethnicity",
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(8.dp)
+                )
                 ExposedDropdownMenuBox(
-                    modifier=Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(),
                     expanded = ethnicityExpanded,
                     onExpandedChange = {
                         ethnicityExpanded = !ethnicityExpanded
@@ -190,9 +199,13 @@ fun UserInterestsView(
                 }
 
 
-                Text(text = "Religion", fontWeight = FontWeight.Bold, modifier=Modifier.padding(8.dp))
+                Text(
+                    text = "Religion",
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(8.dp)
+                )
                 ExposedDropdownMenuBox(
-                    modifier=Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(),
                     expanded = religionExpanded,
                     onExpandedChange = {
                         religionExpanded = !religionExpanded
@@ -226,9 +239,13 @@ fun UserInterestsView(
                     }
                 }
 
-                Text(text = "Program", fontWeight = FontWeight.Bold, modifier=Modifier.padding(8.dp))
+                Text(
+                    text = "Program",
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(8.dp)
+                )
                 ExposedDropdownMenuBox(
-                    modifier=Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(),
                     expanded = programExpanded,
                     onExpandedChange = {
                         programExpanded = !programExpanded
@@ -262,8 +279,12 @@ fun UserInterestsView(
                     }
                 }
 
-                Text(text = "Hobbies", fontWeight = FontWeight.Bold, modifier=Modifier.padding(8.dp))
-                
+                Text(
+                    text = "Hobbies",
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(8.dp)
+                )
+
                 MultiSelectCategoryList(viewModel = viewModel)
             }
         }
@@ -274,13 +295,15 @@ fun UserInterestsView(
             onDismissRequest = {
                 showDialog = false
                 fillAllFields = null
-            }, buttons = { TextButton(
-            onClick = {
-                showDialog = false
-                fillAllFields = null
-            }) {
-            Text(text = "Dismiss")
-        } })
+            }, buttons = {
+                TextButton(
+                    onClick = {
+                        showDialog = false
+                        fillAllFields = null
+                    }) {
+                    Text(text = "Dismiss")
+                }
+            })
     }
 }
 
@@ -311,7 +334,11 @@ fun MultiSelectCategoryList(viewModel: UserInterestsViewModel) {
 }
 
 @Composable
-fun CategoryItem(category: Interest, isSelected: Boolean, onCategorySelected: (Int, Boolean) -> Unit) {
+fun CategoryItem(
+    category: Interest,
+    isSelected: Boolean,
+    onCategorySelected: (Int, Boolean) -> Unit
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()

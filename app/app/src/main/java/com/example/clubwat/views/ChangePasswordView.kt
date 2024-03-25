@@ -60,51 +60,63 @@ fun ChangePasswordView(
             )
         },
         content = {
-            Column (
+            Column(
                 Modifier
                     .padding(it)
-                    .fillMaxSize()) {
+                    .fillMaxSize()
+            ) {
                 OutlinedTextField(
-                    modifier= Modifier
+                    modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp),
                     value = viewModel.oldPassword.value,
-                    onValueChange = {value -> viewModel.oldPassword.value = value },
+                    onValueChange = { value -> viewModel.oldPassword.value = value },
                     label = { Text("Old Password") },
                     visualTransformation = PasswordVisualTransformation()
                 )
                 OutlinedTextField(
-                    modifier= Modifier
+                    modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp),
                     value = viewModel.newPassword.value,
-                    onValueChange = {value -> viewModel.newPassword.value = value },
+                    onValueChange = { value -> viewModel.newPassword.value = value },
                     label = { Text("New Password") },
                     visualTransformation = PasswordVisualTransformation()
                 )
                 OutlinedTextField(
-                    modifier= Modifier
+                    modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp),
                     value = viewModel.confirmNewPassword.value,
-                    onValueChange = {value -> viewModel.confirmNewPassword.value = value },
+                    onValueChange = { value -> viewModel.confirmNewPassword.value = value },
                     label = { Text("Confirm New Password") },
                     visualTransformation = PasswordVisualTransformation()
                 )
-                TextButton(onClick = {
-                    viewModel.editPassword(viewModel.oldPassword.value, viewModel.newPassword.value)
-                                     },
+                TextButton(
+                    onClick = {
+                        viewModel.editPassword(
+                            viewModel.oldPassword.value,
+                            viewModel.newPassword.value
+                        )
+                    },
                     colors = ButtonDefaults.buttonColors(containerColor = LightOrange),
                     modifier = Modifier
                         .width(300.dp)
                         .height(40.dp)
-                        .align(Alignment.CenterHorizontally)) {
+                        .align(Alignment.CenterHorizontally)
+                ) {
                     Text("Change Password")
                 }
                 if (viewModel.passwordSuccess.value != null) {
-                    Text(modifier=Modifier.align(Alignment.CenterHorizontally), text = viewModel.passwordSuccess.value!!)
+                    Text(
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                        text = viewModel.passwordSuccess.value!!
+                    )
                 } else if (viewModel.passwordError.value != null) {
-                    Text(modifier=Modifier.align(Alignment.CenterHorizontally), text = viewModel.passwordError.value!!)
+                    Text(
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                        text = viewModel.passwordError.value!!
+                    )
                 }
             }
         }
