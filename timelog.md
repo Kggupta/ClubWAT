@@ -125,4 +125,4 @@
 | 03/21/2024 |        | 3      |        |         |         |         | Delete button                                               |
 | 03/21/2024 |        |        |        | 1       |         |         | Proof read D4                                               |
 | 03/22/2024 |        |        |        | 8       |         |         | Implemented club approval frontend for superadmins          |
-| 03/24/2024 |        |        |        | 10      |         |         | Implemented create club flow for all users                  |
+| 03/24/2024 |        |        |        | 10      |         |         | Implemented create club flow frontend for all users         |
