@@ -41,7 +41,6 @@ class CreateClubRepositoryImpl : CreateClubRepository {
             jsonObject.put("description", request.description)
             jsonObject.put("membership_fee", request.membershipFee)
             jsonObject.put("categories", JSONArray(request.categories))
-            jsonObject.put("position", "X")
             val jsonObjectString = jsonObject.toString()
 
             //Send the JSON we created

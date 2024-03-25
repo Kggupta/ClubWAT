@@ -80,15 +80,13 @@ import java.time.format.DateTimeFormatter
     "UnusedMaterial3ScaffoldPaddingParameter", "SimpleDateFormat",
     "CoroutineCreationDuringComposition"
 )
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateClubView(
     viewModel: CreateClubViewModel = hiltViewModel(),
     navController: NavController,
 ) {
     val uiState = viewModel.uiState.collectAsState()
-    val coroutineScope = rememberCoroutineScope()
-    val state = rememberLazyListState()
+    val createdClubSuccess = viewModel.clubCreatedSuccess
 
     LaunchedEffect(Unit) {
         viewModel.fetchCategories()
@@ -198,7 +196,9 @@ fun CreateClubView(
                     }
 
                     Button(
-                        onClick = { viewModel.createClub() },
+                        onClick = {
+                            viewModel.createClub()
+                        },
                         colors = ButtonDefaults.buttonColors(Orange),
                         modifier = Modifier
                             .padding(vertical = 8.dp)
@@ -229,4 +229,9 @@ fun CreateClubView(
             }
         }
     )
+
+    if (createdClubSuccess.value) {
+        navController.popBackStack()
+        createdClubSuccess.value = false
+    }
 }

@@ -36,10 +36,15 @@ class CreateClubViewModel @Inject constructor(
     val uiState: StateFlow<CreateClubUiState> = _uiState
 
     val errorMessage = mutableStateOf("")
+    val clubCreatedSuccess = mutableStateOf(false)
+
     private fun checkIsFormValid(): Pair<Boolean, String> {
         with(uiState.value) {
             if (title.isBlank() || description.isBlank()) {
                 return Pair(false, "Title or description is missing!")
+            }
+            if (membershipFee.isNaN() || membershipFee < 0) {
+                return Pair(false, "Invalid Membership Fee!")
             }
         }
         return Pair(true, "")
@@ -83,10 +88,11 @@ class CreateClubViewModel @Inject constructor(
                     membershipFee = uiState.value.membershipFee.toFloat(),
                     categories = uiState.value.selectedCategoryIds,
                 ),
-                userRepository.currentUser.value?.userId?.toString() ?: ""
+                userRepository.currentUser.value?.userId ?: ""
             )) {
                 is NetworkResult.Success -> {
                     resetForm()
+                    clubCreatedSuccess.value = true
                 }
 
                 is NetworkResult.Error -> {

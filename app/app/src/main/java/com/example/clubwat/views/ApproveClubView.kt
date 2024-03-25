@@ -117,8 +117,9 @@ fun ApproveClubView(
                                             horizontalArrangement = Arrangement.End
                                         ) {
                                             IconButton(onClick = {
-                                                viewModel.approveClub(
-                                                    club.id.toInt()
+                                                viewModel.updateClub(
+                                                    club.id.toInt(),
+                                                    true
                                                 )
                                             }) {
                                                 Icon(
@@ -127,8 +128,9 @@ fun ApproveClubView(
                                                 )
                                             }
                                             IconButton(onClick = {
-                                                viewModel.approveClub(
-                                                    club.id.toInt()
+                                                viewModel.updateClub(
+                                                    club.id.toInt(),
+                                                    false
                                                 )
                                             }) {
                                                 Icon(
