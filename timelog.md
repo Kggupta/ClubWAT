@@ -51,7 +51,7 @@
 | 02/16/2024 | 1      |        |        |         |         |         | Debug club discussions backend                              |
 | 02/18/2024 |        |        | 3      |         |         |         | Fixed how we save data to the User class                    |
 | 02/18/2024 |        |        | 4      |         |         |         | Added bottom navigation bar                                 |
-| 02/19/2024 |        | 3      |        |         |         |         | Created Profile Page                                        |
+| 02/19/2024 |        | 9      |        |         |         |         | Created Profile Page                                        |
 | 02/19/2024 |        |        |        | 6       |         |         | Refactoring overall frontend code                           |
 | 02/21/2024 |        |        |        | 5       |         |         | Refactoring overall frontend code                           |
 | 02/21/2024 |        |        | 4.5    |         |         |         | Added basic home page view with tab rows                    |
@@ -59,7 +59,7 @@
 | 02/21/2024 | 2      |        |        |         |         |         | Club detail view fe + backend                               |
 | 02/21/2024 | 2      |        |        |         |         |         | Club join/leave/request to join logic fe + backend          |
 | 02/22/2024 | 0.5    |        |        |         |         |         | Sorting club browsing, update club details look/feel        |
-| 02/22/2024 |        | 4      |        |         |         |         | Created User interests UI, edit password UI                 |
+| 02/22/2024 |        | 6      |        |         |         |         | Created User interests UI, edit password UI                 |
 | 02/25/2024 |        |        | 6      |         |         |         | Added all of the user's clubs on the home screen            |
 | 02/25/2024 | 1.2    |        |        |         |         |         | Get my clubs endpoint                                       |
 | 02/26/2024 |        |        |        |         | 4       |         | Continued work on events backend endpoints                  |
@@ -67,7 +67,7 @@
 | 02/27/2024 |        |        |        |         | 2       |         | Finished events endpoint work                               |
 | 02/28/2024 |        |        |        |         |         | 5       | Completed most of the frontend work for browsing events     |
 | 02/29/2024 |        |        |        |         |         | 1       | Full stack work to complete all of event browsing           |
-| 02/29/2024 |        | 3      |        |         |         |         | Created friends UI                                          |
+| 02/29/2024 |        | 3      |        |         |         |         | Created friends UI basic layout                             |
 | 02/29/2024 |        |        |        | 6       |         |         | Implement club discussions initial view and VM              |
 | 02/29/2024 | 1.1    |        |        |         |         |         | Handle user already exists and tries to register error      |
 | 03/01/2024 | 3      |        |        |         |         |         | Endpoint to get the users 'my events' for the homepage      |
@@ -89,7 +89,10 @@
 | 03/10/2024 | 1      |        |        |         |         |         | Club Settings page for club admins                          |
 | 03/10/2024 | 1      |        |        |         |         |         | Rework club admin positions to include admin + owner        |
 | 03/10/2024 | 6      |        |        |         |         |         | Club User management flow for club admins (be, fe, design)  |
-| 03/10/2024 |        | 1      |        |         |         |         | 30 sec wait time for resend button                          |
+| 03/10/2024 |        | 2      |        |         |         |         | Created dialog component                                    |
+| 03/10/2024 |        | 3      |        |         |         |         | 30 sec wait time for resend button                          |
+| 03/10/2024 |        | 2      |        |         |         |         | created dropdown component                                  |
+| 03/10/2024 |        | 5      |        |         |         |         | created UI for edit password and user interests             |
 | 03/10/2024 |        |        |        |         | 5       |         | User Friendship Endpoints setup                             |
 | 03/11/2024 |        |        |        |         | 2       |         | User Friendship Endpoints review + fixes according to UI    |
 | 03/12/2024 |        | 6      |        |         |         | 2       | Added APIs for password change and friends                  |
@@ -105,7 +108,7 @@
 | 03/13/2024 |        |        |        | 5       |         |         | Implement club discussions user and admin DEL messages      |
 | 03/13/2024 |        |        | 0.5    |         |         |         | Reviewed PRs and organized tickets                          |
 | 03/11/2024 |        |        |        |         |         | 2       | Added APIs for User Interests                               |
-| 03/15/2024 |        | 6      |        |         |         |         | Added APIs for User Interests to the UI                     |
+| 03/15/2024 |        | 9      |        |         |         |         | Added APIs for User Interests to the UI                     |
 | 03/15/2024 | 3      |        |        |         |         |         | D4 work on client-server                                    |
 | 03/16/2024 | 1      |        |        |         |         |         | Notifications to club members when event created            |
 | 03/17/2024 | 3      |        |        |         |         |         | Download user data, delete user ui/api                      |
@@ -123,7 +126,7 @@
 | 03/21/2024 |        |        | 5      |         |         |         | Re-factored whole codebase to include dependency injection  |
 | 03/21/2024 | 2      |        |        |         |         |         | Added dependency injection to last problematic views/vms    |
 | 03/21/2024 |        | 3      |        |         |         |         | D5                                                          |
-| 03/21/2024 |        | 3      |        |         |         |         | Delete button                                               |
+| 03/21/2024 |        | 4      |        |         |         |         | Delete button                                               |
 | 03/21/2024 |        |        |        | 1       |         |         | Proof read D4                                               |
 | 03/22/2024 |        |        |        | 8       |         |         | Implemented club approval frontend for superadmins          |
 | 03/24/2024 |        |        |        | 10      |         |         | Implemented create club flow frontend for all users         |
