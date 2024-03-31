@@ -123,12 +123,15 @@
 | 03/19/2024 | 1      |        |        |         |         |         | Create Club APIs for super admins                           |
 | 03/19/2024 |        |        |        | 4       |         |         | D4 implicit invocation writeup                              |
 | 03/20/2024 |        |        | 1      |         |         |         | Proof read D4                                               |
+| 03/20/2024 |        |        |        |         | 1       |         | Proof read D4                                               |
 | 03/21/2024 |        |        | 5      |         |         |         | Re-factored whole codebase to include dependency injection  |
 | 03/21/2024 | 2      |        |        |         |         |         | Added dependency injection to last problematic views/vms    |
 | 03/21/2024 |        | 3      |        |         |         |         | D5                                                          |
 | 03/21/2024 |        | 4      |        |         |         |         | Delete button                                               |
+| 03/21/2024 |        |        |        |         | 1       |         | Reviewed PRs                                                |
 | 03/21/2024 |        |        |        | 1       |         |         | Proof read D4                                               |
 | 03/22/2024 |        |        |        | 8       |         |         | Implemented club approval frontend for superadmins          |
 | 03/24/2024 |        |        |        | 10      |         |         | Implemented create club flow frontend for all users         |
 | 03/24/2024 | 3      |        |        |         |         |         | Bug fixes for club management and data population           |
 | 03/25/2024 |        |        | 7      |         |         |         | D6 writeup                                                  |
+| 03/27/2024 |        |        |        |         | 4       |         | D5 writeup                                                  |
