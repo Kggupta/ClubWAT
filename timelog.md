@@ -135,3 +135,6 @@
 | 03/24/2024 | 3      |        |        |         |         |         | Bug fixes for club management and data population           |
 | 03/25/2024 |        |        | 7      |         |         |         | D6 writeup                                                  |
 | 03/27/2024 |        |        |        |         | 4       |         | D5 writeup                                                  |
+| 03/22/2024 |        |        |        |         |         | 4       | D5 writeup                                                  |
+| 03/23/2024 |        |        |        |         |         | 1       | Proof read D5                                               |
+| 03/27/2024 |        |        |        |         |         | 2       | Reviewed PRs throughout term                                |
