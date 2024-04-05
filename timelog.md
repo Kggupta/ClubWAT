@@ -138,3 +138,6 @@
 | 03/22/2024 |        |        |        |         |         | 4       | D5 writeup                                                  |
 | 03/23/2024 |        |        |        |         |         | 1       | Proof read D5                                               |
 | 03/27/2024 |        |        |        |         |         | 2       | Reviewed PRs throughout term                                |
+| 04/04/2024 | 7      |        |        |         |         |         | D6 writeup                                                  |
+| 04/04/2024 | 3      |        |        |         |         |         | D7 writeup                                                  |
+| 04/04/2024 | 2      |        |        |         |         |         | Deploy application to production (digital ocean)            |
