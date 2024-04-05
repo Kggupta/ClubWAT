@@ -4,10 +4,7 @@
 
 **Group Number:** 7
 
-**Descriptive Project Title:** ClubWAT
-
-- This is a descriptive project title that uses the _WAT_ phrase polular among the UW population along with 'Club' to speciffy that it's an application for exploring *WAT*erloo clubs and their associated events.
-- It's also a play on words, as it could be interpreted as the *WAT*erloo community being one big club itself.
+**Project Title:** ClubWAT
 
 ### Members
 
@@ -19,3 +16,33 @@
 | Isshana Mohanakumar | imohanak | https://github.com/iissh            |
 | Abhinit Patil       | a33patil | https://github.com/abhinit75        |
 | Abhinav Gupta       | a363gupt | https://github.com/AbhinavGupta2002 |
+
+### Startup
+
+#### Server
+
+1. Initialize node
+
+```
+cd server
+npm i
+```
+
+2. Add a `.env.prod` or `.env.dev`
+3. Build
+
+```
+npm run build
+npx prisma generate
+```
+
+4. Run the app
+
+```
+npm run prod/dev
+```
+
+#### Application
+
+1. Gradle Sync and Build
+2. Run the application. The app was designed with Pixel 4a, but it works with other models.
