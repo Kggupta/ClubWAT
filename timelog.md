@@ -141,3 +141,7 @@
 | 04/04/2024 | 7      |        |        |         |         |         | D6 writeup                                                  |
 | 04/04/2024 | 3      |        |        |         |         |         | D7 writeup                                                  |
 | 04/04/2024 | 2      |        |        |         |         |         | Deploy application to production (digital ocean)            |
+| 04/03/2024 |        |        |        |         | 4       |         | Completed application's class diagram for D6                |
+| 04/03/2024 |        |        |        |         | 4       |         | Completed 5 major user scenarios for D6                     |
+| 04/04/2024 |        |        |        |         | 1       |         | Reviewed D6 writeup                                         |
+| 04/04/2024 |        |        |        |         | 2       |         | Completed + Reviewed D7 writeup                             |
