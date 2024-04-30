@@ -1,8 +1,9 @@
 # ClubWAT
-
 ## General Information
 ClubWAT is a mobile application for the University of Waterloo to manage all student clubs and events. This application was coded with Kotlin, TypeScript, and Node.
 
+
+[ClubWAT Demo Video](https://youtu.be/XQ_cdk1XUzM)
 ### Features
 1. **User Authentication:** As demonstrated in the demo the user sees the login screen on startup of the application and can login with the email/password. The user can create their account with basic details and receives an email with a six digit code that they enter in the application to complete the registration and verify their identity.
 2. **User Interface:** The system uses the popular four tab bottom bar layout that a user can click any tab to go to that view. The tab bar is visible at all times during the user session.
